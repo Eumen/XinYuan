@@ -237,7 +237,7 @@ class PublicAction extends CommonAction
         $this->assign('i9', $fee_rs['i9']);
         unset($fee, $fee_rs);
         // $this->display('login3');
-        $this->display('login6');
+        $this->display('login');
     }
 
     public function index()

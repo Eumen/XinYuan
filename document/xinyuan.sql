@@ -225,7 +225,7 @@ CREATE TABLE `xy_member` (
   `update_time` varchar(255) DEFAULT NULL COMMENT '更新时间',
   `delete_flag` varchar(255) DEFAULT NULL COMMENT '删除标志',
   `delete_time` varchar(255) DEFAULT NULL COMMENT '删除时间',
-  `reMoney` varchar(255) DEFAULT NULL COMMENT '复投金额',
+  `re_money` varchar(255) DEFAULT NULL COMMENT '复投金额',
   `bk1` varchar(255) DEFAULT NULL COMMENT '备用字段1',
   `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段2',
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段3',

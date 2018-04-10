@@ -4,11 +4,11 @@ return array(
 	//'URL_PATHINFO_MODEL'=>2,
 	'DB_TYPE'=>'mysql',
 	'DB_HOST'=>'localhost',
-	'DB_NAME'=>'s1815',
+	'DB_NAME'=>'xinyuan',
 	'DB_USER'=>'root',
 	'DB_PWD'=>'123qwe!@#',
 	'DB_PORT'=>'3306',
-	'DB_PREFIX'=>'xt_',
+	'DB_PREFIX'=>'xy_',
 //	'DB_FIELDS_CACHE'   => true,//设置是否启用数据库字段缓存
 )
 ?>

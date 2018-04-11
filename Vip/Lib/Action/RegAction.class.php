@@ -1,9 +1,9 @@
 <?php
 class RegAction extends CommonAction{
 	function _initialize() {
-		$this->_inject_check(0);//调用过滤函数
-		$this->_Config_name();
-		$this->_checkUser();
+// 		$this->_inject_check(0);//调用过滤函数
+ 		$this->_Config_name();
+// 		$this->_checkUser();
 		header("Content-Type:text/html; charset=utf-8");
 	}
 

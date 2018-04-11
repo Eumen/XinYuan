@@ -265,32 +265,15 @@ class PublicAction extends CommonAction
         } elseif (empty($_POST['verify'])) {
             $this->error('请输入验证码！');
         }
-        $fee = M('fee');
-        // $sel = (int) $_POST['radio'];
-        // if($sel <=0 or $sel >=3){
-        // $this->error('非法操作！');
-        // exit;
-        // }
-        // if($sel != 1){
-        // $this->error('暂时不支持英文版登录！');
-        // exit;
-        // }
-        
-        // 生成认证条件
         $map = array();
-        // 支持使用绑定帐号登录
         $map['user_id'] = $_POST['account'];
-        // $map['nickname'] = $_POST['account']; //用户名也可以登录
-        // $map['_logic'] = 'or';
-        // $map['_complex'] = $where;
-        // $map["status"] = array('gt',0);
         if ($_SESSION['verify'] != md5($_POST['verify'])) {
             $this->error('验证码错误！');
         }
         
         import('@.ORG.RBAC');
-        $fck = M('fck');
-        $field = 'id,user_id,password,is_pay,is_lock,nickname,user_name,is_agent,user_type,last_login_time,login_count,is_boss';
+        $fck = M('member');
+        $field = 'user_id,password';
         $authInfo = $fck->where($map)
             ->field($field)
             ->find();
@@ -308,26 +291,25 @@ class PublicAction extends CommonAction
                 exit();
             }
             
-            if ($_POST['agent'] == 2 && $authInfo['is_agent'] < $_POST['agent']) {
-                $this->error('您为非报单中心,请选择会员登录入口！');
-                exit();
-            }
+//             if ($_POST['agent'] == 2 && $authInfo['is_agent'] < $_POST['agent']) {
+//                 $this->error('您为非报单中心,请选择会员登录入口！');
+//                 exit();
+//             }
             
-            if ($authInfo['is_pay'] < 1) {
-                $this->error('用户尚未开通，暂时不能登录系统！');
-                exit();
-            }
-            if ($authInfo['is_lock'] != 0) {
-                $this->error('用户已锁定，请与管理员联系！');
-                exit();
-            }
+//             if ($authInfo['is_pay'] < 1) {
+//                 $this->error('用户尚未开通，暂时不能登录系统！');
+//                 exit();
+//             }
+//             if ($authInfo['is_lock'] != 0) {
+//                 $this->error('用户已锁定，请与管理员联系！');
+//                 exit();
+//             }
             $_SESSION[C('USER_AUTH_KEY')] = $authInfo['id'];
             $_SESSION['loginUseracc'] = $authInfo['user_id']; // 用户名
-            $_SESSION['loginNickName'] = $authInfo['nickname']; // 会员名
             $_SESSION['loginUserName'] = $authInfo['user_name']; // 开户名
             $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];
             // $_SESSION['login_count'] = $authInfo['login_count'];
-            $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否报单中心
+//             $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否报单中心
             $_SESSION['UserMktimes'] = mktime();
             // 身份确认 = 用户名+识别字符+密码
             $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
@@ -341,30 +323,13 @@ class PublicAction extends CommonAction
             // 管理员
             
             $parmd = $this->_cheakPrem();
-            if ($authInfo['id'] == 1 || $parmd[11] == 1) {
-                $_SESSION['administrator'] = 1;
-            } else {
-                $_SESSION['administrator'] = 2;
-            }
+//             if ($authInfo['id'] == 1 || $parmd[11] == 1) {
+//                 $_SESSION['administrator'] = 1;
+//             } else {
+//                 $_SESSION['administrator'] = 2;
+//             }
             
-            // //管理员
-            // if($authInfo['is_boss'] == 1) {
-            // $_SESSION['administrator'] = 1;
-            // }elseif($authInfo['is_boss'] == 2){
-            // $_SESSION['administrator'] = 3;
-            // }elseif($authInfo['is_boss'] == 3){
-            // $_SESSION['administrator'] = 4;
-            // }elseif($authInfo['is_boss'] == 4){
-            // $_SESSION['administrator'] = 5;
-            // }elseif($authInfo['is_boss'] == 5){
-            // $_SESSION['administrator'] = 6;
-            // }elseif($authInfo['is_boss'] == 6){
-            // $_SESSION['administrator'] = 7;
-            // }else{
-            // $_SESSION['administrator'] = 2;
-            // }
-            
-            $fck->execute("update __TABLE__ set last_login_time=new_login_time,last_login_ip=new_login_ip,new_login_time=" . time() . ",new_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
+//             $fck->execute("update __TABLE__ set last_login_time=new_login_time,last_login_ip=new_login_ip,new_login_time=" . time() . ",new_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
             
             // 缓存访问权限
             RBAC::saveAccessList();

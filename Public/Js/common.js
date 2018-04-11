@@ -45,7 +45,6 @@ function showPopWin(content,width,height){
 
 function fleshVerify(){
 //重载验证码
-var timenow = new Date().getTime();
 $('verifyImg').src= APP+'/Public/verify/'+timenow;
 }
 

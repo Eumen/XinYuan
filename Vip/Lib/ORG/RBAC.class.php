@@ -166,13 +166,13 @@ class RBAC extends Think
     {
         // Db方式权限数据
         $db     =   Db::getInstance();
-        $table = array('role'=>C('RBAC_ROLE_TABLE'),'fck'=>C('RBAC_USER_TABLE'),'access'=>C('RBAC_ACCESS_TABLE'),'node'=>C('RBAC_NODE_TABLE'));
+        $table = array('role'=>C('RBAC_ROLE_TABLE'),'member'=>C('RBAC_USER_TABLE'),'access'=>C('RBAC_ACCESS_TABLE'),'node'=>C('RBAC_NODE_TABLE'));
         $sql    =   "select node.id,node.name from ".
                     $table['role']." as role,".
-                    $table['fck']." as fck,".
+                    $table['member']." as member,".
                     $table['access']." as access ,".
                     $table['node']." as node ".
-                    "where fck.user_id='{$authId}' and fck.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=1 and node.status=1";
+                    "where member.user_id='{$authId}' and member.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=1 and node.status=1";
         $apps =   $db->query($sql);
         $access =  array();
         foreach($apps as $key=>$app) {
@@ -182,10 +182,10 @@ class RBAC extends Think
             $access[strtoupper($appName)]   =  array();
             $sql    =   "select node.id,node.name from ".
                     $table['role']." as role,".
-                    $table['fck']." as fck,".
+                    $table['member']." as member,".
                     $table['access']." as access ,".
                     $table['node']." as node ".
-                    "where fck.user_id='{$authId}' and fck.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=2 and node.pid={$appId} and node.status=1";
+                    "where member.user_id='{$authId}' and member.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=2 and node.pid={$appId} and node.status=1";
             $modules =   $db->query($sql);
             // 判断是否存在公共模块的权限
             $publicAction  = array();
@@ -195,10 +195,10 @@ class RBAC extends Think
                 if('PUBLIC'== strtoupper($moduleName)) {
                 $sql    =   "select node.id,node.name from ".
                     $table['role']." as role,".
-                    $table['fck']." as fck,".
+                    $table['member']." as member,".
                     $table['access']." as access ,".
                     $table['node']." as node ".
-                    "where fck.user_id='{$authId}' and fck.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1";
+                    "where member.user_id='{$authId}' and member.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1";
                     $rs =   $db->query($sql);
                     foreach ($rs as $a){
                         $publicAction[$a['name']]	 =	 $a['id'];
@@ -213,10 +213,10 @@ class RBAC extends Think
                 $moduleName = $module['name'];
                 $sql    =   "select node.id,node.name from ".
                     $table['role']." as role,".
-                    $table['fck']." as fck,".
+                    $table['member']." as member,".
                     $table['access']." as access ,".
                     $table['node']." as node ".
-                    "where fck.user_id='{$authId}' and fck.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1";
+                    "where member.user_id='{$authId}' and member.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1";
                 $rs =   $db->query($sql);
                 $action = array();
                 foreach ($rs as $a){
@@ -234,12 +234,12 @@ class RBAC extends Think
 	static public function getModuleAccessList($authId,$module) {
         // Db方式
         $db     =   Db::getInstance();
-        $table = array('role'=>C('RBAC_ROLE_TABLE'),'fck'=>C('RBAC_USER_TABLE'),'access'=>C('RBAC_ACCESS_TABLE'));
+        $table = array('role'=>C('RBAC_ROLE_TABLE'),'member'=>C('RBAC_USER_TABLE'),'access'=>C('RBAC_ACCESS_TABLE'));
         $sql    =   "select access.node_id from ".
                     $table['role']." as role,".
-                    $table['fck']." as fck,".
+                    $table['member']." as member,".
                     $table['access']." as access ".
-                    "where fck.user_id='{$authId}' and fck.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and  access.module='{$module}' and access.status=1";
+                    "where member.user_id='{$authId}' and member.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and  access.module='{$module}' and access.status=1";
         $rs =   $db->query($sql);
         $access	=	array();
         foreach ($rs as $node){

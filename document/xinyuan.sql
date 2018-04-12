@@ -1,8 +1,30 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-04-10 16:45:28
+# Date: 2018-04-12 08:46:51
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
+
+#
+# Structure for table "xy_access"
+#
+
+DROP TABLE IF EXISTS `xy_access`;
+CREATE TABLE `xy_access` (
+  `role_id` smallint(6) unsigned NOT NULL,
+  `node_id` smallint(6) unsigned NOT NULL,
+  `level` tinyint(1) NOT NULL,
+  `pid` smallint(6) NOT NULL,
+  `module` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  KEY `groupId` (`role_id`) USING BTREE,
+  KEY `nodeId` (`node_id`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='权限表';
+
+#
+# Data for table "xy_access"
+#
+
+/*!40000 ALTER TABLE `xy_access` DISABLE KEYS */;
+/*!40000 ALTER TABLE `xy_access` ENABLE KEYS */;
 
 #
 # Structure for table "xy_address"
@@ -237,13 +259,14 @@ CREATE TABLE `xy_member` (
   `bk9` varchar(255) DEFAULT NULL COMMENT '备用字段9',
   `bk10` varchar(255) DEFAULT NULL COMMENT '备用字段10',
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 #
 # Data for table "xy_member"
 #
 
 /*!40000 ALTER TABLE `xy_member` DISABLE KEYS */;
+INSERT INTO `xy_member` VALUES (1,'aaa',NULL,NULL,'1523486135',NULL,NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ba8c9dbfd5bd49a3f0b06db2b4635562',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_member` ENABLE KEYS */;
 
 #

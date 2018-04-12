@@ -6,7 +6,7 @@ class PublicAction extends CommonAction
     public function _initialize()
     {
         header("Content-Type:text/html; charset=utf-8");
-        $this->_inject_check(1); // 调用过滤函数
+//         $this->_inject_check(1); // 调用过滤函数
         $this->_Config_name(); // 调用参数
     }
     
@@ -46,7 +46,7 @@ class PublicAction extends CommonAction
         $info_count = M('msg')->where($map)->count(); // 总记录数
         $this->assign('info_count', $info_count);
         
-        $fck = M('fck');
+        $fck = M('member');
         $fwhere = array();
         $fwhere['ID'] = $_SESSION[C('USER_AUTH_KEY')];
         $frs = $fck->where($fwhere)
@@ -67,22 +67,22 @@ class PublicAction extends CommonAction
         $this->_checkUser();
         $ppfg = $_POST['ppfg'];
         $id = $_SESSION[C('USER_AUTH_KEY')]; // 登录AutoId
-        $fck = M('fck');
-        $jiadan = M('Jiadan');
-        $cash = M('cash');
-        $form = M('form');
+        $fck = M('member');
+//         $jiadan = M('Jiadan');
+//         $cash = M('cash');
+//         $form = M('form');
         $map = array();
         $map['status'] = array(
             'eq',
             1
         );
         $field = '*';
-        $newslist = $form->where($map)
-            ->field($field)
-            ->order('baile desc,id desc')
-            ->limit(10)
-            ->select();
-        $this->assign('newslist', $newslist); // 数据输出到模板
+//         $newslist = $form->where($map)
+//             ->field($field)
+//             ->order('baile desc,id desc')
+//             ->limit(10)
+//             ->select();
+//         $this->assign('newslist', $newslist); // 数据输出到模板
         
         $map = array();
         $map['s_uid'] = $id; // 会员ID
@@ -106,24 +106,24 @@ class PublicAction extends CommonAction
         }
         $this->assign('all_nmoney', $all_nmoney);
         
-        // 出局分红包数
-        $where = Array();
-        $where['user_id'] = $urs['user_id'];
-        $where['is_pay'] = 1;
-        $out_counts = $jiadan->where($where)->sum('danshu');
-        if (empty($out_counts)) {
-            $out_counts = 0;
-        }
-        $this->assign('out_counts', $out_counts);
+//         // 出局分红包数
+//         $where = Array();
+//         $where['user_id'] = $urs['user_id'];
+//         $where['is_pay'] = 1;
+//         $out_counts = $jiadan->where($where)->sum('danshu');
+//         if (empty($out_counts)) {
+//             $out_counts = 0;
+//         }
+//         $this->assign('out_counts', $out_counts);
         
-        // 未出局分红包数
-        $where['user_id'] = $urs['user_id'];
-        $where['is_pay'] = 0;
-        $in_counts = $jiadan->where($where)->sum('danshu');
-        if (empty($in_counts)) {
-            $in_counts = 0;
-        }
-        $this->assign('in_counts', $in_counts);
+//         // 未出局分红包数
+//         $where['user_id'] = $urs['user_id'];
+//         $where['is_pay'] = 0;
+//         $in_counts = $jiadan->where($where)->sum('danshu');
+//         if (empty($in_counts)) {
+//             $in_counts = 0;
+//         }
+//         $this->assign('in_counts', $in_counts);
         // 直推人数
         $one = $fck->where('id=1')
             ->field('tz_nums')
@@ -273,7 +273,7 @@ class PublicAction extends CommonAction
         
         import('@.ORG.RBAC');
         $fck = M('member');
-        $field = 'user_id,password';
+        $field = 'id,user_id,password';
         $authInfo = $fck->where($map)
             ->field($field)
             ->find();
@@ -281,7 +281,7 @@ class PublicAction extends CommonAction
         if (false == $authInfo) {
             $this->error('帐号不存在或已禁用！');
         } else {
-            if ($authInfo['password'] != md5($_POST['password'])) {
+            if ($authInfo['password'] != ($_POST['password'])) {
                 $this->error('密码错误！');
                 exit();
             }
@@ -306,30 +306,34 @@ class PublicAction extends CommonAction
 //             }
             $_SESSION[C('USER_AUTH_KEY')] = $authInfo['id'];
             $_SESSION['loginUseracc'] = $authInfo['user_id']; // 用户名
-            $_SESSION['loginUserName'] = $authInfo['user_name']; // 开户名
-            $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];
+//             $_SESSION['loginUserName'] = $authInfo['user_name']; // 开户名
+//             $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];
             // $_SESSION['login_count'] = $authInfo['login_count'];
 //             $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否报单中心
             $_SESSION['UserMktimes'] = mktime();
             // 身份确认 = 用户名+识别字符+密码
             $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
+//                 $_SESSION['login_sf_list_u'] = ($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
             
             // 登录状态
             $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
-            $_SESSION['login_user_type'] = $user_type;
-            $where['id'] = $authInfo['id'];
-            $fck->where($where)->setField('user_type', $user_type);
-            // $fck->where($where)->setField('last_login_time',mktime());
+//             $_SESSION['login_user_type'] = $user_type;
+//             $where['id'] = $authInfo['id'];
+//                 $user_type = ($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
+                $_SESSION['login_user_type'] = $user_type;
+                $where['id'] = $authInfo['id'];
+            $fck->where($where)->setField('bk1', $user_type);
+            $fck->where($where)->setField('last_login_time',mktime());
             // 管理员
             
             $parmd = $this->_cheakPrem();
-//             if ($authInfo['id'] == 1 || $parmd[11] == 1) {
-//                 $_SESSION['administrator'] = 1;
-//             } else {
-//                 $_SESSION['administrator'] = 2;
-//             }
+            if ($authInfo['id'] == 1 || $parmd[11] == 1) {
+                $_SESSION['administrator'] = 1;
+            } else {
+                $_SESSION['administrator'] = 2;
+            }
             
-//             $fck->execute("update __TABLE__ set last_login_time=new_login_time,last_login_ip=new_login_ip,new_login_time=" . time() . ",new_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
+            $fck->execute("update __TABLE__ set last_login_time=new_login_time,last_login_ip=new_login_ip,new_login_time=" . time() . ",new_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
             
             // 缓存访问权限
             RBAC::saveAccessList();

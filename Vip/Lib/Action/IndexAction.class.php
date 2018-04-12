@@ -7,7 +7,7 @@ class IndexAction extends CommonAction {
 		$this->_Config_name();//调用参数
 		C ( 'SHOW_RUN_TIME', false ); // 运行时间显示
 		C ( 'SHOW_PAGE_TRACE', false );
-		$fck = D ('Fck');
+		$fck = D ('member');
 
 		$id = $_SESSION[C('USER_AUTH_KEY')];
 		$field = '*';
@@ -48,9 +48,9 @@ $week_end=strtotime("$week_start +6 days");
 
 
 		// $fck->emptyMonthTime();
-		$fck->emptywTime();
-		$fck->getLevel();
-		$fck->sh_level();
+// 		$fck->emptywTime();
+// 		$fck->getLevel();
+// 		$fck->sh_level();
 		$ydate = strtotime(date('Y-m-d'));//当天时间
 		$end_date =$ydate + (24*3600);//当天结束时间
 
@@ -71,8 +71,8 @@ $week_end=strtotime("$week_start +6 days");
 		$arss = $this->_cheakPrem();
         $this->assign('arss',$arss);
         
-        $Guzhi = A("Guzhi");
-        $Guzhi->stock_past_due();
+//         $Guzhi = A("Guzhi");
+//         $Guzhi->stock_past_due();
         
 //		$fck -> mr_fenhong(1);
 //		$this->aotu_clearings();

@@ -37,7 +37,7 @@ class CommonAction extends CheFieldAction {
         }
         if($number>0){
             $id=$_SESSION[C('USER_AUTH_KEY')];
-            $prem=M("fck")->getFieldbyid($id,"prem");
+            $prem=M("member")->getFieldbyid($id,"prem");
             if(strpos($prem, ",{$number},")===false){
                 $this->error("权限不足!");exit;
             }
@@ -53,19 +53,19 @@ class CommonAction extends CheFieldAction {
 			$this->_boxx($bUrl);
 			exit;
 		}
-		$fck = M('fck');
+		$member = M('member');
 		$mapp				=   array();
 		$mapp['id']			= $_SESSION[C('USER_AUTH_KEY')];
 		$mapp['is_jb']	= array('gt',0);
 		$field = 'id,user_id';
-        $rs = $fck->where($mapp)->field($field)->find();
+        $rs = $member->where($mapp)->field($field)->find();
         if(!$rs){
         	$_SESSION = array();
 			$bUrl = __APP__.'/Public/login';
 			$this->_boxx($bUrl);
 			exit;
         }
-		unset($fck,$mapp,$rs);
+		unset($member,$mapp,$rs);
 	}
 
 	protected function _Admin_checkUser(){
@@ -76,20 +76,20 @@ class CommonAction extends CheFieldAction {
 			$this->_boxx($bUrl);
 			exit;
 		}
-		$fck = M('fck');
+		$member = M('member');
 		$admid			= $_SESSION[C('USER_AUTH_KEY')];
 //		$mapp				=   array();
 //		$mapp['id']			= $_SESSION[C('USER_AUTH_KEY')];
 //		$mapp['is_boss']	= array('gt',0);
 		$field = 'id,user_id';
-        $rs = $fck->where('id='.$admid.' and (is_boss>0 or (is_boss=0 ))')->field($field)->find();
+        $rs = $member->where('id='.$admid.' and (is_boss>0 or (is_boss=0 ))')->field($field)->find();
         if(!$rs){
         	$_SESSION = array();
 			$bUrl = __APP__.'/Public/login';
 			$this->_boxx($bUrl);
 			exit;
         }
-		unset($fck,$mapp,$rs);
+		unset($member,$mapp,$rs);
 	}
 	// 检查用户是否登录
 	protected function _checkUser() {
@@ -100,7 +100,7 @@ class CommonAction extends CheFieldAction {
 		$this->check_order_isout();
 		
 		$this->_user_mktime($_SESSION['UserMktimes']);
-		$User = M ('fck');
+		$User = M ('member');
 
 
 		//生成认证条件
@@ -109,7 +109,7 @@ class CommonAction extends CheFieldAction {
 		//管理员编号，证明
 		$mapp['id']    = $_SESSION[C('USER_AUTH_KEY')];
 		$mapp['user_id']	= $_SESSION['loginUseracc'];
-		$field = 'user_id,password,user_type,is_lock';
+		$field = 'user_id,password,bk1,status';
         $authInfoo = $User->where($mapp)->field($field)->find();
         if(false == $authInfoo) {
             $this->LinkOut();
@@ -161,7 +161,7 @@ class CommonAction extends CheFieldAction {
 	//检测登录是否超时
 	protected function check_order_isout(){
 		$id  = $_SESSION[C('USER_AUTH_KEY')];
-		$fck = M ('fck');
+		$member = M ('member');
 		$cashpp = M ('cashpp');
 		$nowdate = strtotime(date('c'));
 		
@@ -182,7 +182,7 @@ class CommonAction extends CheFieldAction {
 			$mapp['bdt']	= array('lt',$buylasttime);
 			$buych = $cashpp ->where($mapp)->select();
 			if($buych){
-				$fck->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
+				$member->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
 				$this->LinkOut();
 			}
 			
@@ -194,7 +194,7 @@ class CommonAction extends CheFieldAction {
 			$map['bdt']	   = array('lt',$selllasttime);
 			$sellch = $cashpp ->where($map)->select();
 			if($sellch){
-				$fck->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
+				$member->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
 				$this->LinkOut();
 			}
 		}
@@ -503,18 +503,18 @@ class CommonAction extends CheFieldAction {
 	
 	//双轨小公排
 	public function gongpaixtsmall($uid){
-		$fck = M ('fck');
+		$member = M ('member');
 		$mouid=$uid;
 		$field = 'id,user_id,p_level,p_path,u_pai';
 		$where = 'is_pay>0 and (p_path like "%,'.$mouid.',%" or id='.$mouid.')';
 	
-		$re_rs = $fck ->where($where)->order('p_level asc,u_pai asc')->field($field)->select();
+		$re_rs = $member ->where($where)->order('p_level asc,u_pai asc')->field($field)->select();
 		$fck_where = array();
 		foreach($re_rs as $vo){
 			$faid=$vo['id'];
 			$fck_where['is_pay']   = array('egt',0);
 			$fck_where['father_id']   = $faid;
-			$count = $fck->where($fck_where)->count();
+			$count = $member->where($fck_where)->count();
 			if ( is_numeric($count) == false){
 				$count = 0;
 			}
@@ -543,9 +543,9 @@ class CommonAction extends CheFieldAction {
 	protected function _cheakPrem()
     {
         //权限
-        $fck = M ('fck');
+        $member = M ('member');
         $id = $_SESSION[C('USER_AUTH_KEY')];
-        $frs = $fck ->field('prem') ->find($id);
+        $frs = $member ->field('prem') ->find($id);
         $arr = explode(',',$frs['prem']);
         for ($i=1;$i<=30;$i++){
             if (in_array($i,$arr)){
@@ -558,10 +558,10 @@ class CommonAction extends CheFieldAction {
     }
     
     public function check_us_gq($type=0){
-//		$fck = M('fck');
+//		$member = M('member');
 //		$mapp['id']    = $_SESSION[C('USER_AUTH_KEY')];
 //		$field = 'user_id,is_lockqd';
-//		$aurs = $fck->where($mapp)->field($field)->find();
+//		$aurs = $member->where($mapp)->field($field)->find();
 //		if(false == $aurs) {
 //			$this->LinkOut();
 //			exit;
@@ -578,14 +578,14 @@ class CommonAction extends CheFieldAction {
 //				}
 //			}
 //		}
-//		unset($fck,$mapp,$aurs);
+//		unset($member,$mapp,$aurs);
     }
     
 	//======================================奖金结算
     public function  _clearing(){
 		//参数
 		$times = M ('times');  //结算时间表
-		$fck = D ('Fck');
+		$member = D ('member');
 
 		//以下写进资金表
 		$nowdate = strtotime(date('Y-m-d'))+3600*24-1;
@@ -617,10 +617,10 @@ class CommonAction extends CheFieldAction {
 
 		$times_time = $data['shangqi'];
 
-		$fck->execute("UPDATE __TABLE__ SET `b0`=b1+b2+b3");
+		$member->execute("UPDATE __TABLE__ SET `b0`=b1+b2+b3");
 
 		//奖金汇总
-		$fck->quanhuizong();
+		$member->quanhuizong();
 
 		$bonus = M ('bonus');
 		$twhere = array();
@@ -634,12 +634,12 @@ class CommonAction extends CheFieldAction {
 		$fwhere['b0'] = array('neq',0);       //这一期总奖金大于0
 		$fwhere['is_tj'] = array('eq',0);    //统计占用
 		$fwhere['is_pay'] = array('gt',0);   //已开通的会员
-		$rs = $fck ->where($fwhere)->field('*')->order('id asc')->select();
+		$rs = $member ->where($fwhere)->field('*')->order('id asc')->select();
 		foreach ($rs as $rss){
 			$my_b = $rss['b0'];
 			$my_id = $rss['id'];
 			$myww = "id=".$my_id." and b0=".$my_b." and is_tj=0";
-			$result = $fck -> execute("update __TABLE__ set zjj=zjj+b0,is_tj=1,agent_use=agent_use+".$my_b." where ".$myww);
+			$result = $member -> execute("update __TABLE__ set zjj=zjj+b0,is_tj=1,agent_use=agent_use+".$my_b." where ".$myww);
 			if($result){
 				$where_two['uid'] = $rss['id'];
 				$bonus_rs = $bonus->where($where_two)->find();  //查找是否存在本期结算记录
@@ -673,11 +673,11 @@ class CommonAction extends CheFieldAction {
 					$sql .= "`b9`=b9+". $rss['b9'] ."";
 					$bonus -> query("update __TABLE__ set ". $sql ." where `id`=". $bonus_rs['id']);  //bonus 奖金表本期记录++
 				}
-				$fck -> query("update __TABLE__ set b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,b7=0,b8=0,b9=0,is_tj=0 where id=".$my_id);
+				$member -> query("update __TABLE__ set b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,b7=0,b8=0,b9=0,is_tj=0 where id=".$my_id);
 			}
         }
-		$fck->_addBonus();
-		unset($fck,$times,$trs,$settime_two,$bonus,$twhere,$trs_two,$data2,$fwhere,$rs,$data);
+		$member->_addBonus();
+		unset($member,$times,$trs,$settime_two,$bonus,$twhere,$trs_two,$data2,$fwhere,$rs,$data);
 	}
     
 

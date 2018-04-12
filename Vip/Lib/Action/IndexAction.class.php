@@ -80,29 +80,14 @@ $week_end=strtotime("$week_start +6 days");
 		$this->display('index');
 	}
 
-    //每日自动结算
-	public function aotu_clearings(){
-		$fck = D ('Fck');
-		$fee = M ('fee');
-		$nowday = strtotime(date('Y-m-d'));
-		$nowweek = date("w");
-		if($nowweek==0){
-			$nowweek = 7;
-		}
-		$kou_w = $nowweek-1;
-		$weekday = $nowday-$kou_w*24*3600;
-		
-		$now_dtime = strtotime(date("Y-m-d"));
-		if(empty($_SESSION['auto_cl_ok'])||$_SESSION['auto_cl_ok']!=$now_dtime){
-			$js_c = $fee->where('id=1 and f_time<'.$weekday)->count();
-			if($js_c>0){
-				//经理分红
-				$fck->jl_fenghong();
-			}
-			$_SESSION['auto_cl_ok'] = $now_dtime;
-		}
-		unset($fck,$fee);
-	}
-
+//3. 生成原始的二维码(不生成图片文件)  
+function scerweima2($url=''){  
+    require_once 'phpqrcode.php';  
+    $value = $url;                  //二维码内容  
+    $errorCorrectionLevel = 'L';    //容错级别   
+    $matrixPointSize = 5;           //生成图片大小    
+    //生成二维码图片  
+    $QR = QRcode::png($value,false,$errorCorrectionLevel, $matrixPointSize, 2);  
+}  
 }
 ?>

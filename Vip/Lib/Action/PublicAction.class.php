@@ -281,7 +281,7 @@ class PublicAction extends CommonAction
         if (false == $authInfo) {
             $this->error('帐号不存在或已禁用！');
         } else {
-            if ($authInfo['password'] != ($_POST['password'])) {
+            if ($authInfo['password'] != md5($_POST['password'])) {
                 $this->error('密码错误！');
                 exit();
             }
@@ -313,8 +313,6 @@ class PublicAction extends CommonAction
             $_SESSION['UserMktimes'] = mktime();
             // 身份确认 = 用户名+识别字符+密码
             $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
-//                 $_SESSION['login_sf_list_u'] = ($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
-            
             // 登录状态
             $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
 //             $_SESSION['login_user_type'] = $user_type;
@@ -383,7 +381,7 @@ class PublicAction extends CommonAction
             
             $where = array();
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-            $where['passopen'] = md5($pass);
+            $where['password2'] = md5($pass);
             $list = $fck->where($where)
                 ->field('id')
                 ->find();

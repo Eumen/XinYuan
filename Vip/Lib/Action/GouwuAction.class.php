@@ -75,13 +75,19 @@ class GouwuAction extends CommonAction{
 				$this->_boxx($bUrl);
 				break;
 			case 4;
-				$_SESSION['UrlszUserpass'] = 'manlian';//求购股票
+				$_SESSION['UrlszUserpass'] = 'manlian';
 				$bUrl = __URL__ . '/BuycpInfo';
 				$this->_boxx($bUrl);
 				break;
+			case 6;
+    			$_SESSION['UrlszUserpass'] = 'mallIndex';
+    			$bUrl = __URL__ . '/mallIndex';
+				$this->_boxx($bUrl);
+    			break;
+				exit;
 			default;
 			case 5;
-				$_SESSION['UrlszUserpass'] = 'ACmil';//求购股票
+				$_SESSION['UrlszUserpass'] = 'ACmil';
 				$bUrl = __URL__ . '/dizhiadd';
 				$this->_boxx($bUrl);
 				break;

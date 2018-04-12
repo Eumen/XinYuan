@@ -62,6 +62,11 @@ class NewsAction extends CommonAction{
 				$bUrl = __URL__.'/adminnews';
 				$this->_boxx($bUrl);
 				break;
+			case 2:
+			    $_SESSION['Urlszpass'] = 'newsIndex';
+			    $bUrl = __URL__.'/newsIndex';
+			    $this->_boxx($bUrl);
+			    break;
 			default;
 				$this->error('二级密码错误!');
 				break;

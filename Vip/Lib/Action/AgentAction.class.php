@@ -101,6 +101,11 @@ class AgentAction extends CommonAction
                 $bUrl = __URL__ . '/memberuplevel'; // 原点升级晋级审核
                 $this->_boxx($bUrl);
                 break;
+            case 12:
+                $_SESSION['Urlszpass'] = 'agentIndex';
+                $bUrl = __URL__ . '/agentIndex'; // 服务中心主页
+                $this->_boxx($bUrl);
+                break;
             
             case 4:
                 $_SESSION['UrlPTPass'] = 'MyssGuanXiGua';

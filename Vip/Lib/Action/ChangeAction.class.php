@@ -35,7 +35,7 @@ class ChangeAction extends CommonAction {
 		$Urlsz = $_POST['Urlsz'];
 		if(empty($_SESSION['user_pwd2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('fck');
+			$fck   =  M ('member');
 		    if (!$fck->autoCheckToken($_POST)){
 	            $this->error('页面过期请刷新页面!');
 	            exit();
@@ -47,7 +47,7 @@ class ChangeAction extends CommonAction {
 
 			$where =array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$where['passopen'] = md5($pass);
+			$where['password2'] = md5($pass);
 			$list = $fck->where($where)->field('id')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
@@ -93,27 +93,23 @@ class ChangeAction extends CommonAction {
 			unset($vo);
 
 			//输出银行
-			$b_bank = $fck -> where('id='.$id) -> field("bank_name,youname") -> find();
+			$b_bank = $fck -> where('id='.$id) -> field("bank,user_name") -> find();
 			$this->assign('b_bank',$b_bank);
 
 			$fee = M ('fee');
 			$fee_s = $fee->field('s2,s9,i4,str29,str99,str24,str25,str17')->find();
 			$wentilist = explode('|',$fee_s['str99']);
-			$this->assign('wentilist',$wentilist);
 			$bank = explode('|',$fee_s['str29']);
 			$you = explode('|',$fee_s['str17']);
 			$this->assign('bank',$bank);
 			$this->assign('you',$you);
-			
 			$lang= explode('|',$fee_s['str24']);
 			$countrys = explode('|',$fee_s['str25']);
 			$this->assign('lang',$lang);
-			$this->assign('countrys',$countrys);
-				
 
 			unset($bank,$b_bank);
 
-			$this->display('changedata');
+			$this->display('profile');
 
 		}else{
 			$this->error('操作错误!');

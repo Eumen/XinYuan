@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-04-12 08:46:51
+# Date: 2018-04-13 17:28:10
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -123,6 +123,25 @@ CREATE TABLE `xy_bonussummary` (
 /*!40000 ALTER TABLE `xy_bonussummary` ENABLE KEYS */;
 
 #
+# Structure for table "xy_cody"
+#
+
+DROP TABLE IF EXISTS `xy_cody`;
+CREATE TABLE `xy_cody` (
+  `c_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `cody_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`c_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "xy_cody"
+#
+
+/*!40000 ALTER TABLE `xy_cody` DISABLE KEYS */;
+INSERT INTO `xy_cody` VALUES (1,'profile'),(2,'password'),(3,'Jj_FA'),(4,'4'),(5,'5'),(6,'6'),(7,'7'),(8,'8'),(9,'9'),(10,'10'),(11,'11'),(12,'12'),(13,'13'),(14,'14'),(15,'15'),(16,'16'),(17,'17'),(18,'18'),(19,'19'),(20,'20'),(21,'21'),(22,'22'),(23,'23'),(24,'24'),(25,'25'),(26,'26'),(27,'27'),(28,'28'),(29,'29'),(30,'30');
+/*!40000 ALTER TABLE `xy_cody` ENABLE KEYS */;
+
+#
 # Structure for table "xy_fee"
 #
 
@@ -150,13 +169,14 @@ CREATE TABLE `xy_fee` (
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk6` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='后台参数表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台参数表';
 
 #
 # Data for table "xy_fee"
 #
 
 /*!40000 ALTER TABLE `xy_fee` DISABLE KEYS */;
+INSERT INTO `xy_fee` VALUES (1,'3000',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_fee` ENABLE KEYS */;
 
 #
@@ -248,10 +268,10 @@ CREATE TABLE `xy_member` (
   `delete_flag` varchar(255) DEFAULT NULL COMMENT '删除标志',
   `delete_time` varchar(255) DEFAULT NULL COMMENT '删除时间',
   `re_money` varchar(255) DEFAULT NULL COMMENT '复投金额',
-  `bk1` varchar(255) DEFAULT NULL COMMENT '备用字段1',
-  `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段2',
-  `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段3',
-  `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段4',
+  `bk1` varchar(255) DEFAULT NULL COMMENT '推荐绝对层数',
+  `bk2` varchar(255) DEFAULT NULL COMMENT '节点绝对层数',
+  `bk3` varchar(255) DEFAULT NULL COMMENT '多点登录',
+  `bk4` varchar(255) DEFAULT NULL COMMENT '是否支付 0：未支付 1：已支付',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段5',
   `bk6` varchar(255) DEFAULT NULL COMMENT '备用字段6',
   `bk7` varchar(255) DEFAULT NULL COMMENT '备用字段7',
@@ -259,14 +279,14 @@ CREATE TABLE `xy_member` (
   `bk9` varchar(255) DEFAULT NULL COMMENT '备用字段9',
   `bk10` varchar(255) DEFAULT NULL COMMENT '备用字段10',
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 #
 # Data for table "xy_member"
 #
 
 /*!40000 ALTER TABLE `xy_member` DISABLE KEYS */;
-INSERT INTO `xy_member` VALUES (1,'aaa',NULL,NULL,'1523486135',NULL,NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ba8c9dbfd5bd49a3f0b06db2b4635562',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `xy_member` VALUES (1,'carNo1','公司','13888888888','1523611103','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','1','1','1','1','1','1523608131','0','0','0','0','2','3000','3000','3000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','2cc76f7e2192120f14c7e4436aa6c64f','1',NULL,NULL,NULL,NULL,NULL,NULL),(2,'aaa','啊三','15678455446','1523611103','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'2cc76f7e2192120f14c7e4436aa6c64f','0',NULL,NULL,NULL,NULL,NULL,NULL),(3,'bbb','啊B','15874586666','1523611103',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'2cc76f7e2192120f14c7e4436aa6c64f','0',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_member` ENABLE KEYS */;
 
 #

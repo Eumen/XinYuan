@@ -66,7 +66,7 @@
         </tr>
     <volist name="list" id="vo">  
         <tr bgcolor="#FFFFFF" id="tr12" align="center">
-        <td> <span id="">{$vo['cid']}</span></td>            
+        <td> <span id="">{$vo['id']}</span></td>            
         <td><span id="">{$vo['name']}</span></td>
         <td align="center"><span id="">有货</span></td>
         <td align="center"><span id="">{$cc[$vo['id']]}</span></td>
@@ -81,19 +81,19 @@
 <tr id="tr_PVamount" style="border-top: 3px solid display:block;">
 </tr>
 <tr>
-	<td align="right" colspan = "3">现金币余额：<span style="color:#F00;">{$fck_rs['agent_use']}</span></td>
-	<td align="left" colspan = "3">电子币余额：<span style="color:#F00;">{$fck_rs['agent_cash']}</span></td></tr>
+	<td align="right" colspan = "3">现金币余额：<span style="color:#F00;">{$member_rs['cash']}</span></td>
+	<td align="left" colspan = "3">积分币余额：<span style="color:#F00;">{$member_rs['point']}</span></td></tr>
 <tr>
 	<td align="center" colspan = "6">
 		<span style="color:#F00;">*支付方式：</span>
-		<input type="radio" name="sel" value="1">现金币<input type="radio" name="sel" value="2">电子币</td>
+		<input type="radio" name="sel" value="1" >现金币<input type="radio" name="sel" value="2" checked="checked">现金币+积分币</td>
 </tr>
 </table>
 <TABLE class=cart_tab border=0 cellSpacing=5 cellPadding=5 width="100%"> 
 <tr bgcolor="#FFFFFF" style="border-top: 3px solid #C1DAD7;">
 <th align="center" bgcolor="#F0FFFF" class="spec" colspan = "6" style="text-align:center;">
 	<span style="color:#F00;">*二级密码:</span>
-	<input class="inptuaa" type="password" name="Password">
+	<input class="inptuaa" type="password" id="Password" name="Password">
 </th>
 </tr>
 <tr>
@@ -140,7 +140,7 @@
 		}
 	}
 	function ajaxRID(id){
-
+		alert("123");
 		create_xmlhttp();
 		xmlobj.onreadystatechange = ready_RID;
 		url = "__URL__/moren/ID/"+id;

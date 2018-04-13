@@ -22,15 +22,15 @@
   <volist name="list" id="vo">
 			<tr align="center">
 			  <td nowrap="nowrap">{$vo.user_id}</td>
-			  <td height="24" nowrap="nowrap">{$vo.us_name}&nbsp;</td>
+			  <td height="24" nowrap="nowrap">{$vo.user_name}&nbsp;</td>
 			  <td nowrap="nowrap">{$vo.name}&nbsp;</td>
-			  <td nowrap="nowrap">{$vo.pdt|date='Y-m-d H:i:s',###}</td>
-			  <td nowrap="nowrap">{$vo.money}</td>
-			  <td nowrap="nowrap">{$vo.shu}</td>
+			  <td nowrap="nowrap">{$vo.time|date='Y-m-d H:i:s',###}</td>
+			  <td nowrap="nowrap">{$vo.price}</td>
+			  <td nowrap="nowrap">{$vo.count}</td>
 			 <!-- <td nowrap="nowrap" >{$vo.cpeice}</td> -->
-			   <td nowrap="nowrap">{$vo.us_tel}</td>
-			  <td nowrap="nowrap">{$vo.us_address}</td>
-			  <td nowrap="nowrap">{$vo.cprice}</td>
+			   <td nowrap="nowrap">{$vo.tel}</td>
+			  <td nowrap="nowrap">{$vo.address}</td>
+			  <td nowrap="nowrap">{$vo.money}</td>
 			  <td nowrap="nowrap">
 			    <eq name="vo.isfh" value="0">
 			      未发

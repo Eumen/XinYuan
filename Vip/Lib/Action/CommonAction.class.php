@@ -98,24 +98,21 @@ class CommonAction extends CheFieldAction {
 			exit;
 		}
 		$this->check_order_isout();
-		
 		$this->_user_mktime($_SESSION['UserMktimes']);
 		$User = M ('member');
-
-
 		//生成认证条件
-        $mapp            =   array();
+        $mapp = array();
 		// 支持使用绑定帐号登录
 		//管理员编号，证明
 		$mapp['id']    = $_SESSION[C('USER_AUTH_KEY')];
 		$mapp['user_id']	= $_SESSION['loginUseracc'];
-		$field = 'user_id,password,bk1,status';
+		$field = 'user_id,password,bk3,status';
         $authInfoo = $User->where($mapp)->field($field)->find();
         if(false == $authInfoo) {
             $this->LinkOut();
 			exit;
         }else {
-       		if($authInfoo['is_lock'] == 1){
+       		if($authInfoo['status'] == 1){
 				echo "<script language=javascript>";
 				echo 'alert("==您的账户已锁定！==");';
 				echo "</script>";
@@ -259,7 +256,6 @@ class CommonAction extends CheFieldAction {
 				exit();
 			}
 		}
-
 	}
 
 	protected function _levelConfirm(&$HYJJ,$HYid=1){

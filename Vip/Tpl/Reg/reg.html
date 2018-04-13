@@ -20,6 +20,21 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace-fonts.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/fonts-awesome.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/buttons.css">
+<script src="__PUBLIC__/Js/jquery.js"></script>
+ <script>
+ function getQueryString(name) {  
+     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
+     var url=decodeURI(decodeURI(window.location.search))  
+     var r = url.substr(1).match(reg);  
+     if (r != null) return unescape(r[2]); return null;  
+ }  
+$(document).ready(function() {  
+ var value=getQueryString("rid");  
+ if(value!=null){
+         $("#rid").val(value);
+ }  
+});
+</script>
 <style>
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -65,7 +80,6 @@ code {
 </style>
 <script src="__PUBLIC__/Js/Jquery/jquery-1.11.3.min.js"></script>
 <script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
-
 </head>
 <body>
 <!-- Wrap all page content here -->
@@ -79,12 +93,12 @@ code {
       </div>
     </div>
   </div>
-  
   <!-- Begin page content -->
   <div class="container">
 	<div class="form row">
 		<div class="span12">
 			<form class="form-horizontal "  method="post"  id = "registerForm" action="__URL__/regAC">
+				<input name="rid" id="rid" type="hidden" value="{$rid}" class="ipt"/>
 					<div class="form-group">
 						  <div class="col-sm-12">
 						      <h4 style="text-align:center;">注册会员</h4>

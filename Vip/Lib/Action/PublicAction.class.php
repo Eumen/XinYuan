@@ -6,7 +6,7 @@ class PublicAction extends CommonAction
     public function _initialize()
     {
         header("Content-Type:text/html; charset=utf-8");
-//         $this->_inject_check(1); // 调用过滤函数
+        $this->_inject_check(1); // 调用过滤函数
         $this->_Config_name(); // 调用参数
     }
     
@@ -48,15 +48,13 @@ class PublicAction extends CommonAction
         
         $fck = M('member');
         $fwhere = array();
-        $fwhere['ID'] = $_SESSION[C('USER_AUTH_KEY')];
+        $fwhere['id'] = $_SESSION[C('USER_AUTH_KEY')];
         $frs = $fck->where($fwhere)
             ->field('*')
             ->find();
-        // dump($frs);
         $HYJJ = '';
         $this->_levelConfirm($HYJJ, 1);
         $this->assign('voo', $HYJJ);
-        
         $this->assign('fck_rs', $frs);
         $this->display('menu');
     }
@@ -191,7 +189,6 @@ class PublicAction extends CommonAction
             'eq',
             0
         );
-        
         $cptype = M('cptype');
         $tplist = $cptype->where('status=0')
             ->order('id asc')
@@ -227,30 +224,24 @@ class PublicAction extends CommonAction
         $this->assign('f_rs', $f_rs);
         $this->display();
     }
-    
     // 用户登录页面
     public function login()
     {
         $fee = M('fee');
-        $fee_rs = $fee->field('str21,i9')->find();
-        $this->assign('fflv', $fee_rs['str21']);
-        $this->assign('i9', $fee_rs['i9']);
+        $fee_rs = $fee->field('s1')->find();
+        $this->assign('s1', $fee_rs['s1']);
         unset($fee, $fee_rs);
-        // $this->display('login3');
         $this->display('login');
     }
-
     public function index()
     {
         // 如果通过认证跳转到首页
         redirect(__APP__);
     }
-    
     // 用户登出
     public function LogOut()
     {
         $_SESSION = array();
-        // unset($_SESSION);
         $this->assign('jumpUrl', __URL__ . '/login/');
         $this->success('退出成功！');
     }
@@ -270,13 +261,10 @@ class PublicAction extends CommonAction
         if ($_SESSION['verify'] != md5($_POST['verify'])) {
             $this->error('验证码错误！');
         }
-        
         import('@.ORG.RBAC');
         $fck = M('member');
-        $field = 'id,user_id,password';
-        $authInfo = $fck->where($map)
-            ->field($field)
-            ->find();
+        $field = 'id,user_id,user_name,password,register_time,last_login_time,is_agent,cash,point';
+        $authInfo = $fck->where($map)->field($field)->find();
         // 使用用户名、密码和状态的方式进行认证
         if (false == $authInfo) {
             $this->error('帐号不存在或已禁用！');
@@ -284,55 +272,32 @@ class PublicAction extends CommonAction
             if ($authInfo['password'] != md5($_POST['password'])) {
                 $this->error('密码错误！');
                 exit();
-            }
-            
-            if ($_POST['lang'] == 1) {
-                $this->error('英文版本暂时无法登陆，请选择中文版本！');
-                exit();
-            }
-            
-//             if ($_POST['agent'] == 2 && $authInfo['is_agent'] < $_POST['agent']) {
-//                 $this->error('您为非报单中心,请选择会员登录入口！');
-//                 exit();
-//             }
-            
-//             if ($authInfo['is_pay'] < 1) {
-//                 $this->error('用户尚未开通，暂时不能登录系统！');
-//                 exit();
-//             }
-//             if ($authInfo['is_lock'] != 0) {
-//                 $this->error('用户已锁定，请与管理员联系！');
-//                 exit();
-//             }
+        }
             $_SESSION[C('USER_AUTH_KEY')] = $authInfo['id'];
             $_SESSION['loginUseracc'] = $authInfo['user_id']; // 用户名
-//             $_SESSION['loginUserName'] = $authInfo['user_name']; // 开户名
-//             $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];
-            // $_SESSION['login_count'] = $authInfo['login_count'];
-//             $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否报单中心
+            $_SESSION['loginUserName'] = $authInfo['user_name']; // 用户姓名
+            $_SESSION['register_time'] = $authInfo['register_time'];// 注册时间
+            $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];// 最近登录时间
+            $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否服务中心
+            $_SESSION['cash'] = $authInfo['cash']; // 现金币
+            $_SESSION['point'] = $authInfo['point']; // 积分币
             $_SESSION['UserMktimes'] = mktime();
             // 身份确认 = 用户名+识别字符+密码
             $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
-            // 登录状态
+            // 登录状态（多点登录设置）
             $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
-//             $_SESSION['login_user_type'] = $user_type;
-//             $where['id'] = $authInfo['id'];
-//                 $user_type = ($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
-                $_SESSION['login_user_type'] = $user_type;
-                $where['id'] = $authInfo['id'];
-            $fck->where($where)->setField('bk1', $user_type);
+            $_SESSION['login_user_type'] = $user_type;
+            $where['id'] = $authInfo['id'];
+            $fck->where($where)->setField('bk3', $user_type);
             $fck->where($where)->setField('last_login_time',mktime());
             // 管理员
-            
             $parmd = $this->_cheakPrem();
             if ($authInfo['id'] == 1 || $parmd[11] == 1) {
                 $_SESSION['administrator'] = 1;
             } else {
                 $_SESSION['administrator'] = 2;
             }
-            
-            $fck->execute("update __TABLE__ set last_login_time=new_login_time,last_login_ip=new_login_ip,new_login_time=" . time() . ",new_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
-            
+            $fck->execute("update __TABLE__ set last_login_time=" . time() . ",last_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
             // 缓存访问权限
             RBAC::saveAccessList();
             $this->success('登录成功！');
@@ -378,7 +343,6 @@ class PublicAction extends CommonAction
                 $this->error('二级密码错误!');
                 exit();
             }
-            
             $where = array();
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
             $where['password2'] = md5($pass);

@@ -4,9 +4,10 @@
 html,
 body {
     height: 100%;
-    background-color: #ffffff;
+    background-color: #FFFFF0;
     /* The html and body elements cannot have any padding or margin. */
 }
+
 /* Wrapper for page content to push down footer */
 #wrap {
     min-height: 100%;
@@ -18,18 +19,60 @@ body {
     padding: 0 0 60px;
 }
 
+.center-vertical-y-1{
+    position: relative;
+    top: 10%;
+    transform: translateY(10%);
+}
+.center-vertical-y-2{
+    position: relative;
+    top: 10%;
+    transform: translateY(20%);
+}
+.center-vertical-y-3{
+    position: relative;
+    top: 10%;
+    transform: translateY(30%);
+}
+.center-vertical-y-4{
+    position: relative;
+    top: 10%;
+    transform: translateY(40%);
+}
+.center-vertical-y-5{
+    position: relative;
+    top: 10%;
+    transform: translateY(50%);
+}
+.padding-one{
+    padding: 1px;
+}
+.margin-one {
+    margin: 1px;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
 .margin-top {
     margin-top: 15px;
 }
+
 /* Set the fixed height of the footer here */
 #footer {
     height: 60px;
-    background-color: #f5f5f5;
+    background-color: #cccccc;
 }
 
 #wrap > .container {
     padding: 60px 15px 0;
 }
+
 .container .credit {
     margin: 20px 0;
 }

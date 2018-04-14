@@ -85,3 +85,8 @@ footer > .container {
 code {
     font-size: 80%;
 }
+
+.line-style{
+    height:2px;
+    background-color: #d4d4d4;
+}

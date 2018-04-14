@@ -14,13 +14,13 @@ class MsgAction extends CommonAction {
 			$this->error('二级密码错误!');
 			exit;
 		}
-		if(!empty($_SESSION['user_pwd2'])){
+		if(!empty($_SESSION['password2'])){
 			$url = __URL__."/codys/Urlsz/$UrlID";
 			$this->_boxx($url);
 			exit;
 		}
-		$fck   =  M ('cody');
-        $list	=  $fck->where("c_id=$UrlID")->getField('c_id');
+		$member   =  M ('cody');
+        $list	=  $member->where("c_id=$UrlID")->getField('c_id');
 		if (!empty($list)){
 			$this->assign('vo',$list);
 			$this->display('Public:cody');
@@ -33,10 +33,10 @@ class MsgAction extends CommonAction {
 	//二级验证后调转页面
 	public function codys(){
 		$Urlsz = $_POST['Urlsz'];
-		if(empty($_SESSION['user_pwd2'])){
+		if(empty($_SESSION['password2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('fck');
-		    if (!$fck->autoCheckToken($_POST)){
+			$member   =  M ('member');
+		    if (!$member->autoCheckToken($_POST)){
 	            $this->error('页面过期请刷新页面!');
 	            exit();
 	        }
@@ -48,12 +48,12 @@ class MsgAction extends CommonAction {
 			$where =array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
 			$where['passopen'] = md5($pass);
-			$list = $fck->where($where)->field('id')->find();
+			$list = $member->where($where)->field('id')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
 				exit();
 			}
-			$_SESSION['user_pwd2'] = 1;
+			$_SESSION['password2'] = 1;
 		}else{
 			$Urlsz = $_GET['Urlsz'];
 		}
@@ -84,8 +84,8 @@ class MsgAction extends CommonAction {
 	*/
 	public function writemsg(){
 		$ID = $_SESSION[C('USER_AUTH_KEY')];
-		$fck = M('fck');
-		$mrs = $fck->where('id='.$ID)->find();
+		$member = M('member');
+		$mrs = $member->where('id='.$ID)->find();
 		$this->assign('mrs',$mrs);
 		$this->display('writemsg');
 	}
@@ -103,10 +103,10 @@ class MsgAction extends CommonAction {
 		$Msg      = trim($_POST['Msg']);
 		$level      = (int)$_POST['level'];
 		if($level==1){
-			$gsrs = M('fck')->where('id=1')->field('user_id')->find();
+			$gsrs = M('member')->where('id=1')->field('user_id')->find();
 			$UserID = $gsrs['user_id'];
 		}
-		$fck = M ('fck');
+		$member = M ('member');
 		if (empty($UserID)){
 			$this->error('数据错误!');
 			exit;
@@ -118,20 +118,20 @@ class MsgAction extends CommonAction {
 		$this->_messagesAdd($UserID,$Title,$Msg);
 	}
 	private function _messagesAdd($UserID='0',$Title='',$Msg=''){
-		$fck = M ('fck');
-		$Users = M ('Msg');
+		$member = M ('member');
+		$Users = M ('message');
 		$where = array();
 		$ID = $_SESSION[C('USER_AUTH_KEY')];
 		//收件人
 		$where1 = array();
 		$where1['user_id'] = $UserID;
 		if($UserID == '公司'){
-			$gsrs = M('fck')->where('id=1')->field('user_id')->find();
+			$gsrs = M('member')->where('id=1')->field('user_id')->find();
 			$where1['user_id'] = $gsrs['user_id'];
 		}
 
-		$field = 'id,user_id';
-		$vo = $fck->where($where1)->field($field)->find();
+		$field = 'user_name,user_id';
+		$vo = $member->where($where1)->field($field)->find();
 		if (!$vo){
 			$this->error('收件人不存在！');
 			exit;
@@ -145,7 +145,7 @@ class MsgAction extends CommonAction {
 
 		//发件人
 		$where['id'] = $ID;
-		$vo2 = $fck->where($where)->field($field)->find();
+		$vo2 = $member->where($where)->field($field)->find();
 		if (!$vo2){
 			$this->error('没有该记录!');
 			exit;
@@ -156,13 +156,16 @@ class MsgAction extends CommonAction {
         
 		//留言表
 		$data = array();
-		$data['f_uid']		= $vo2['id'];
-		$data['f_user_id']	= $vo2['user_id'];
-		$data['s_uid']		= $vo['id'];
+		// 发件人
+		$data['user_id']		= $vo2['user_id'];
+		$data['user_name']	= $vo2['user_name'];
+		// 收件人
+		$data['s_user_name']		= $vo['user_name'];
 		$data['s_user_id']	= $vo['user_id'];
-		$data['title']		= $Title;
+		$data['title']	= $Title;
 		$data['content']	= $Msg;
-		$data['f_time']		= time();
+		// 创建时间
+		$data['create_time']	= time();
 		$rs1 = $Users->add($data);
 		unset($data);
 		if ($rs1){
@@ -183,10 +186,10 @@ class MsgAction extends CommonAction {
 	 * 收件箱
 	 * */
 	public function inmsg(){
-		$msg = M('msg');
+		$msg = M('message');
 		$map = array();
-		$map['s_uid']   = $_SESSION[C('USER_AUTH_KEY')];
-		$map['s_del']   = 0;
+		$map['s_user_id']   = $_SESSION['loginUseracc'] ;
+		$map['delete_flag']   != 1;
         $field  = '*';
         //=====================分页开始==============================================
         import ( "@.ORG.ZQPage" );  //导入分页类
@@ -207,7 +210,7 @@ class MsgAction extends CommonAction {
 	 * */
 	public function s_del(){
 		$boxID = $_POST['tabledb'];
-		$msg = M('msg');
+		$msg = M('message');
 		$map = array();
 		$map['id']  = array('in ',$boxID);
 		$map['s_uid'] = $_SESSION[C('USER_AUTH_KEY')];
@@ -219,7 +222,7 @@ class MsgAction extends CommonAction {
 				$delre = $msg->where($where)->delete();
 			}else{
 				$data = array();
-				$data['s_del'] = 1;
+				$data['delete_flag'] = 1;
 				$delre = $msg->where($where)->save($data);
 			}
 		}
@@ -233,11 +236,11 @@ class MsgAction extends CommonAction {
 	 * 查看收件箱记录
 	 * */
 	public function s_view(){
-		$msg = M('msg');
+		$msg = M('message');
 		$did = (int)$_GET['did'];
 		$map = array();
 		$map['id']  = $did;
-		$map['s_uid'] = $_SESSION[C('USER_AUTH_KEY')];
+		$map['s_user_id']  = $_SESSION['loginUseracc'] ;
 		$mrs = $msg->where($map)->find();
 		if($mrs){
 			$read = $mrs['s_read'];
@@ -269,11 +272,11 @@ class MsgAction extends CommonAction {
 		$this->_messagesShowReply($Pid,$Msg);
 	}
 	private function _messagesShowReply($Pid=0,$Msg=''){
-		$ID = $_SESSION[C('USER_AUTH_KEY')];
-		$msg = M ('msg');
-		$fck = M ('fck');
-		$where = array();//
-		$where['s_uid'] = $ID;
+		$user_id  = $_SESSION['loginUseracc'] ;
+		$msg = M ('message');
+		$member = M ('member');
+		$where = array();
+		$where['s_user_id'] = $user_id;
 		$where['id'] = $Pid;
 		$field = '*';
 		$vo = $msg ->where($where)->field($field)->find();
@@ -283,8 +286,8 @@ class MsgAction extends CommonAction {
 		}
 		//发件人
 		$where = array();
-		$where['id'] = $ID;
-		$vo2 = $fck->where($where)->field('id,user_id')->find();
+		$where['user_id'] = $user_id;
+		$vo2 = $member->where($where)->field('user_name,user_id')->find();
 		if (!$vo2){
 			$this->error('没有该记录!');
 			exit;
@@ -292,13 +295,13 @@ class MsgAction extends CommonAction {
 		$Title = '回复：'. $vo['title'];
 		
 		$data = array();
-		$data['f_uid']		= $vo2['id'];
-		$data['f_user_id']	= $vo2['user_id'];
-		$data['s_uid']		= $vo['f_uid'];
-		$data['s_user_id']	= $vo['f_user_id'];
+		$data['user_id']		= $vo2['user_id'];
+		$data['user_name']	= $vo2['user_name'];
+		$data['s_user_id']		= $vo['user_id'];
+		$data['s_user_name']	= $vo['user_name'];
 		$data['title']		= $Title;
 		$data['content']	= $Msg;
-		$data['f_time']		= time();
+		$data['create_time']		= time();
 		$rs1 = $msg->add($data);
 		unset($msg,$data);
 		if ($rs1){
@@ -310,15 +313,14 @@ class MsgAction extends CommonAction {
 			exit;
 		}
 	}
-	
 	/*
 	 * 发件箱
 	 * */
 	public function outmsg(){
-		$msg = M('msg');
+		$msg = M('message');
 		$map = array();
-		$map['f_uid']   = $_SESSION[C('USER_AUTH_KEY')];
-		$map['f_del']   = 0;
+		$map['s_user_id']   = $_SESSION['loginUseracc'] ;
+		$map['delete_flag']   != 1;
         $field  = '*';
         //=====================分页开始==============================================
         import ( "@.ORG.ZQPage" );  //导入分页类
@@ -339,19 +341,19 @@ class MsgAction extends CommonAction {
 	 * */
 	public function f_del(){
 		$boxID = $_POST['tabledb'];
-		$msg = M('msg');
+		$msg = M('message');
 		$map = array();
 		$map['id']  = array('in ',$boxID);
-		$map['f_uid'] = $_SESSION[C('USER_AUTH_KEY')];
+		$map['user_id']   = $_SESSION['loginUseracc'] ;
 		$lirs = $msg->where($map)->select();
 		foreach($lirs as $rs){
 			$where = "id=".$rs['id'];
-			$f_del = $rs['s_del'];
+			$f_del = $rs['delete_flag'];
 			if($f_del==1){
 				$delre = $msg->where($where)->delete();
 			}else{
 				$data = array();
-				$data['f_del'] = 1;
+				$data['delete_flag'] = 1;
 				$delre = $msg->where($where)->save($data);
 			}
 		}
@@ -365,11 +367,11 @@ class MsgAction extends CommonAction {
 	 * 查看收件箱记录
 	 * */
 	public function f_view(){
-		$msg = M('msg');
+		$msg = M('message');
 		$did = (int)$_GET['did'];
 		$map = array();
 		$map['id']  = $did;
-		$map['f_uid'] = $_SESSION[C('USER_AUTH_KEY')];
+		$map['user_id']   = $_SESSION['loginUseracc'] ;
 		$mrs = $msg->where($map)->find();
 		if($mrs){
 			$read = $mrs['f_read'];
@@ -383,6 +385,5 @@ class MsgAction extends CommonAction {
 			exit;
 		}
 	}
-
 }
 ?>

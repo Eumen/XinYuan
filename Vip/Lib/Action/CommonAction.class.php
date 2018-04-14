@@ -77,12 +77,12 @@ class CommonAction extends CheFieldAction {
 			exit;
 		}
 		$member = M('member');
-		$admid			= $_SESSION[C('USER_AUTH_KEY')];
-//		$mapp				=   array();
-//		$mapp['id']			= $_SESSION[C('USER_AUTH_KEY')];
-//		$mapp['is_boss']	= array('gt',0);
+		$admid = $_SESSION[C('USER_AUTH_KEY')];
+		$mapp				=   array();
+		$mapp['id']			= $_SESSION[C('USER_AUTH_KEY')];
+		$mapp['grade']	= array('eq',2);
 		$field = 'id,user_id';
-        $rs = $member->where('id='.$admid.' and (is_boss>0 or (is_boss=0 ))')->field($field)->find();
+        $rs = $member->where($mapp)->field($field)->find();
         if(!$rs){
         	$_SESSION = array();
 			$bUrl = __APP__.'/Public/login';

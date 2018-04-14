@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-04-14 03:57:45
+# Date: 2018-04-15 07:19:41
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -48,14 +48,14 @@ CREATE TABLE `xy_address` (
   `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段2',
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段3',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='地址表';
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='地址表';
 
 #
 # Data for table "xy_address"
 #
 
 /*!40000 ALTER TABLE `xy_address` DISABLE KEYS */;
-INSERT INTO `xy_address` VALUES (3,'carNo1','tom','米国白宫','15845127845','1','','','0','','0','',NULL,NULL,NULL),(6,'aaa','123123','123123','123123','0','','','0','','0','',NULL,NULL,NULL),(7,'carNo1','aaa','aaa','aaa','0','','','0','','0','',NULL,NULL,NULL),(8,'carNo1','123123','123123','123123','0','','','0','','0','',NULL,NULL,NULL),(9,'carNo1','123123','123123','321321','0','','','0','','0','',NULL,NULL,NULL),(10,'carNo1','123123','123123','123123','0','','','0','','0','',NULL,NULL,NULL);
+INSERT INTO `xy_address` VALUES (6,'aaa','123123','123123','123123','0','','','0','','0','',NULL,NULL,NULL),(7,'carNo1','aaa','aaa','aaa','0','','','0','','0','',NULL,NULL,NULL),(8,'carNo1','123123','123123','123123','0','','','0','','0','',NULL,NULL,NULL),(9,'carNo1','123123','123123','321321','0','','','0','','0','',NULL,NULL,NULL),(10,'carNo1','123123','123123','123123','1','','','0','','0','',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_address` ENABLE KEYS */;
 
 #
@@ -204,6 +204,26 @@ INSERT INTO `xy_fee` VALUES (1,'3000',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NU
 /*!40000 ALTER TABLE `xy_fee` ENABLE KEYS */;
 
 #
+# Structure for table "xy_form_class"
+#
+
+DROP TABLE IF EXISTS `xy_form_class`;
+CREATE TABLE `xy_form_class` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `baile` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "xy_form_class"
+#
+
+/*!40000 ALTER TABLE `xy_form_class` DISABLE KEYS */;
+INSERT INTO `xy_form_class` VALUES (1,'新闻公告',0);
+/*!40000 ALTER TABLE `xy_form_class` ENABLE KEYS */;
+
+#
 # Structure for table "xy_gouwu"
 #
 
@@ -239,7 +259,7 @@ CREATE TABLE `xy_gouwu` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='购物表';
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='购物表';
 
 #
 # Data for table "xy_gouwu"
@@ -297,9 +317,9 @@ CREATE TABLE `xy_member` (
   `bk2` varchar(255) DEFAULT NULL COMMENT '节点绝对层数',
   `bk3` varchar(255) DEFAULT NULL COMMENT '多点登录',
   `bk4` varchar(255) DEFAULT NULL COMMENT '是否支付 0：未支付 1：已支付',
-  `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段5',
-  `bk6` varchar(255) DEFAULT NULL COMMENT '备用字段6',
-  `bk7` varchar(255) DEFAULT NULL COMMENT '备用字段7',
+  `bk5` varchar(255) DEFAULT NULL COMMENT '服务中心ID',
+  `bk6` varchar(255) DEFAULT NULL COMMENT '服务中心姓名',
+  `bk7` varchar(255) DEFAULT NULL COMMENT '开通时间',
   `bk8` varchar(255) DEFAULT NULL COMMENT '备用字段8',
   `bk9` varchar(255) DEFAULT NULL COMMENT '备用字段9',
   `bk10` varchar(255) DEFAULT NULL COMMENT '备用字段10',
@@ -311,7 +331,7 @@ CREATE TABLE `xy_member` (
 #
 
 /*!40000 ALTER TABLE `xy_member` DISABLE KEYS */;
-INSERT INTO `xy_member` VALUES (1,'carNo1','公司','13888888888','1523648635','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','1','1','1','1','1','1523608131','0','0','0','0','2','3000','1977','3000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','f2dd9564eb5e500f42649ef429894d41','1',NULL,NULL,NULL,NULL,NULL,NULL),(2,'aaa','啊三','15678455446','1523646257','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0',NULL,NULL,NULL,NULL,NULL,NULL),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `xy_member` VALUES (1,'carNo1','公司','13888888888','1523747572','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','1','1','1','1','1','1523608131','0','0','0','0','2','3000','1977','3000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','4233d6d6ab4d34dff488f0ed99dabf3e','1','carNo1',NULL,'1523699005',NULL,NULL,NULL),(2,'aaa','啊三','15678455446','1523646257','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','1','carNo1',NULL,'1523699005',NULL,NULL,NULL),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0','carNo1',NULL,'1523699005',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_member` ENABLE KEYS */;
 
 #
@@ -338,6 +358,10 @@ CREATE TABLE `xy_message` (
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
+  `s_user_id` varchar(255) DEFAULT NULL COMMENT '收件人',
+  `s_user_name` varchar(255) DEFAULT NULL COMMENT '收件人姓名',
+  `s_read` varchar(255) DEFAULT NULL COMMENT '收件人是否已读',
+  `f_read` varchar(255) DEFAULT NULL COMMENT '发件人是否已读',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言板';
 
@@ -346,6 +370,7 @@ CREATE TABLE `xy_message` (
 #
 
 /*!40000 ALTER TABLE `xy_message` DISABLE KEYS */;
+INSERT INTO `xy_message` VALUES (1,'123','123',NULL,'carNo1','公司','1523747597',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'carNo1','公司','1','1'),(2,'回复：123','123123',NULL,'carNo1','公司','1523747637',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'carNo1','公司',NULL,NULL);
 /*!40000 ALTER TABLE `xy_message` ENABLE KEYS */;
 
 #
@@ -370,14 +395,16 @@ CREATE TABLE `xy_news` (
   `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
+  `baile` varchar(255) DEFAULT NULL COMMENT '是否置顶',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
 
 #
 # Data for table "xy_news"
 #
 
 /*!40000 ALTER TABLE `xy_news` DISABLE KEYS */;
+INSERT INTO `xy_news` VALUES (1,'1','<p>12</p>',NULL,'1',NULL,'1523744895','1523745271','0','1',NULL,NULL,NULL,NULL,NULL,NULL,'1'),(3,'234','<p>&nbsp;234</p>',NULL,'1',NULL,'1523747773',NULL,'1','1',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_news` ENABLE KEYS */;
 
 #

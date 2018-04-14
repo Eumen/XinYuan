@@ -13,13 +13,13 @@ class NewsAction extends CommonAction{
 			$this->error('二级密码错误!');
 			exit;
 		}
-		if(!empty($_SESSION['user_pwd2'])){
+		if(!empty($_SESSION['password2'])){
 			$url = __URL__."/codys/Urlsz/$UrlID";
 			$this->_boxx($url);
 			exit;
 		}
-		$fck   =  M ('cody');
-        $list	=  $fck->where("c_id=$UrlID")->getField('c_id');
+		$member   =  M ('cody');
+        $list	=  $member->where("c_id=$UrlID")->getField('c_id');
 		if (!empty($list)){
 			$this->assign('vo',$list);
 			$this->display('Public:cody');
@@ -32,10 +32,10 @@ class NewsAction extends CommonAction{
 	//二级验证后调转页面
 	public function codys(){
 		$Urlsz = $_POST['Urlsz'];
-		if(empty($_SESSION['user_pwd2'])){
+		if(empty($_SESSION['password2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('fck');
-		    if (!$fck->autoCheckToken($_POST)){
+			$member   =  M ('member');
+		    if (!$member->autoCheckToken($_POST)){
 	            $this->error('页面过期请刷新页面!');
 	            exit();
 	        }
@@ -46,13 +46,13 @@ class NewsAction extends CommonAction{
 
 			$where =array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$where['passopen'] = md5($pass);
-			$list = $fck->where($where)->field('id')->find();
+			$where['password2'] = md5($pass);
+			$list = $member->where($where)->field('id')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
 				exit();
 			}
-			$_SESSION['user_pwd2'] = 1;
+			$_SESSION['password2'] = 1;
 		}else{
 			$Urlsz = $_GET['Urlsz'];
 		}
@@ -77,7 +77,7 @@ class NewsAction extends CommonAction{
 	public function adminnews(){
 		$this->_Admin_checkUser();//后台权限检测
 		if ($_SESSION['Urlszpass'] == 'Myssadminnews'){
-			$form = M ('form');
+			$form = M ('news');
 			$title = trim($_REQUEST['title']);
 			if (!empty($title)){
 				import ( "@.ORG.KuoZhan" );  //导入扩展类
@@ -96,7 +96,7 @@ class NewsAction extends CommonAction{
 	        $count = $form->where($map)->count();//总页数
 	   		$listrows = C('ONE_PAGE_RE');//每页显示的记录数
 			$this_where = 'title='. $title;
-	        $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+	        $Page = new ZQPage($count, $listrows, 1, 0, 3, $this_where);
 	        //===============(总页数,每页显示记录数,css样式 0-9)
 	        $show = $Page->show();//分页变量
 	        $this->assign('page',$show);//分页变量输出到模板
@@ -114,14 +114,12 @@ class NewsAction extends CommonAction{
 		$this->_Admin_checkUser();//后台权限检测
 		//处理提交按钮
 		$action = trim($_POST['action']);
-
 		//获取复选框的值
 		$PTid = $_POST['tabledb'];
 		if ($action == '添加新闻'){
 			$nowtime = date("Y-m-d H:i:s");
 			$this->assign('nowtime',$nowtime);
 			$this->us_fckeditor('content',"",400,"100%");
-		
 			$this->News_add();
 			exit;
 		}
@@ -156,12 +154,11 @@ class NewsAction extends CommonAction{
 		$this->display('News_add');
 	}
 	public function News_add_save(){
-		$User = M ('form');
+		$User = M ('news');
 		$data = array();
-
 		$content = stripslashes($_POST['content']);
 		$title = $_POST['title'];
-		$addtime = $_POST['addtime'];
+		$addtime = $_POST['create_time'];
 		$ttime = strtotime($addtime);
 		if($ttime==0){
 			$ttime = mktime();
@@ -169,26 +166,27 @@ class NewsAction extends CommonAction{
 		if(empty($title) or empty($content)){
 			$this->error('请输入完整的信息！');
 		}
-		//dump($_POST['select']);exit;
 		$data['title'] = $title;
 		$data['content'] = $content;
 		$data['user_id'] = $_POST['user_id'];
 		$data['create_time'] = $ttime;
 		$data['status'] = 1;
-		$data['type'] = $_POST['type'];
+		$data['news_type'] = $_POST['type'];
 
 		$rs = $User->add($data);
 		if (!$rs){
-			$this->error('添加新闻2');
+			$this->error('添加资讯失败');
 			exit;
+		} else {
+		    $bUrl = __URL__.'/adminnews';
+		    $this->_box(0,'添加资讯成功！',$bUrl,1);
+		    exit;
 		}
-		$bUrl = __URL__.'/adminnews';
-		$this->_box(0,'添加新闻！',$bUrl,1);
-		exit;
+		
 	}
 	//启用
 	private function News_Open($PTid=0){
-		$User = M ('form');
+		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
 		$User->where($where)->setField('status',1);
 		$bUrl = __URL__.'/adminnews';
@@ -197,7 +195,7 @@ class NewsAction extends CommonAction{
 	}
 	//禁用
 	private function News_Stop($PTid=0){
-		$User = M ('form');
+		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
 		$User->where($where)->setField('status',0);
 		$bUrl = __URL__.'/adminnews';
@@ -206,7 +204,7 @@ class NewsAction extends CommonAction{
 	}
 	//删除
 	private function News_Del($PTid=0){
-		$User = M ('form');
+		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
 		$rs = $User->where($where)->delete();
 		if ($rs){
@@ -221,7 +219,7 @@ class NewsAction extends CommonAction{
 	}
 	//置顶
 	private function News_Top($PTid=0){
-		$User = M ('form');
+		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
 		$User->where($where)->setField('baile',1);
 		$bUrl = __URL__.'/adminnews';
@@ -230,7 +228,7 @@ class NewsAction extends CommonAction{
 	}
 	//取消置顶
 	private function News_NoTop($PTid=0){
-		$User = M ('form');
+		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
 		$User->where($where)->setField('baile',0);
 		$bUrl = __URL__.'/adminnews';
@@ -242,7 +240,7 @@ class NewsAction extends CommonAction{
 	public function News_edit(){
 		$this->_Admin_checkUser();//后台权限检测
 		$EDid = $_GET['EDid'];
-		$User = M ('form');
+		$User = M ('news');
 		$l_type = (int)$_GET['l_type'];
 		$this->assign('l_type',$l_type);
 		if($l_type==1){
@@ -264,7 +262,7 @@ class NewsAction extends CommonAction{
 	}
 	public function News_editAc(){
 		$this->_Admin_checkUser();//后台权限检测
-		$User = M ('form');
+		$User = M ('news');
 		$data = array();
 		//h 函数转换成安全html
 		$content = stripslashes($_POST['content']);
@@ -277,28 +275,26 @@ class NewsAction extends CommonAction{
 			$ttime = mktime();
 		}
 		if($l_type==1){
-			$data['e_title'] = $title;
-			$data['e_content'] = $content;
+			$data['bk1'] = $title;
+			$data['bk2'] = $content;
 		}else{
 			$data['title'] = $title;
 			$data['content'] = $content;
 		}
-		$data['type'] =$type;
+		$data['news_type'] =$type;
 		//$data['user_id'] = $_POST['user_id'];
 		$data['create_time'] = $ttime;
 		$data['update_time'] = mktime();
 		$data['status'] = 1;
 		$data['id'] = $_POST['ID'];
 
-		//dump($data);
-		//exit;
 		$rs = $User->save($data);
 		if (!$rs){
-			$this->error('编辑失败！');
+			$this->error('编辑资讯失败！');
 			exit;
 		}
 		$bUrl = __URL__.'/adminnews';
-		$this->_box(1,'编辑新闻！',$bUrl,1);
+		$this->_box(1,'编辑资讯成功！',$bUrl,1);
 		exit;
 	}
 
@@ -310,7 +306,7 @@ class NewsAction extends CommonAction{
 	public function News() {
 		$map = array();
 		$map['status'] = 1;
-		$form = M ('form');
+		$form = M ('news');
         $field  = '*';
         //=====================分页开始==============================================
         import ( "@.ORG.ZQPage" );  //导入分页类
@@ -329,7 +325,7 @@ class NewsAction extends CommonAction{
 
 	//查询返回一条记录
 	public function News_show() {
-		$model = M ('Form');
+		$model = M ('news');
 		$id = (int) $_GET['NewID'];
 		$where = array();
 		$where['id'] = $id;

@@ -21,8 +21,8 @@
           <input type="checkbox" name="tabledb[]" value="{$vo['id']}" class="btn2" />
         </div></td>
         <td>
-          <eq name="vo['type']" value="1">新闻资讯</eq>
-          <eq name="vo['type']" value="2">常见问题</eq>
+          <eq name="vo['news_type']" value="1">新闻资讯</eq>
+          <eq name="vo['news_type']" value="2">常见问题</eq>
         </td>
         <td><eq name="vo.baile" value="1"><font color=red>[置顶] </font></eq>{$vo['title']|mysubstr=###,20}</td>
        <!-- <td>{$vo['e_title']|mysubstr=###,20}</td>-->

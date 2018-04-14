@@ -258,36 +258,6 @@ class CommonAction extends CheFieldAction {
 		}
 	}
 
-	protected function _levelConfirm(&$HYJJ,$HYid=1){
-		$HYJJ = array();
-		$User = M ('fee');
-		$fee_rs = $User->find(1);
-		// $HYJJ=array('普通会员','铜级','银级','金级','蓝宝石','绿宝石','红宝石','珍珠','钻石','双钻石','黑钻石','皇冠');
-		$fee_s1 = explode('|',$fee_rs['s10']);
-		// $fee_s1 = array('普通会员','铜级','银级','金级','蓝宝石','绿宝石','红宝石','珍珠','钻石','双钻石','黑钻石','皇冠');
-		$HYJJ[1] = $fee_s1[0];
-		// $HYJJ[2] = $fee_s1[1];
-		// $HYJJ[3] = $fee_s1[2];
-		// $HYJJ[4] = $fee_s1[3];
-		// $HYJJ[5] = $fee_s1[4];
- 	// 	$HYJJ[6] = $fee_s1[5];
-		// $HYJJ[7] = $fee_s1[6];
-		// $HYJJ[8] = $fee_s1[7];
-		// $HYJJ[9] = $fee_s1[8];
-		// $HYJJ[10] = $fee_s1[9];
-		// $HYJJ[11] = $fee_s1[10];
-		// $HYJJ[12] = $fee_s1[11];
-	}
-	
-	protected function _getLevelConfirm(&$HYJJ,$HYid=1){
-		$HYJJ = array();
-		$HYJJ[0] = "普通会员";
-		$HYJJ[1] = "一星";
-		$HYJJ[2] = "二星";
-		$HYJJ[3] = "三星";
-		$HYJJ[4] = "四星";
-	}
-
 	public function index() {
 		//列表过滤器，生成查询Map对象
 		$map = $this->_search ();
@@ -406,7 +376,6 @@ class CommonAction extends CheFieldAction {
 			$i = 1;
 			$HYJJ = array();
 			$HYoo = array();
-			$this->_levelConfirm($HYJJ,1);
 			foreach($voList as $voo){
 				$HYoo[$i][0] = $HYJJ[$voo['u_level']];
 				$i++;

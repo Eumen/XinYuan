@@ -22,10 +22,6 @@ class IndexAction extends CommonAction {
 		$reusertel = $rers['user_tel'];
 		$this->assign('reusertel',$reusertel);
 
-		$HYJJ="";
-		$this->_levelConfirm($HYJJ,1);
-		$this->assign('voo',$HYJJ);//会员级别
-		
 		$k=explode(",",$fck_rs['prem']);
 		$this -> assign('k',$k);
 		

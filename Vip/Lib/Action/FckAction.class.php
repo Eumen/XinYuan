@@ -665,9 +665,6 @@ private function _transferMoneyConfirm($UserID='0',$ePoints=0,$content=null,$sel
             $this->assign('page',$show);//分页变量输出到模板
             $list = $fck->where($map)->field($field)->order('pdt desc')->page($Page->getPage().','.$listrows)->select();
 
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ,1);
-            $this->assign('voo',$HYJJ);//会员级别
             $this->assign('list',$list);//数据输出到模板
             //=================================================
 
@@ -729,9 +726,6 @@ private function _transferMoneyConfirm($UserID='0',$ePoints=0,$content=null,$sel
 	            $show = $Page->show();//分页变量
 	            $this->assign('page',$show);//分页变量输出到模板
 	            $list = $fck->where($map)->field($field)->order('pdt desc')->page($Page->getPage().','.$listrows)->select();
-	            $HYJJ = '';
-	            $this->_levelConfirm($HYJJ,1);
-	            $this->assign('voo',$HYJJ);//会员级别
 	            $this->assign('list',$list);//数据输出到模板
 	            unset($list);
 	            //=================================================
@@ -1388,12 +1382,7 @@ private function _transferMoneyConfirm($UserID='0',$ePoints=0,$content=null,$sel
 			$show = $Page->show();//分页变量
 			$this->assign('page',$show);//分页变量输出到模板
 			$list = $ul->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
-			$HYJJ = '';
-			$this->_levelConfirm($HYJJ,1);
-			$this->assign('HYJJ',$HYJJ);//会员级别
 			$this->assign('list',$list);
-
-
 			$this->display();
 		}else{
 			$this->error('二级密码错误!');

@@ -115,9 +115,6 @@ class UserAction extends CommonAction{
             $show = $Page->show();//分页变量
             $this->assign('page',$show);//分页变量输出到模板
             $list = $fck->where($map)->field($field)->order('pdt desc')->page($Page->getPage().','.$listrows)->select();
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ,1);
-            $this->assign('voo',$HYJJ);//会员级别
             $this->assign('list',$list);//数据输出到模板
             //=================================================
 
@@ -271,9 +268,6 @@ class UserAction extends CommonAction{
 			$this->assign('list',$list);//数据输出到模板
 			//=================================================
 	
-			$HYJJ = '';
-			$this->_levelConfirm($HYJJ,1);
-			$this->assign('voo',$HYJJ);//会员级别
 			$where = array();
 			$where['id'] = $id;
 			$fck_rs = $fck->where($where)->field('*')->find();

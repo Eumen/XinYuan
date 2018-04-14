@@ -20,37 +20,6 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace-fonts.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/fonts-awesome.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/buttons.css">
-<script language='javascript'>
-function CheckForm(){
-	if(document.form1.ePoints.value==""){
-		alert("请输入金额！");
-		document.form1.ePoints.focus();
-		return false;
-	}
-	if(confirm('您确定充值金额 '+document.form1.ePoints.value+' 吗？'))
-	{
-		var Null_Name = document.form1._hour.value;
-		if (Null_Name)
-		{
-			str = Null_Name.replace(/^\s+|\s+$/g,"");
-			if (!str == "")//判断是否为空
-			{
-				if (!isNaN(Null_Name))
-				{
-					if(Null_Name >= 0 && Null_Name <=24){
-						return true;
-					}else{ alert('小时输入有误'); return false; }
-				}else{ alert('请输入数字'); return false; }
-
-			}
-		}
-	}else{
-	alert('您取消了本次操作');
-       return false;
-    }
-}
-
-</script>
 <style>
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -115,7 +84,7 @@ code {
   <div class="container">
   <div class="row">
 	  <div class="col-xs-12">
-	      <h4><a href="javascript:history.back();" class="btn-xs btn-info"><img src="__PUBLIC__/Images/left.png"></a>充值申请</h4>
+	      <h4><a href="javascript:history.back();" class="btn-xs btn-info"><img src="__PUBLIC__/Images/left.png"></a>申请服务服务中心</h4>
 	   </div>
    </div>
 	<div class="row">
@@ -123,46 +92,13 @@ code {
 			<form class="form-horizontal" role="form">
 				<!-- #section:elements.form -->
 				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" >用户账号</label>
 					<div class="col-sm-9">
-						<input type="text" id="user_id" name ="user_id" value="{$_SESSION['loginUseracc']}" placeholder="用户账号" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" >充值方式：</label>
-					<div class="col-sm-9">
-					    <select id="recharge_type"  class="col-xs-10 col-sm-5">
-					      <option>微信</option>
-					      <option>支付宝</option>
-					      <option>网银</option>
-					    </select>
-				    </div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" >充值金额：</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="请输入充值金额" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" >二级密码</label>
-
-					<div class="col-sm-9">
-						<input type="password" id="form-field-1-1" placeholder="请输入二级密码" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-md-offset-3 col-md-9">
-						<button class="btn btn-info" type="button">
-							<i class="ace-icon fa fa-check bigger-110"></i>
-							确认
-						</button>
-						&nbsp; &nbsp; &nbsp;
-						<button class="btn" type="reset">
-							<i class="ace-icon fa fa-undo bigger-110"></i>
-							重置
-						</button>
+						<address contenteditable="true" class="col-xs-10 col-sm-5" >
+						申请服务商需总公司审核，有意者请拨打公司电话详谈！<br />
+									公司地址:<br />
+									南宁市青秀区阳光100写字楼
+									T2座801室<br />
+									<abbr title="Phone">Tel:</abbr> (123) 456-7890</address>
 					</div>
 				</div>
 			</form>
@@ -174,7 +110,8 @@ code {
 
 <div id="footer">
   <div class="container">
-    <p class="text-muted credit">copyright@xxx.com</p>
+    <p class="text-muted credit">©
+				2018-现在 cheyihao.com 广西亚凯龙科技有限公司版权所有 客服及技术支持.</p>
   </div>
 </div>
 </body>

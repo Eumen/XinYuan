@@ -44,8 +44,8 @@ class AgentAction extends CommonAction
         $Urlsz = (int) $_POST['Urlsz'];
         if (empty($_SESSION['user_pwd2'])) {
             $pass = $_POST['oldpassword'];
-            $fck = M('fck');
-            if (! $fck->autoCheckToken($_POST)) {
+            $member = M('member');
+            if (! $member->autoCheckToken($_POST)) {
                 $this->error('页面过期请刷新页面!');
                 exit();
             }
@@ -53,13 +53,10 @@ class AgentAction extends CommonAction
                 $this->error('二级密码错误!');
                 exit();
             }
-            
             $where = array();
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-            $where['passopen'] = md5($pass);
-            $list = $fck->where($where)
-                ->field('id,is_agent')
-                ->find();
+            $where['password2'] = md5($pass);
+            $list = $member->where($where)->field('id,is_agent')->find();
             if ($list == false) {
                 $this->error('二级密码错误!');
                 exit();
@@ -157,18 +154,18 @@ class AgentAction extends CommonAction
         if ($_SESSION['Urlszpass'] == 'MyssXiGua') {
             $fee_rs = M('fee')->find();
             
-            $fck = M('fck');
+            $member = M('member');
             $where = array();
             // 查询条件
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
             $field = '*';
-            $fck_rs = $fck->where($where)
+            $member_rs = $member->where($where)
                 ->field($field)
                 ->find();
             
-            if ($fck_rs) {
+            if ($member_rs) {
                 // 会员级别
-                switch ($fck_rs['l_nums']) {
+                switch ($member_rs['l_nums']) {
                     case 0:
                         $agent_status = '未申请商家!';
                         break;
@@ -183,7 +180,7 @@ class AgentAction extends CommonAction
                 $this->assign('fee_s6', $fee_rs['i1']);
                 $this->assign('agent_level', 0);
                 $this->assign('agent_status', $agent_status);
-                $this->assign('fck_rs', $fck_rs);
+                $this->assign('member_rs', $member_rs);
                 
                 $Agent_Us_Name = C('Agent_Us_Name');
                 $Aname = explode("|", $Agent_Us_Name);
@@ -206,18 +203,18 @@ class AgentAction extends CommonAction
         if ($_SESSION['Urlszpass'] == 'MyssX') {
             $fee_rs = M('fee')->find();
             
-            $fck = M('fck');
+            $member = M('member');
             $where = array();
             // 查询条件
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
             $field = '*';
-            $fck_rs = $fck->where($where)
+            $member_rs = $member->where($where)
                 ->field($field)
                 ->find();
             
-            if ($fck_rs) {
+            if ($member_rs) {
                 // 会员级别
-                switch ($fck_rs['is_agent']) {
+                switch ($member_rs['is_agent']) {
                     case 0:
                         $agent_status = '未申请服务中心!';
                         break;
@@ -232,7 +229,7 @@ class AgentAction extends CommonAction
                 $this->assign('fee_s6', $fee_rs['i1']);
                 $this->assign('agent_level', 0);
                 $this->assign('agent_status', $agent_status);
-                $this->assign('fck_rs', $fck_rs);
+                $this->assign('member_rs', $member_rs);
                 
                 $Agent_Us_Name = C('Agent_Us_Name');
                 $Aname = explode("|", $Agent_Us_Name);
@@ -255,18 +252,18 @@ class AgentAction extends CommonAction
         if ($_SESSION['Urlszpass'] == 'MyssXiGu') {
             $fee_rs = M('fee')->find();
             
-            $fck = M('fck');
+            $member = M('member');
             $where = array();
             // 查询条件
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
             $field = '*';
-            $fck_rs = $fck->where($where)
+            $member_rs = $member->where($where)
                 ->field($field)
                 ->find();
             
-            if ($fck_rs) {
+            if ($member_rs) {
                 // 会员级别
-                switch ($fck_rs['is_cc']) {
+                switch ($member_rs['is_cc']) {
                     case 0:
                         $agent_status = '未申请现金卡!';
                         break;
@@ -282,7 +279,7 @@ class AgentAction extends CommonAction
                 $this->assign('str9', $fee_rs['str9']);
                 $this->assign('agent_level', 0);
                 $this->assign('agent_status', $agent_status);
-                $this->assign('fck_rs', $fck_rs);
+                $this->assign('member_rs', $member_rs);
                 
                 $Agent_Us_Name = C('Agent_Us_Name');
                 $Aname = explode("|", $Agent_Us_Name);
@@ -305,18 +302,18 @@ class AgentAction extends CommonAction
         if ($_SESSION['Urlszpass'] == 'MyssXiG') {
             $fee_rs = M('fee')->find();
             
-            $fck = M('fck');
+            $member = M('member');
             $where = array();
             // 查询条件
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
             $field = '*';
-            $fck_rs = $fck->where($where)
+            $member_rs = $member->where($where)
                 ->field($field)
                 ->find();
             
-            if ($fck_rs) {
+            if ($member_rs) {
                 // 会员级别
-                switch ($fck_rs['is_p']) {
+                switch ($member_rs['is_p']) {
                     case 0:
                         $agent_status = '未申请省代理!';
                         break;
@@ -328,7 +325,7 @@ class AgentAction extends CommonAction
                         break;
                 }
                 
-                switch ($fck_rs['is_c']) {
+                switch ($member_rs['is_c']) {
                     case 0:
                         $agent_status1 = '未申请市代理!';
                         break;
@@ -339,7 +336,7 @@ class AgentAction extends CommonAction
                         $agent_status1 = '市代理已申请成功!';
                         break;
                 }
-                switch ($fck_rs['is_cty']) {
+                switch ($member_rs['is_cty']) {
                     case 0:
                         $agent_status2 = '未申请县!';
                         break;
@@ -357,7 +354,7 @@ class AgentAction extends CommonAction
                 $this->assign('agent_status', $agent_status);
                 $this->assign('agent_status1', $agent_status1);
                 $this->assign('agent_status2', $agent_status2);
-                $this->assign('fck_rs', $fck_rs);
+                $this->assign('member_rs', $member_rs);
                 
                 $Agent_Us_Name = C('Agent_Us_Name');
                 $Aname = explode("|", $Agent_Us_Name);
@@ -398,20 +395,20 @@ class AgentAction extends CommonAction
         if ($shoplx == 3) {
             $where['is_cty'] = 0;
         }
-        $fck = M('fck');
+        $member = M('member');
         $id = $_SESSION[C('USER_AUTH_KEY')];
         
         $where['id'] = $id;
         
-        $fck_rs = $fck->where($where)
+        $member_rs = $member->where($where)
             ->field('*')
             ->find();
         
-        if ($fck_rs) {
+        if ($member_rs) {
             
-            $agent_use = $fck_rs['agent_use'];
+            $agent_use = $member_rs['agent_use'];
             
-            if ($fck_rs['is_pay'] == 0) {
+            if ($member_rs['is_pay'] == 0) {
                 $this->error('临时会员不能申请!');
                 exit();
             }
@@ -421,15 +418,15 @@ class AgentAction extends CommonAction
             // exit;
             // }
             
-            if ($fck_rs['is_p'] == 1) {
+            if ($member_rs['is_p'] == 1) {
                 $this->error('有申请还没通过审核!');
                 exit();
             }
-            if ($fck_rs['is_c'] == 1) {
+            if ($member_rs['is_c'] == 1) {
                 $this->error('有申请还没通过审核!');
                 exit();
             }
-            if ($fck_rs['is_cty'] == 1) {
+            if ($member_rs['is_cty'] == 1) {
                 $this->error('有申请还没通过审核!');
                 exit();
             }
@@ -439,17 +436,17 @@ class AgentAction extends CommonAction
                 exit();
             }
             
-            if ($fck_rs['is_p'] == 0 && $shoplx == 1) {
+            if ($member_rs['is_p'] == 0 && $shoplx == 1) {
                 $nowdate = time();
-                $result = $fck->query("update __TABLE__ set verify='" . $content . "',is_p=1,is_cha=1,jia_nums=1,idt=$nowdate where id=" . $id);
+                $result = $member->query("update __TABLE__ set verify='" . $content . "',is_p=1,is_cha=1,jia_nums=1,idt=$nowdate where id=" . $id);
             }
-            if ($fck_rs['is_c'] == 0 && $shoplx == 2) {
+            if ($member_rs['is_c'] == 0 && $shoplx == 2) {
                 $nowdate = time();
-                $result = $fck->query("update __TABLE__ set verify='" . $content . "',is_c=1,is_cha=1,jia_nums=2,idt=$nowdate where id=" . $id);
+                $result = $member->query("update __TABLE__ set verify='" . $content . "',is_c=1,is_cha=1,jia_nums=2,idt=$nowdate where id=" . $id);
             }
-            if ($fck_rs['is_cty'] == 0 && $shoplx == 3) {
+            if ($member_rs['is_cty'] == 0 && $shoplx == 3) {
                 $nowdate = time();
-                $result = $fck->query("update __TABLE__ set verify='" . $content . "',is_cty=1,is_cha=1,jia_nums=3,idt=$nowdate where id=" . $id);
+                $result = $member->query("update __TABLE__ set verify='" . $content . "',is_cty=1,is_cha=1,jia_nums=3,idt=$nowdate where id=" . $id);
             }
             
             $bUrl = __URL__ . '/agents2';
@@ -487,19 +484,19 @@ class AgentAction extends CommonAction
         $str9 = $fee_rs['str9'];
         $one_mm = 1;
         
-        $fck = D('Fck');
+        $member = D('member');
         // 登录会员ID
         $id = $_SESSION[C('USER_AUTH_KEY')];
         $where = array();
         $where['id'] = $id;
         // 查询会员表数据
-        $fck_rs = $fck->where($where)->field('*')->find();
+        $member_rs = $member->where($where)->field('*')->find();
         // 若存在会员表数据
-        if ($fck_rs) {
+        if ($member_rs) {
             // 已经复投单数+现在提交的复投单数
-            $f4 = $fck_rs['is_cc'] + $nums;
+            $f4 = $member_rs['is_cc'] + $nums;
             // 剩余可以复投单数
-            $sum = 50 - $fck_rs['is_cc'];
+            $sum = 50 - $member_rs['is_cc'];
             // 总单数不能大于50
             if ($nums > 50) {
                 $this->error('一次最多只能复投50单！');
@@ -508,11 +505,11 @@ class AgentAction extends CommonAction
                 // 前台输入单数总金额：单数*每单注册金额
                 $picmoney = $nums * $s9;
                 // 投资额*10%
-                $summoney = $fck_rs['cpzj'] * 0.1;
+                $summoney = $member_rs['cpzj'] * 0.1;
                 // 注册单数大于等于25之后，前10次任意复投，10次之后满投资额的10%才可以复投。
-                if ($fck_rs['f4'] >= 25) {
+                if ($member_rs['f4'] >= 25) {
                     // 复投次数 > 10次
-                    if ($fck_rs['jia_nums'] > 10) {
+                    if ($member_rs['jia_nums'] > 10) {
                 
                         // 复投金额小于投资额的10%，不允许复投
                         if ($picmoney < $summoney) {
@@ -526,16 +523,16 @@ class AgentAction extends CommonAction
             }
             // 复投金额：单数*每单金额
             $money = $sum * $s9;
-            if ($fck_rs['agent_xf'] < $money && $futou == 3) {
+            if ($member_rs['agent_xf'] < $money && $futou == 3) {
                 $this->error('复投币不足！');
                 exit();
             }
-            if ($fck_rs['agent_use'] < $money && $futou == 2) {
+            if ($member_rs['agent_use'] < $money && $futou == 2) {
                 $this->error('现金币不足！');
                 exit();
             }
             // 注册时投资金额
-            $agent_xf = $fck_rs['cpzj'];
+            $agent_xf = $member_rs['cpzj'];
             $data = array();
             // 现在时间
             $nowdate = strtotime(date('c'));
@@ -544,9 +541,9 @@ class AgentAction extends CommonAction
             // 复投币复投
             if ($futou == 3) {
                 // ID
-                $data['uid'] = $fck_rs['id'];
+                $data['uid'] = $member_rs['id'];
                 // 会员编号
-                $data['user_id'] = $fck_rs['user_id'];
+                $data['user_id'] = $member_rs['user_id'];
                 // 复投币复投
                 $data['action_type'] = 24;
                 // 时间
@@ -560,12 +557,12 @@ class AgentAction extends CommonAction
                 $history->create();
                 $history->add($data);
                 // 更新会员表数据
-                $result = $fck->query("update __TABLE__ set is_cc=is_cc+" . $sum .",jia_nums=jia_nums+1". ",agent_xf=agent_xf-$money where id=" . $id);
+                $result = $member->query("update __TABLE__ set is_cc=is_cc+" . $sum .",jia_nums=jia_nums+1". ",agent_xf=agent_xf-$money where id=" . $id);
             } else {
                 // ID
-                $data['uid'] = $fck_rs['id'];
+                $data['uid'] = $member_rs['id'];
                 // 会员编号
-                $data['user_id'] = $fck_rs['user_id'];
+                $data['user_id'] = $member_rs['user_id'];
                 // 现金币复投
                 $data['action_type'] = 25;
                 // 时间
@@ -579,20 +576,20 @@ class AgentAction extends CommonAction
                 $history->create();
                 $history->add($data);
                 // 更新会员表数据
-                $result = $fck->query("update __TABLE__ set is_cc=is_cc+" . $sum .",jia_nums=jia_nums+1". ",agent_use=agent_use-$money where id=" . $id);
+                $result = $member->query("update __TABLE__ set is_cc=is_cc+" . $sum .",jia_nums=jia_nums+1". ",agent_use=agent_use-$money where id=" . $id);
             }
             
             // 分红包记录表
-            $fck->jiaDan($fck_rs['id'], $fck_rs['user_id'], $nowdate, 0, 0, $sum, 0, 2);
-            $fck->tz($fck_rs['p_path'], $money);
+            $member->jiaDan($member_rs['id'], $member_rs['user_id'], $nowdate, 0, 0, $sum, 0, 2);
+            $member->tz($member_rs['p_path'], $money);
             // 推荐奖
-            $fck->tuijj($fck_rs['re_path'], $fck_rs['user_id'], $money);
+            $member->tuijj($member_rs['re_path'], $member_rs['user_id'], $money);
             // 见点奖
-            $fck->jiandianjiang($fck_rs['p_path'], $fck_rs['user_id']);
+            $member->jiandianjiang($member_rs['p_path'], $member_rs['user_id']);
             // 领导奖
-            $fck->lingdao22($fck_rs['p_path'], $fck_rs['user_id'], $money);
+            $member->lingdao22($member_rs['p_path'], $member_rs['user_id'], $money);
             // 合伙人级别
-            $fck->sh_level();
+            $member->sh_level();
             
             $bUrl = __URL__ . '/agents1';
             $this->_box(1, '复投成功！', $bUrl, 2);
@@ -628,30 +625,30 @@ class AgentAction extends CommonAction
          * }
          */
         
-        $fck = M('fck');
+        $member = M('member');
         $id = $_SESSION[C('USER_AUTH_KEY')];
         $where = array();
         $where['id'] = $id;
         
-        $fck_rs = $fck->where($where)
+        $member_rs = $member->where($where)
             ->field('*')
             ->find();
-        if ($fck_rs) {
+        if ($member_rs) {
             
-            if ($fck_rs['is_pay'] == 0) {
+            if ($member_rs['is_pay'] == 0) {
                 $this->error('临时会员不能申请!');
                 exit();
             }
-            if ($fck_rs['is_agent'] == 1) {
+            if ($member_rs['is_agent'] == 1) {
                 $this->error('上次申请还没通过审核!');
                 exit();
             }
             
             // $bqycount=0;
             // if($shoplx==1){
-            // $bqycount = $fck->where("is_agent>0 and shop_a=".$shop_a)->count;
+            // $bqycount = $member->where("is_agent>0 and shop_a=".$shop_a)->count;
             // }elseif($shoplx==2){
-            // $bqycount = $fck->where("is_agent>0 and shop_b=".$shop_b)->count;
+            // $bqycount = $member->where("is_agent>0 and shop_b=".$shop_b)->count;
             // }
             // if($bqycount>0){
             // $this->error('本区域的服务中心已经存在!');
@@ -663,9 +660,9 @@ class AgentAction extends CommonAction
                 exit();
             }
             
-            if ($fck_rs['l_nums'] == 0) {
+            if ($member_rs['l_nums'] == 0) {
                 $nowdate = time();
-                $result = $fck->query("update __TABLE__ set verify='" . $content . "',is_agent=1,shoplx=" . $shoplx . ",shop_a='" . $shop_a . "',shop_b='" . $shop_b . "',idt=$nowdate where id=" . $id);
+                $result = $member->query("update __TABLE__ set verify='" . $content . "',is_agent=1,shoplx=" . $shoplx . ",shop_a='" . $shop_a . "',shop_b='" . $shop_b . "',idt=$nowdate where id=" . $id);
             }
             
             $bUrl = __URL__ . '/agents3';
@@ -702,30 +699,30 @@ class AgentAction extends CommonAction
          * }
          */
         
-        $fck = M('fck');
+        $member = M('member');
         $id = $_SESSION[C('USER_AUTH_KEY')];
         $where = array();
         $where['id'] = $id;
         
-        $fck_rs = $fck->where($where)
+        $member_rs = $member->where($where)
             ->field('*')
             ->find();
-        if ($fck_rs) {
+        if ($member_rs) {
             
-            if ($fck_rs['is_pay'] == 0) {
+            if ($member_rs['is_pay'] == 0) {
                 $this->error('临时会员不能申请!');
                 exit();
             }
-            if ($fck_rs['l_nums'] == 1) {
+            if ($member_rs['l_nums'] == 1) {
                 $this->error('上次申请还没通过审核!');
                 exit();
             }
             
             // $bqycount=0;
             // if($shoplx==1){
-            // $bqycount = $fck->where("is_agent>0 and shop_a=".$shop_a)->count;
+            // $bqycount = $member->where("is_agent>0 and shop_a=".$shop_a)->count;
             // }elseif($shoplx==2){
-            // $bqycount = $fck->where("is_agent>0 and shop_b=".$shop_b)->count;
+            // $bqycount = $member->where("is_agent>0 and shop_b=".$shop_b)->count;
             // }
             // if($bqycount>0){
             // $this->error('本区域的服务中心已经存在!');
@@ -737,9 +734,9 @@ class AgentAction extends CommonAction
                 exit();
             }
             
-            if ($fck_rs['l_nums'] == 0) {
+            if ($member_rs['l_nums'] == 0) {
                 $nowdate = time();
-                $result = $fck->query("update __TABLE__ set verify='" . $content . "',l_nums=1,shoplx=" . $shoplx . ",shop_a='" . $shop_a . "',shop_b='" . $shop_b . "',idt=$nowdate where id=" . $id);
+                $result = $member->query("update __TABLE__ set verify='" . $content . "',l_nums=1,shoplx=" . $shoplx . ",shop_a='" . $shop_a . "',shop_b='" . $shop_b . "',idt=$nowdate where id=" . $id);
             }
             
             $bUrl = __URL__ . '/agents';
@@ -755,11 +752,10 @@ class AgentAction extends CommonAction
     {
         // 列表过滤器，生成查询Map对象
         if ($_SESSION['Urlszpass'] == 'MyssShuiPuTao') {
-            $fck = M('fck');
+            $member = M('member');
             $map = array();
-            $id = $_SESSION[C('USER_AUTH_KEY')];
+            $user_id = $_SESSION['loginUseracc'];
             $gid = (int) $_GET['bj_id'];
-            $map['shop_id'] = $id;
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -768,7 +764,7 @@ class AgentAction extends CommonAction
                     $UserID = iconv('GB2312', 'UTF-8', $UserID);
                 }
                 unset($KuoZhan);
-                $where['nickname'] = array(
+                $where['user_name'] = array(
                     'like',
                     "%" . $UserID . "%"
                 );
@@ -780,43 +776,33 @@ class AgentAction extends CommonAction
                 $map['_complex'] = $where;
                 $UserID = urlencode($UserID);
             }
-            $map['is_pay'] = array(
-                'eq',
-                0
-            );
-            $map['shop_id'] = array(
-                'eq',
-                $id
-            );
-            
+            // 是否支付
+            $map['bk4'] = array('eq',0);
+            // 报单中心
+            $map['bk5'] = array( 'eq',$user_id);
             // 查询字段
             $field = '*';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
-                ->order('is_pay asc,pdt desc')
+                ->order('bk4 asc,register_time desc')
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
             $where = array();
-            $where['id'] = $id;
-            $fck_rs = $fck->where($where)
+            $where['user_id'] = $user_id;
+            $member_rs = $member->where($where)
                 ->field('*')
                 ->find();
-            $this->assign('frs', $fck_rs); // 注册币
+            $this->assign('frs', $member_rs);
             $this->display('menber');
             exit();
         } else {
@@ -829,111 +815,85 @@ class AgentAction extends CommonAction
     public function memberuplevel($Urlsz = 0)
     {
         // 列表过滤器，生成查询Map对象
-        if ($_SESSION['Urlszpass'] == 'MyssmenberUpLevel') {
-            $id = $_SESSION[C('USER_AUTH_KEY')];
-            $fck = M('fck');
-            $where = array();
-            $where['p_path'] = array('like',"%" . $id . "%");
-            $fck_rs = $fck->where($where)->field('*')->find();
-            $promo = M('promo');
-            $map = array();
-            // 查询字段
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $promo->where($map)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = 'user_id=' . $fck_rs['user_id']; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $promo->where($map)->field($field)->order('is_pay asc,pdt desc')->page($Page->getPage() . ',' . $listrows)->select();
-            $this->assign('list', $list); // 数据输出到模板
-            // =================================================
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
-            $this->assign('frs', $fck_rs); // 注册币
-            $this->display('memberuplevel');
-            exit();
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
+        $id = $_SESSION[C('USER_AUTH_KEY')];
+        $member = M('member');
+        $where = array();
+        $where['p_path'] = array('like',"%" . $id . "%");
+        $member_rs = $member->where($where)->field('*')->find();
+        $promo = M('promo');
+        $map = array();
+        // 查询字段
+        $field = '*';
+        // =====================分页开始==============================================
+        import("@.ORG.ZQPage"); // 导入分页类
+        $count = $promo->where($map)->count(); // 总页数
+        $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
+        $page_where = 'user_id=' . $member_rs['user_id']; // 分页条件
+        $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+        // ===============(总页数,每页显示记录数,css样式 0-9)
+        $show = $Page->show(); // 分页变量
+        $this->assign('page', $show); // 分页变量输出到模板
+        $list = $promo->where($map)->field($field)->order('is_pay asc,pdt desc')->page($Page->getPage() . ',' . $listrows)->select();
+        $this->assign('list', $list); // 数据输出到模板
+        // =================================================
+        $this->assign('frs', $member_rs); // 注册币
+        $this->display('memberuplevel');
+        exit();
     }
     
-    // 未开通会员
+    // 已开通会员
     public function menberok($Urlsz = 0)
     {
         // 列表过滤器，生成查询Map对象
-        if ($_SESSION['Urlszpass'] == 'Myssmenberok') {
-            $fck = M('fck');
-            $map = array();
-            $id = $_SESSION[C('USER_AUTH_KEY')];
-            $gid = (int) $_GET['bj_id'];
-            $map['shop_id'] = $id;
-            $map['is_pay'] = array(
-                'gt',
-                0
-            );
-            $UserID = $_POST['UserID'];
-            if (! empty($UserID)) {
-                import("@.ORG.KuoZhan"); // 导入扩展类
-                $KuoZhan = new KuoZhan();
-                if ($KuoZhan->is_utf8($UserID) == false) {
-                    $UserID = iconv('GB2312', 'UTF-8', $UserID);
-                }
-                unset($KuoZhan);
-                $where['nickname'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-                $where['user_id'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-                $where['_logic'] = 'or';
-                $map['_complex'] = $where;
-                $UserID = urlencode($UserID);
+        $member = M('member');
+        $map = array();
+        $user_id = $_SESSION['loginUseracc'];
+        $gid = (int) $_GET['bj_id'];
+        // 服务中心ID
+        $map['bk5'] = $user_id;
+        // 是否支付
+        $map['bk4'] = array( 'gt',0);
+        $UserID = $_POST['UserID'];
+        if (! empty($UserID)) {
+            import("@.ORG.KuoZhan"); // 导入扩展类
+            $KuoZhan = new KuoZhan();
+            if ($KuoZhan->is_utf8($UserID) == false) {
+                $UserID = iconv('GB2312', 'UTF-8', $UserID);
             }
-            
-            // 查询字段
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = 'UserID=' . $UserID; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
-                ->field($field)
-                ->order('is_pay asc,pdt desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
-            $where = array();
-            $where['id'] = $id;
-            $fck_rs = $fck->where($where)
-                ->field('*')
-                ->find();
-            $this->assign('frs', $fck_rs); // 注册币
-            $this->display('menberok');
-            exit();
-        } else {
-            $this->error('数据错误!');
-            exit();
+            unset($KuoZhan);
+            $where['user_name'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['user_id'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['_logic'] = 'or';
+            $map['_complex'] = $where;
+            $UserID = urlencode($UserID);
         }
+        // 查询字段
+        $field = '*';
+        // =====================分页开始==============================================
+        import("@.ORG.ZQPage"); // 导入分页类
+        $count = $member->where($map)->count(); // 总页数
+        $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
+        $page_where = 'UserID=' . $UserID; // 分页条件
+        $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+        // ===============(总页数,每页显示记录数,css样式 0-9)
+        $show = $Page->show(); // 分页变量
+        $this->assign('page', $show); // 分页变量输出到模板
+        $list = $member->where($map)->field($field)->order('bk4 asc,register_time desc')->page($Page->getPage() . ',' . $listrows)->select();
+        $this->assign('list', $list); // 数据输出到模板
+        $where = array();
+        $where['user_id'] = $user_id;
+        $member_rs = $member->where($where)->field('*')->find();
+        $this->assign('frs', $member_rs);
+        $this->display('menberok');
+        exit();
     }
-
+    // 开通会员
     public function menberAC()
     {
         // 处理提交按钮
@@ -942,7 +902,7 @@ class AgentAction extends CommonAction
         $OpID = $_POST['tabledb'];
         if (! isset($OpID) || empty($OpID)) {
             $bUrl = __URL__ . '/menber';
-            $this->_box(0, '没有该会员！', $bUrl, 1);
+            $this->_box(0, '请选择要开通的会员！', $bUrl, 1);
             exit();
         }
         switch ($action) {
@@ -976,7 +936,7 @@ class AgentAction extends CommonAction
                 $where['id'] = $vo;
                 $where['is_pay'] = 0;
                 $promo = M('promo');
-                $fck = D('Fck');
+                $member = D('member');
                 $fee = M ('fee');
                 $fee_rs =$fee->field('s1,s2,s9,s4,s5')->find();
                 $s2 =explode('|',$fee_rs['s2']);//单量
@@ -987,9 +947,9 @@ class AgentAction extends CommonAction
                     exit;
                 }
                 $promo->query("update xt_promo set is_pay=1 where `id`=".$vo);
-                $fck_where = array();
-                $fck_where['user_id'] = $promo_rs['user_id'];
-                $fck_rs = $fck->where($fck_where)->find();
+                $member_where = array();
+                $member_where['user_id'] = $promo_rs['user_id'];
+                $member_rs = $member->where($member_where)->find();
                 $newlv = $promo_rs['up_level'];
                 $oldlv  = $promo_rs['u_level'];
                 //差额
@@ -1005,20 +965,20 @@ class AgentAction extends CommonAction
                     exit;
                 }
                 //统计单数
-                $fck->xiangJiao($fck_rs['id'], $need_dl);
-                $fck->tz($fck_rs['p_path'],$need_m);
+                $member->xiangJiao($member_rs['id'], $need_dl);
+                $member->tz($member_rs['p_path'],$need_m);
                 //各种奖项
-                $fck->tuijj($fck_rs['p_path'],$fck_rs['user_id'],$need_m);
-                $fck->lingdao22($fck_rs['p_path'],$fck_rs['user_id'],$need_m);
-                $fck->sh_level();
-                $fck->baodanfei($fck_rs['shop_id'],$fck_rs['user_id'],$need_m,$fck_rs['is_agent']);
-                $fck->dsfenhong($fck_rs['p_path'],$fck_rs['user_id'],$need_m);
-                $fck->query("update __TABLE__ set is_xf=0,u_level=1".",cpzj=".$newlv.",f4=f4+".$need_dl." where `id`=".$fck_rs['id']);
+                $member->tuijj($member_rs['p_path'],$member_rs['user_id'],$need_m);
+                $member->lingdao22($member_rs['p_path'],$member_rs['user_id'],$need_m);
+                $member->sh_level();
+                $member->baodanfei($member_rs['shop_id'],$member_rs['user_id'],$need_m,$member_rs['is_agent']);
+                $member->dsfenhong($member_rs['p_path'],$member_rs['user_id'],$need_m);
+                $member->query("update __TABLE__ set is_xf=0,u_level=1".",cpzj=".$newlv.",f4=f4+".$need_dl." where `id`=".$member_rs['id']);
                 // 分红包记录表
                 $nowdate = strtotime ("now");
-                $fck->jiaDan($fck_rs['id'], $fck_rs['user_id'], $nowdate, 0, 0, $need_dl, 0, 1);
+                $member->jiaDan($member_rs['id'], $member_rs['user_id'], $nowdate, 0, 0, $need_dl, 0, 1);
             
-                unset($fck,$fee,$promo);
+                unset($member,$fee,$promo);
             }
             if($OpID) {
                 $bUrl = __URL__.'/memberuplevel/';
@@ -1032,56 +992,39 @@ class AgentAction extends CommonAction
             exit;
         }
     }
-
+    
+    // =============================================开通会员
     private function _menberOpenUse($OpID = 0, $reg_money = 0)
     {
-        // =============================================开通会员
         if ($_SESSION['Urlszpass'] == 'MyssShuiPuTao') {
-            
-            // $length_arr = count($OpID);
-            // if($length_arr > 1){
-            // $this->error('一次只能开通一个会员');
-            // exit;
-            // }
-            
-            $fck = D('Fck');
+            $member = D('member');
             $fee = M('fee');
             $gouwu = D('Gouwu');
             $shouru = M('shouru');
             $blist = M('blist');
             $Guzhi = A('Guzhi');
-            if (! $fck->autoCheckToken($_POST)) {
+            if (! $member->autoCheckToken($_POST)) {
                 $this->error('页面过期，请刷新页面！');
                 exit();
             }
-            
             // 被开通会员参数
             $where = array();
-            $where['id'] = array(
-                'in',
-                $OpID
-            ); // 被开通会员id数组
+            $where['id'] = array('in',$OpID); // 被开通会员id数组
             $where['is_pay'] = 0; // 未开通的
             $field = '*';
-            $vo = $fck->where($where)
-                ->field($field)
-                ->order('id asc')
-                ->select();
+            $vo = $member->where($where)->field($field)->order('id asc')->select();
             $fee_rs = $fee->field('str18,str19')->find();
-            
             // 服务中心参数
             $where_two = array();
             $field_two = '*';
             $ID = $_SESSION[C('USER_AUTH_KEY')];
             $where_two['id'] = $ID;
-            // $where_two['is_agent'] = array('gt',1);
             $nowdate = strtotime(date('c'));
             $nowday = strtotime(date('Y-m-d'));
             $nowmonth = date('m');
-            $fck->emptyTime();
-            
+//             $member->emptyTime();
             foreach ($vo as $voo) {
-                $rs = $fck->where($where_two)
+                $rs = $member->where($where_two)
                     ->field($field_two)
                     ->find(); // 找出登录会员(必须为服务中心并且已经登录)
                 if (! $rs) {
@@ -1095,7 +1038,7 @@ class AgentAction extends CommonAction
                     0
                 );
                 $frs_where['id'] = $voo['father_id'];
-                $frs = $fck->where($frs_where)->find();
+                $frs = $member->where($frs_where)->find();
                 
                 $us_money = $rs['agent_cash'];
                 $money_b = $voo['cpzj'];
@@ -1106,56 +1049,36 @@ class AgentAction extends CommonAction
                     exit();
                 }
                 $r_id = $rs['id'];
-                // $r_id=$voo['shop_id'];
-                // $res=$fck->where('shop_id='.$r_id)->field('id,is_agent')->find();
-                // $is_agent=$res['is_agent'];
                 $is_agent = $rs['is_agent'];
                 if ($reg_money == 1) {
-                    
-                    $result = $fck->execute("update __TABLE__ set `agent_cash`=agent_cash-" . $money_b . " where `id`=" . $ID);
+                    $result = $member->execute("update __TABLE__ set `agent_cash`=agent_cash-" . $money_b . " where `id`=" . $ID);
                 }
                 if ($result) {
                     if ($reg_money == 1) {
                         $kt_cont = "开通会员";
                     }
                     // 奖金历史记录表
-                    $fck->addencAdd($rs['id'], $voo['user_id'], $money_b, 26, 0, 0, 0, $kt_cont); 
+                    $member->addencAdd($rs['id'], $voo['user_id'], $money_b, 26, 0, 0, 0, $kt_cont); 
                     // 分红包记录表
-                    $fck->jiaDan($voo['id'], $voo['user_id'], $nowdate, 0, 0, $voo['f4'], 0, 0);
+                    $member->jiaDan($voo['id'], $voo['user_id'], $nowdate, 0, 0, $voo['f4'], 0, 0);
                                                                                                
                     // 给推荐人添加推荐人数和单数
-                    $fck->query("update __TABLE__ set `re_nums`=re_nums+1,re_f4=re_f4+" . $voo['f4'] . " where `id`=" . $voo['re_id']);
+                    $member->query("update __TABLE__ set `re_nums`=re_nums+1,re_f4=re_f4+" . $voo['f4'] . " where `id`=" . $voo['re_id']);
                     // 购物车管理
                     $gouwu->query("update __TABLE__ set `lx`=1 where `uid`=" . $voo['id']);
                     
-                    $nnrs = $fck->where('is_pay>0')
+                    $nnrs = $member->where('is_pay>0')
                         ->field('n_pai')
                         ->order('n_pai desc')
                         ->find();
                     $mynpai = ((int) $nnrs['n_pai']) + 1;
                     
-                    // //接点人信息
-                    // $arry = array();
-                    // $arry = $this->gongpaixtsmall($voo['re_id']);
-                    // $father_id = $arry['father_id'];
-                    // $father_name = $arry['father_name'];
-                    // $TreePlace = $arry['treeplace'];
-                    // $p_level = $arry['p_level'];
-                    // $p_path = $arry['p_path'];
-                    // $u_pai = $arry['u_pai'];
-                    
-                    // $in_gp = $s3[$voo['u_level']-1]*$voo['cpzj']/100;
-                    // 新
-                    // $fck->adduser($voo['id'],$voo['cpzj']);
                     $data = array();
                     $data['is_pay'] = 1;
                     $data['pdt'] = $nowdate;
                     $data['open'] = 0;
                     $data['get_date'] = $nowday;
                     $data['fanli_time'] = $nowday - 1; // 当天没有分红奖
-                                                     // $data['agent_lock'] = $in_gp;//
-                                                     // $data['agent_gp'] = $in_gp;//
-                                                     // $data['gp_num'] = $in_gp;//
                     $data['n_pai'] = $mynpai;
                     $data['is_zy'] = $voo['id'];
                     $data['kt_id'] = $r_id;
@@ -1164,18 +1087,9 @@ class AgentAction extends CommonAction
                         $data['adt'] = $nowdate;
                         $data['is_agent'] = 2;
                     }
-                    
-                    // $data['father_id'] = $father_id;
-                    // $data['father_name'] = $father_name;
-                    // $data['treeplace'] = $TreePlace;
-                    // $data['p_level'] = $p_level;
-                    // $data['p_path'] = $p_path;
-                    // $data['u_pai'] = $u_pai;
-                    
                     // 开通会员
-                    $result = $fck->where('id=' . $voo['id'])->save($data);
+                    $result = $member->where('id=' . $voo['id'])->save($data);
                     unset($data, $varray);
-                    
                     $data = array();
                     $data['uid'] = $voo['id'];
                     $data['user_id'] = $voo['user_id'];
@@ -1186,15 +1100,12 @@ class AgentAction extends CommonAction
                     unset($data);
                     
                     //统计单数
-                    $fck->xiangJiao($voo['id'], 1);
+                    $member->xiangJiao($voo['id'], 1);
                     // 算出奖金
-                    $fck->getusjj($voo['id'], 1, $voo['cpzj']);
+                    $member->getusjj($voo['id'], 1, $voo['cpzj']);
                 }
-                
-                // //全部奖金结算
-                // $this->_clearing();
             }
-            unset($fck, $where, $where_two, $rs);
+            unset($member, $where, $where_two, $rs);
             if ($vo) {
                 unset($vo);
                 $bUrl = __URL__ . '/menber';
@@ -1216,13 +1127,13 @@ class AgentAction extends CommonAction
     {
         // =========================================删除会员
         if ($_SESSION['Urlszpass'] == 'MyssShuiPuTao') {
-            $fck = M('fck');
+            $member = M('member');
             $where['is_pay'] = 0;
             foreach ($OpID as $voo) {
-                $rs = $fck->find($voo);
+                $rs = $member->find($voo);
                 if ($rs) {
                     $whe['father_name'] = $rs['user_id'];
-                    $rss = $fck->where($whe)
+                    $rss = $member->where($whe)
                         ->field('id')
                         ->find();
                     if ($rss) {
@@ -1231,7 +1142,7 @@ class AgentAction extends CommonAction
                         exit();
                     } else {
                         $where['id'] = $voo;
-                        $fck->where($where)->delete();
+                        $member->where($where)->delete();
                     }
                 } else {
                     $this->error('错误!');
@@ -1245,19 +1156,19 @@ class AgentAction extends CommonAction
         }
     }
     
-    // 已开通会员
+    // 未开通会员
     public function frontMenber($Urlsz = 0)
     {
         // 列表过滤器，生成查询Map对象
         if ($_SESSION['Urlszpass'] == 'MyssDaShuiPuTao') {
-            $fck = M('fck');
-            $id = $_SESSION[C('USER_AUTH_KEY')];
+            $member = M('member');
             $map = array();
-            $map['open'] = $id;
-            $map['is_pay'] = array(
-                'gt',
-                0
-            );
+            $user_id = $_SESSION['loginUseracc'];
+            $gid = (int) $_GET['bj_id'];
+            // 服务中心ID
+            $map['bk5'] = $user_id;
+            // 是否支付
+            $map['bk4'] = array( 'gt',0);
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -1266,10 +1177,7 @@ class AgentAction extends CommonAction
                     $UserID = iconv('GB2312', 'UTF-8', $UserID);
                 }
                 unset($KuoZhan);
-                $where['nickname'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
+                $where['user_name'] = array( 'like',"%" . $UserID . "%");
                 $where['user_id'] = array(
                     'like',
                     "%" . $UserID . "%"
@@ -1283,29 +1191,23 @@ class AgentAction extends CommonAction
             $field = "*";
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
-                ->order('pdt desc')
+                ->order('register_time desc')
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
-            
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $this->display('frontMenber');
             exit();
         } else {
-            $this->error('数据错误2!');
+            $this->error('数据错误!');
             exit();
         }
     }
@@ -1315,7 +1217,7 @@ class AgentAction extends CommonAction
         // =====================================后台服务中心管理
         $this->_Admin_checkUser();
         if ($_SESSION['UrlPTPass'] == 'MyssGuanX') {
-            $fck = M('fck');
+            $member = M('member');
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -1347,14 +1249,14 @@ class AgentAction extends CommonAction
             $field = '*';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
                 ->order('id desc')
                 ->page($Page->getPage() . ',' . $listrows)
@@ -1379,7 +1281,7 @@ class AgentAction extends CommonAction
         // =====================================后台服务中心管理
         $this->_Admin_checkUser();
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
-            $fck = M('fck');
+            $member = M('member');
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -1411,14 +1313,14 @@ class AgentAction extends CommonAction
             $field = '*';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
                 ->order('id desc')
                 ->page($Page->getPage() . ',' . $listrows)
@@ -1443,7 +1345,7 @@ class AgentAction extends CommonAction
         // =====================================后台服务中心管理
         $this->_Admin_checkUser();
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGu') {
-            $fck = M('fck');
+            $member = M('member');
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -1475,14 +1377,14 @@ class AgentAction extends CommonAction
             $field = '*';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
                 ->order('id desc')
                 ->page($Page->getPage() . ',' . $listrows)
@@ -1507,7 +1409,7 @@ class AgentAction extends CommonAction
         // =====================================后台服务中心管理
         $this->_Admin_checkUser();
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiG') {
-            $fck = M('fck');
+            $member = M('member');
             $UserID = $_POST['UserID'];
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
@@ -1539,14 +1441,14 @@ class AgentAction extends CommonAction
             $field = '*';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fck->where($map)->count(); // 总页数
+            $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fck->where($map)
+            $list = $member->where($map)
                 ->field($field)
                 ->order('id desc')
                 ->page($Page->getPage() . ',' . $listrows)
@@ -1570,15 +1472,15 @@ class AgentAction extends CommonAction
     {
         // 查看详细信息
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
-            $fck = M('fck');
+            $member = M('member');
             $ID = (int) $_GET['Sid'];
             $where = array();
             $where['id'] = $ID;
-            $srs = $fck->where($where)
+            $srs = $member->where($where)
                 ->field('user_id,verify')
                 ->find();
             $this->assign('srs', $srs);
-            unset($fck, $where, $srs);
+            unset($member, $where, $srs);
             $this->display('adminAgentsShow');
             return;
         } else {
@@ -1594,13 +1496,13 @@ class AgentAction extends CommonAction
         $action = $_POST['action'];
         // 获取复选框的值
         $XGid = $_POST['tabledb'];
-        $fck = M('fck');
-        // if (!$fck->autoCheckToken($_POST)){
+        $member = M('member');
+        // if (!$member->autoCheckToken($_POST)){
         // $this->error('页面过期，请刷新页面！');
         // exit;
         // }
         
-        unset($fck);
+        unset($member);
         if (! isset($XGid) || empty($XGid)) {
             $bUrl = __URL__ . '/adminAgents';
             $this->_box(0, '请选择会员！', $bUrl, 1);
@@ -1627,13 +1529,13 @@ class AgentAction extends CommonAction
         $action = $_POST['action'];
         // 获取复选框的值
         $XGid = $_POST['tabledb'];
-        $fck = M('fck');
-        // if (!$fck->autoCheckToken($_POST)){
+        $member = M('member');
+        // if (!$member->autoCheckToken($_POST)){
         // $this->error('页面过期，请刷新页面！');
         // exit;
         // }
         
-        unset($fck);
+        unset($member);
         if (! isset($XGid) || empty($XGid)) {
             $bUrl = __URL__ . '/adminAgents';
             $this->_box(0, '请选择会员！', $bUrl, 1);
@@ -1660,12 +1562,12 @@ class AgentAction extends CommonAction
         $action = $_POST['action'];
         // 获取复选框的值
         $XGid = $_POST['tabledb'];
-        $fck = M('fck');
-        // if (!$fck->autoCheckToken($_POST)){
+        $member = M('member');
+        // if (!$member->autoCheckToken($_POST)){
         // $this->error('页面过期，请刷新页面！');
         // exit;
         // }
-        unset($fck);
+        unset($member);
         if (! isset($XGid) || empty($XGid)) {
             $bUrl = __URL__ . '/adminAgents1';
             $this->_box(0, '请选择会员！', $bUrl, 1);
@@ -1693,13 +1595,13 @@ class AgentAction extends CommonAction
         // 获取复选框的值
         $XGid = $_POST['tabledb'];
         
-        $fck = M('fck');
-        // if (!$fck->autoCheckToken($_POST)){
+        $member = M('member');
+        // if (!$member->autoCheckToken($_POST)){
         // $this->error('页面过期，请刷新页面！');
         // exit;
         // }
         
-        unset($fck);
+        unset($member);
         if (! isset($XGid) || empty($XGid)) {
             $bUrl = __URL__ . '/adminAgents1';
             $this->_box(0, '请选择会员！', $bUrl, 1);
@@ -1723,7 +1625,7 @@ class AgentAction extends CommonAction
     {
         // ==========================================确认申请服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiG') {
-            $fck = D('Fck');
+            $member = D('member');
             
             $fee = M('fee');
             $fee_rs = $fee->field('str9')->find(1);
@@ -1733,7 +1635,7 @@ class AgentAction extends CommonAction
                 $XGid
             );
             $where['is_cha'] = 1;
-            $rs = $fck->where($where)
+            $rs = $member->where($where)
                 ->field('*')
                 ->select();
             
@@ -1759,17 +1661,17 @@ class AgentAction extends CommonAction
                 $history->add($data);
                 $sel = $rss['jia_nums'];
                 if ($sel == 1) {
-                    $fck->query("UPDATE __TABLE__ SET is_cha=2,is_p=2,jia_nums=0 where id=" . $rss['id']); // 开通
+                    $member->query("UPDATE __TABLE__ SET is_cha=2,is_p=2,jia_nums=0 where id=" . $rss['id']); // 开通
                 }
                 if ($sel == 2) {
-                    $fck->query("UPDATE __TABLE__ SET is_cha=2,is_c=2,jia_nums=0 where id=" . $rss['id']); // 开通
+                    $member->query("UPDATE __TABLE__ SET is_cha=2,is_c=2,jia_nums=0 where id=" . $rss['id']); // 开通
                 }
                 if ($sel == 3) {
-                    $fck->query("UPDATE __TABLE__ SET is_cha=2,is_cty=2,jia_nums=0 where id=" . $rss['id']); // 开通
+                    $member->query("UPDATE __TABLE__ SET is_cha=2,is_cty=2,jia_nums=0 where id=" . $rss['id']); // 开通
                 }
             }
             
-            unset($fck, $where, $rs, $history, $data, $rewhere);
+            unset($member, $where, $rs, $history, $data, $rewhere);
             $bUrl = __URL__ . '/adminAgents2';
             
             $this->_box(1, '确认申请！', $bUrl, 1);
@@ -1785,7 +1687,7 @@ class AgentAction extends CommonAction
     {
         // ==========================================确认申请服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGu') {
-            $fck = D('Fck');
+            $member = D('member');
             
             $fee = M('fee');
             $fee_rs = $fee->field('str9')->find(1);
@@ -1795,7 +1697,7 @@ class AgentAction extends CommonAction
                 $XGid
             );
             $where['is_cc'] = 1;
-            $rs = $fck->where($where)
+            $rs = $member->where($where)
                 ->field('*')
                 ->select();
             
@@ -1819,13 +1721,13 @@ class AgentAction extends CommonAction
                 $data['did'] = 0;
                 $data['allp'] = 0;
                 $history->add($data);
-                $fck->query("UPDATE __TABLE__ SET is_cc=2,r_nums=r_nums+1 where id=" . $rss['id']); // 开通
+                $member->query("UPDATE __TABLE__ SET is_cc=2,r_nums=r_nums+1 where id=" . $rss['id']); // 开通
                 if ($rss['is_fenh'] == 0) {
-                    $fck->youka($rss['id'], $rss['user_id']);
+                    $member->youka($rss['id'], $rss['user_id']);
                 }
             }
             
-            unset($fck, $where, $rs, $history, $data, $rewhere);
+            unset($member, $where, $rs, $history, $data, $rewhere);
             $bUrl = __URL__ . '/adminAgents1';
             
             $this->_box(1, '确认申请！', $bUrl, 1);
@@ -1841,13 +1743,13 @@ class AgentAction extends CommonAction
     {
         // ==========================================确认申请服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanX') {
-            $fck = D('Fck');
+            $member = D('member');
             $where['id'] = array(
                 'in',
                 $XGid
             );
             $where['is_agent'] = 1;
-            $rs = $fck->where($where)
+            $rs = $member->where($where)
                 ->field('*')
                 ->select();
             
@@ -1872,9 +1774,9 @@ class AgentAction extends CommonAction
                 $data['allp'] = 0;
                 $history->add($data);
                 
-                $fck->query("UPDATE __TABLE__ SET is_agent=2,adt=$nowdate,agent_max=0 where id=" . $rss['id']); // 开通
+                $member->query("UPDATE __TABLE__ SET is_agent=2,adt=$nowdate,agent_max=0 where id=" . $rss['id']); // 开通
             }
-            unset($fck, $where, $rs, $history, $data, $rewhere);
+            unset($member, $where, $rs, $history, $data, $rewhere);
             $bUrl = __URL__ . '/adminAgents3';
             $this->_box(1, '确认申请！', $bUrl, 1);
             exit();
@@ -1888,13 +1790,13 @@ class AgentAction extends CommonAction
     {
         // ==========================================确认申请服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
-            $fck = D('Fck');
+            $member = D('member');
             $where['id'] = array(
                 'in',
                 $XGid
             );
             $where['l_nums'] = 1;
-            $rs = $fck->where($where)
+            $rs = $member->where($where)
                 ->field('*')
                 ->select();
             
@@ -1919,9 +1821,9 @@ class AgentAction extends CommonAction
                 $data['allp'] = 0;
                 $history->add($data);
                 
-                $fck->query("UPDATE __TABLE__ SET l_nums=2,adt=$nowdate,agent_max=0 where id=" . $rss['id']); // 开通
+                $member->query("UPDATE __TABLE__ SET l_nums=2,adt=$nowdate,agent_max=0 where id=" . $rss['id']); // 开通
             }
-            unset($fck, $where, $rs, $history, $data, $rewhere);
+            unset($member, $where, $rs, $history, $data, $rewhere);
             $bUrl = __URL__ . '/adminAgents';
             $this->_box(1, '确认申请！', $bUrl, 1);
             exit();
@@ -1933,8 +1835,8 @@ class AgentAction extends CommonAction
 
     public function cate($id = 0)
     {
-        $fck = M('fck');
-        $res = $fck->where('id=' . $id)
+        $member = M('member');
+        $res = $member->where('id=' . $id)
             ->field('id,kt_id,is_agent')
             ->find();
         // print_r($res);die;
@@ -1958,25 +1860,25 @@ class AgentAction extends CommonAction
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
             // $this->_checkUser();
-            $fck = M('fck');
+            $member = M('member');
             $content = $_POST['content'];
             $userid = trim($_POST['userid']);
             $where['user_id'] = $userid;
-            // $rs=$fck->where($where)->find();
-            $fck_rs = $fck->where($where)
+            // $rs=$member->where($where)->find();
+            $member_rs = $member->where($where)
                 ->field('id,is_agent,is_pay,user_id,user_name,agent_max,is_agent')
                 ->find();
             
-            if ($fck_rs) {
-                if ($fck_rs['is_pay'] == 0) {
+            if ($member_rs) {
+                if ($member_rs['is_pay'] == 0) {
                     $this->error('临时代理商不能授权服务中心!');
                     exit();
                 }
-                if ($fck_rs['is_agent'] == 1) {
+                if ($member_rs['is_agent'] == 1) {
                     $this->error('上次申请还没通过审核!');
                     exit();
                 }
-                if ($fck_rs['is_agent'] == 2) {
+                if ($member_rs['is_agent'] == 2) {
                     $this->error('该代理商已是服务中心!');
                     exit();
                 }
@@ -1985,9 +1887,9 @@ class AgentAction extends CommonAction
                     exit();
                 }
                 
-                if ($fck_rs['is_agent'] == 0) {
+                if ($member_rs['is_agent'] == 0) {
                     $nowdate = time();
-                    $result = $fck->query("update __TABLE__ set verify='" . $content . "',is_agent=2,idt=$nowdate,adt={$nowdate} where id=" . $fck_rs['id']);
+                    $result = $member->query("update __TABLE__ set verify='" . $content . "',is_agent=2,idt=$nowdate,adt={$nowdate} where id=" . $member_rs['id']);
                 }
                 
                 $bUrl = __URL__ . '/adminAgents';
@@ -2006,7 +1908,7 @@ class AgentAction extends CommonAction
     {
         // =======================================删除申请服务中心信息
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGu') {
-            $fck = M('fck');
+            $member = M('member');
             $rewhere = array();
             $where['is_cc'] = array(
                 'gt',
@@ -2016,13 +1918,13 @@ class AgentAction extends CommonAction
                 'in',
                 $XGid
             );
-            $rs = $fck->where($where)->select();
+            $rs = $member->where($where)->select();
             foreach ($rs as $rss) {
-                $fck->query("UPDATE __TABLE__ SET is_cc=0,idt=0 where id>1 and id = " . $rss['id']);
+                $member->query("UPDATE __TABLE__ SET is_cc=0,idt=0 where id>1 and id = " . $rss['id']);
             }
             
             // $shop->where($where)->delete();
-            unset($fck, $where, $rs, $rewhere);
+            unset($member, $where, $rs, $rewhere);
             $bUrl = __URL__ . '/adminAgents1';
             $this->_box('操作成功', '删除申请！', $bUrl, 1);
             exit();
@@ -2036,7 +1938,7 @@ class AgentAction extends CommonAction
     {
         // =======================================删除申请服务中心信息
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
-            $fck = M('fck');
+            $member = M('member');
             $rewhere = array();
             $where['l_nums'] = array(
                 'gt',
@@ -2046,13 +1948,13 @@ class AgentAction extends CommonAction
                 'in',
                 $XGid
             );
-            $rs = $fck->where($where)->select();
+            $rs = $member->where($where)->select();
             foreach ($rs as $rss) {
-                $fck->query("UPDATE __TABLE__ SET l_nums=0,idt=0,adt=0,new_agent=0,shoplx=0,shop_a='',shop_b='' where id>1 and id = " . $rss['id']);
+                $member->query("UPDATE __TABLE__ SET l_nums=0,idt=0,adt=0,new_agent=0,shoplx=0,shop_a='',shop_b='' where id>1 and id = " . $rss['id']);
             }
             
             // $shop->where($where)->delete();
-            unset($fck, $where, $rs, $rewhere);
+            unset($member, $where, $rs, $rewhere);
             $bUrl = __URL__ . '/adminAgents';
             $this->_box('操作成功', '删除申请！', $bUrl, 1);
             exit();
@@ -2066,7 +1968,7 @@ class AgentAction extends CommonAction
     {
         // =======================================删除申请服务中心信息
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGua') {
-            $fck = M('fck');
+            $member = M('member');
             $rewhere = array();
             $where['is_agent'] = array(
                 'gt',
@@ -2076,13 +1978,13 @@ class AgentAction extends CommonAction
                 'in',
                 $XGid
             );
-            $rs = $fck->where($where)->select();
+            $rs = $member->where($where)->select();
             foreach ($rs as $rss) {
-                $fck->query("UPDATE __TABLE__ SET is_agent=0,idt=0,adt=0,new_agent=0,shoplx=0,shop_a='',shop_b='' where id>1 and id = " . $rss['id']);
+                $member->query("UPDATE __TABLE__ SET is_agent=0,idt=0,adt=0,new_agent=0,shoplx=0,shop_a='',shop_b='' where id>1 and id = " . $rss['id']);
             }
             
             // $shop->where($where)->delete();
-            unset($fck, $where, $rs, $rewhere);
+            unset($member, $where, $rs, $rewhere);
             $bUrl = __URL__ . '/adminAgents';
             $this->_box('操作成功', '删除申请！', $bUrl, 1);
             exit();
@@ -2104,7 +2006,7 @@ class AgentAction extends CommonAction
         header("Content-Type:text/html; charset=utf-8");
         header("Expires:   0");
         
-        $fck = M('fck'); // 奖金表
+        $member = M('member'); // 奖金表
         
         $map = array();
         $map['id'] = array(
@@ -2116,7 +2018,7 @@ class AgentAction extends CommonAction
             0
         );
         $field = '*';
-        $list = $fck->where($map)
+        $list = $member->where($map)
             ->field($field)
             ->order('idt asc,adt asc')
             ->select();

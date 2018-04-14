@@ -9,27 +9,20 @@
         <th><span>会员编号</span></th>
 		<th><span>开户姓名</span></th>
         <th><span>联系电话</span></th>
-        <th><span>QQ</span></th>
         <th><span>注册时间</span></th>
         <th><span>开通时间</span></th>
-        <th><span>加盟级别</span></th>
         <th><span>注册金额</span></th>
-        <th><span>状态</span></th>
     </tr>
     </thead>
     <volist name="list" id="vo">
     <tr align="center">
         <td> <input type="checkbox" name="tabledb[]" value="{$vo['id']}" class="btn2" /></td>
-        <td><!--<a href="__URL__/menberData/bj_id/{$vo['id']}/eth/menber" title="详细资料">-->{$vo['user_id']}</a></td>
+        <td>{$vo['user_id']}</td>
 		<td>{$vo['user_name']}</td>
-        <td>{$vo['user_tel']}</td>
-        <td>{$vo['qq']}</td>
-        <td>{$vo.rdt|date='Y-m-d H:i:s',###}</td>
-        <td>&nbsp;</td>
-        <td>{$voo[$vo['u_level']]}</td>
-        <!--<td>{$vo["u_level"]+1}</td>-->
-        <td>{$vo['cpzj']}</td>
-        <td><eq name="vo['is_pay']" value='0'><span style="color: #FF0000;">未开通</span><else />已开通</eq></td>
+        <td>{$vo['tel']}</td>
+        <td>{$vo.register_time|date='Y-m-d H:i:s',###}</td>
+        <td>{$vo.bk7|date='Y-m-d H:i:s',###}</td>
+        <td>{$vo['money']}</td>
     </tr>
     </volist>
 </table>
@@ -37,12 +30,8 @@
     <tr>
     	<td>
         <input name="全选" type="button" class="bt_tj" id="全选" onclick="CheckAll(this.form)" value="全选" />
-        <!--&nbsp;&nbsp;
-        <input type="submit" name="action" value="种子币开通会员" onclick="{if(confirm('您确定要使用种子币开通会员吗?')){return true;}return false;}" class="bt_tj">-->
         &nbsp;&nbsp;
         <input type="submit" name="action" value="开通会员" onclick="{if(confirm('您确定要开通会员吗?')){return true;}return false;}" class="bt_tj">
-        &nbsp;&nbsp;
-        <input type="submit" name="action" value="删除会员" onclick="{if(confirm('确定删除会员吗?')){return true;}return false;}" class="bt_tj">
         </td>
     </tr>
 </table>
@@ -61,7 +50,7 @@
     <tr>
       <td align="center" colspan="2">
     <img src="__PUBLIC__/Images/money_dol.png" align="absmiddle"/>&nbsp;&nbsp;&nbsp;
-    电子币:&nbsp;<span class="hong">{$frs['agent_cash']}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+    现金币余额:&nbsp;<span class="hong">{$frs['cash']}</span>&nbsp;&nbsp;&nbsp;&nbsp;
     </td></tr>
 </table>
 </div>

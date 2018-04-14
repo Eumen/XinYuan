@@ -1,7 +1,144 @@
-<include file="Public:header" />
-<div class="ncenter_box">
-<div class="accounttitle"><h1>待审核会员 </h1></div>
-<form name="form3" method="post" action="__URL__/agentUpLevelConfirm">
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>车壹号尾气清净剂管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=2.0, user-scalable=1"> -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="layoutmode" content="standard">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="renderer" content="webkit">
+
+<meta name="wap-font-scale" content="no">
+<meta content="telephone=no" name="format-detection">
+<meta http-equiv="Pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/bootstrap.min.css" title="default">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/bootstrap-theme.min.css" title="default">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace.css" title="default">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace-fonts.css" title="default">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/fonts-awesome.css" title="default">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/buttons.css">
+<style>
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+#wrap > .container {
+  padding: 60px 15px 0;
+}
+.container .credit {
+  margin: 20px 0;
+}
+
+#footer > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+</style>
+<script src="__PUBLIC__/Js/Jquery/jquery-1.11.3.min.js"></script>
+<script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
+
+</head>
+<body>
+<!-- Wrap all page content here -->
+<div id="wrap">
+  
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">车壹号尾气净化剂管理系统</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Begin page content -->
+  <div class="container">
+  <div class="row">
+	  <div class="col-xs-12">
+	      <h4><a href="javascript:history.back();" class="btn-xs btn-info"><img src="__PUBLIC__/Images/left.png"></a>会员自助激活</h4>
+	   </div>
+   </div>
+	<div class="row">
+		<div class="col-xs-12">
+			<form name="form3" method="post" action="__URL__/agentUpLevelConfirm" class="form-horizontal" role="form">
+				<!-- #section:elements.form -->
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-1">用户账号:</label>
+					<div class="col-sm-9">
+						<input id="user_id" name = "user_id" value = "{$_SESSION['loginUseracc']}" class="col-xs-10 col-sm-4"  disabled = "disabled" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-1">充值金额:</label>
+					<div class="col-sm-9">
+						<input id="money" name = "money" value = "3000" class="col-xs-10 col-sm-4"  disabled = "disabled" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">激活方式:</label>
+					<div class="col-sm-9">
+						<select name="select" id="select" onchange="Selev(this.value)" onpropertychange="Selev(this.value)" class="col-xs-10 col-sm-4">
+			      		    <option value="1"> 网银 </option>
+			      		    <option value="2"> 微信</option>
+			      		    <option value="3"> 支付宝</option>
+			            </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-3  col-xs-offset-3 col-xs-4 col-sm-3">
+						<button class="btn btn-info btn-block" type="submit" disabled="disabled">
+							<i class="ace-icon fa fa-check bigger-110" onclick="{if(confirm('您确定要升级会员吗?')){return true;}return false;}" ></i>
+							确认
+						</button>
+						&nbsp; &nbsp; &nbsp;
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+    
+  </div>
+</div>
+
+<div id="footer">
+  <div class="container">
+    <p class="text-muted credit">©
+				2018-现在 cheyihao.com 广西亚凯龙科技有限公司版权所有 客服及技术支持.</p>
+  </div>
+</div>
+</body>
+
+
+
 <table width="100%" class="tab3" border="0" cellpadding="3" cellspacing="1" id="tb1" bgcolor="#b9c8d0">
 	<thead>
     <tr align="center">

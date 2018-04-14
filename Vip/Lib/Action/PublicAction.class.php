@@ -52,13 +52,9 @@ class PublicAction extends CommonAction
         $frs = $fck->where($fwhere)
             ->field('*')
             ->find();
-        $HYJJ = '';
-        $this->_levelConfirm($HYJJ, 1);
-        $this->assign('voo', $HYJJ);
         $this->assign('fck_rs', $frs);
         $this->display('menu');
     }
-    
     // 后台首页 查看系统信息
     public function main()
     {
@@ -161,11 +157,6 @@ class PublicAction extends CommonAction
             $qqlist[$i] = $str5[$i];
         }
         $this->assign('qlist', $qqlist);
-        
-        $HYJJ = "";
-        $this->_levelConfirm($HYJJ, 1);
-        $this->assign('voo', $HYJJ); // 会员级别
-        
         $see = $_SERVER['HTTP_HOST'] . __APP__;
         $see = str_replace("//", "/", $see);
         $this->assign('server', $see);

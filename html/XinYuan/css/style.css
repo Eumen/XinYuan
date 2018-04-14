@@ -48,6 +48,12 @@ body {
     top: 10%;
     transform: translateY(50%);
 }
+
+.center-img{
+    display: block;
+    margin: 0 auto 5px;
+    max-height: inherit;
+}
 .padding-one{
     padding: 1px;
 }

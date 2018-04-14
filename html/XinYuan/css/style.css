@@ -5,6 +5,7 @@ html,
 body {
     height: 100%;
     background-color: #FFFFF0;
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
     /* The html and body elements cannot have any padding or margin. */
 }
 

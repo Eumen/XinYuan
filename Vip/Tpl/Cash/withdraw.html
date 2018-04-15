@@ -20,6 +20,16 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace-fonts.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/fonts-awesome.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/buttons.css">
+<style>
+.footer {
+	padding-top: 15px;
+	padding-bottom: 30px;
+	margin-top:50px;
+	width: 100%;
+	height:40px;
+	border-top: 4px solid #269abc;
+}
+</style>
 <script language='javascript'>
  function CheckForm(){
 	if(confirm('您确定提现金额 '+document.form1.ePoints.value+' 吗？'))
@@ -189,11 +199,11 @@ code {
   </div>
 </div>
 
-<div id="footer">
-  <div class="container">
-    <p class="text-muted credit">copyright@xxx.com</p>
-  </div>
-</div>
+<footer class="footer navbar-fixed-bottom">
+        <div class="container">
+            <p style="font-size: 90%">Copyright © 2018 cheyihao.com. All Rights Reserved.</p>
+        </div>
+</footer>
 </body>
 <script language="javascript">
 new TableSorter("tb1");

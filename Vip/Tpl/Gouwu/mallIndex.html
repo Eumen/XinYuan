@@ -65,10 +65,13 @@ body {
   padding: 0 0 60px;
 }
 
-/* Set the fixed height of the footer here */
-#footer {
-  height: 60px;
-  background-color: #f5f5f5;
+.footer {
+	padding-top: 15px;
+	padding-bottom: 30px;
+	margin-top:50px;
+	width: 100%;
+	height:40px;
+	border-top: 4px solid #269abc;
 }
 
 #wrap > .container {
@@ -90,6 +93,7 @@ code {
 <script src="__PUBLIC__/Js/Jquery/jquery-1.11.3.min.js"></script>
 <script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
 </head>
+<body>
 <!-- Wrap all page content here -->
 <div id="wrap">
   <!-- Fixed navbar -->
@@ -132,12 +136,12 @@ code {
 		</div>
 	</div>
 	<hr>
-	<div class="row">
-		<div class="col-sm-12">
-			<h6 class="col-xs-offset-1 col-sm-offset-2 col-md-offset-3">©
-				2018-现在 cheyihao.com 广西亚凯龙科技有限公司版权所有 客服及技术支持.</h6>
-		</div>
-	</div>
 </div>
 </div>
+<footer class="footer navbar-fixed-bottom">
+      <div class="container">
+          <p style="font-size: 90%">Copyright © 2018 cheyihao.com. All Rights Reserved.</p>
+      </div>
+</footer>
+</body>
 </html>

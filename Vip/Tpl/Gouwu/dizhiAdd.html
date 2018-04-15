@@ -49,6 +49,15 @@ body {
   background-color: #f5f5f5;
 }
 
+.footer {
+	padding-top: 15px;
+	padding-bottom: 30px;
+	margin-top:50px;
+	width: 100%;
+	height:40px;
+	border-top: 4px solid #269abc;
+}
+
 #wrap > .container {
   padding: 60px 15px 0;
 }
@@ -70,17 +79,18 @@ code {
 
 </head>
 <body>
+<div class="col-xs-12" style="background-color: #269abc;">
+		<div
+			style="color: #ffffff; font-weight: bold; padding-top: 2px; font-size: 20px; height: inherit; float:left">
+			车壹号管理系统</div>
+		<div class="pull-right">
+			<img src="__PUBLIC__/resource/image/escape.png"
+				class="img-responsive" style="cursor:pointer;"
+				onclick="javascript:window.location.href='__APP__/Gouwu/mallIndex/'" />
+		</div>
+	</div>
 <!-- Wrap all page content here -->
 <div id="wrap">
-  
-  <!-- Fixed navbar -->
-  <div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">车壹号尾气净化剂管理系统</a>
-      </div>
-    </div>
-  </div>
   
   <!-- Begin page content -->
   <div class="container">
@@ -133,12 +143,11 @@ code {
   </div>
 </div>
 
-<div id="footer">
-  <div class="container">
-    <p class="text-muted credit">©
-				2018-现在 cheyihao.com 广西亚凯龙科技有限公司版权所有 客服及技术支持.</p>
-  </div>
-</div>
+<footer class="footer navbar-fixed-bottom">
+      <div class="container">
+          <p style="font-size: 90%">Copyright © 2018 cheyihao.com. All Rights Reserved.</p>
+      </div>
+</footer>
 </body>
 <script type="text/javascript"> 
   function checklength(){

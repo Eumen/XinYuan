@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-04-15 07:19:41
+# Date: 2018-04-16 04:50:35
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -155,14 +155,14 @@ CREATE TABLE `xy_cptype` (
   `t_pai` int(11) NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 #
 # Data for table "xy_cptype"
 #
 
 /*!40000 ALTER TABLE `xy_cptype` DISABLE KEYS */;
-INSERT INTO `xy_cptype` VALUES (1,'调理肠道',0,0,0,0),(2,'饮料',0,0,0,0),(4,'家居',0,0,0,0),(5,'手机数码',0,0,0,0),(6,'户外运动',0,0,0,0),(7,'服装',0,0,0,0),(8,'家用电器',0,0,0,0),(9,'电脑/办公',0,0,0,0),(10,'美妆个护',0,0,0,0),(11,'房产/汽车用品',0,0,0,0),(12,'母婴/玩具乐器',0,0,0,0),(13,'食品/酒类/生鲜/特产',0,0,0,0),(14,'艺术/礼品鲜花',0,0,0,0),(15,'医药保健/计生情趣',0,0,0,0),(16,'图书/音像/电子书',0,0,0,0),(17,'机票/酒店/旅游/生活',0,0,0,0);
+INSERT INTO `xy_cptype` VALUES (1,'汽车美容',0,0,0,0),(2,'饮料',0,0,0,0),(4,'家居',0,0,0,0),(5,'手机数码',0,0,0,0),(6,'户外运动',0,0,0,0),(7,'服装',0,0,0,0),(8,'家用电器',0,0,0,0),(9,'电脑/办公',0,0,0,0),(10,'美妆个护',0,0,0,0),(11,'房产/汽车用品',0,0,0,0),(12,'母婴/玩具乐器',0,0,0,0),(13,'食品/酒类/生鲜/特产',0,0,0,0),(14,'艺术/礼品鲜花',0,0,0,0),(15,'医药保健/计生情趣',0,0,0,0),(16,'图书/音像/电子书',0,0,0,0),(17,'机票/酒店/旅游/生活',0,0,0,0);
 /*!40000 ALTER TABLE `xy_cptype` ENABLE KEYS */;
 
 #
@@ -177,21 +177,21 @@ CREATE TABLE `xy_fee` (
   `s3` varchar(255) DEFAULT NULL COMMENT '提现手续费',
   `s4` varchar(255) DEFAULT NULL COMMENT '关闭网站提示信息',
   `s5` varchar(255) DEFAULT NULL COMMENT '级别',
-  `s6` varchar(255) DEFAULT NULL COMMENT '推荐奖金比例',
-  `s7` varchar(255) DEFAULT NULL COMMENT '见点奖比例',
-  `s8` varchar(255) DEFAULT NULL COMMENT '报单奖金比例',
+  `s6` varchar(255) DEFAULT NULL COMMENT '推荐奖',
+  `s7` varchar(255) DEFAULT NULL COMMENT '见点奖',
+  `s8` varchar(255) DEFAULT NULL COMMENT '报单奖',
   `s9` varchar(255) DEFAULT NULL COMMENT '最低提现额度',
   `s10` varchar(255) DEFAULT NULL COMMENT '开户银行信息',
   `s11` varchar(255) DEFAULT NULL COMMENT '注册成功信息',
   `s12` varchar(255) DEFAULT NULL COMMENT '充值成功信息',
   `s13` varchar(255) DEFAULT NULL COMMENT '登陆背景',
   `s14` varchar(255) DEFAULT NULL COMMENT '主页背景',
-  `bk1` varchar(255) DEFAULT NULL COMMENT '备用字段',
-  `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段',
-  `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段',
-  `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
-  `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
-  `bk6` varchar(255) DEFAULT NULL COMMENT '备用字段',
+  `s15` varchar(255) DEFAULT '' COMMENT '见点奖层数',
+  `s16` varchar(255) DEFAULT '' COMMENT '充值账户',
+  `s17` varchar(255) DEFAULT NULL COMMENT '众筹基金',
+  `s18` varchar(255) DEFAULT '' COMMENT '奖金名称',
+  `s19` varchar(255) DEFAULT '' COMMENT '汇款信息',
+  `s20` varchar(255) DEFAULT '' COMMENT '是否关闭登录 0：开启 1：关闭',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台参数表';
 
@@ -200,7 +200,7 @@ CREATE TABLE `xy_fee` (
 #
 
 /*!40000 ALTER TABLE `xy_fee` DISABLE KEYS */;
-INSERT INTO `xy_fee` VALUES (1,'3000',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `xy_fee` VALUES (1,'3000','','5','网站关闭升级中，请互相转告！','普通用户|会员','300','100','200','100','农业银行|工商银行|招商银行|建设银行|中国银行','恭喜您注册成功，激活会员将有更多福利等您领取！','','','','10','carNo1','10','直推奖|见点奖|报单奖|众筹基金|现金币|积分币','您已汇款成功，请耐心等待管理员审核！',NULL);
 /*!40000 ALTER TABLE `xy_fee` ENABLE KEYS */;
 
 #
@@ -277,61 +277,64 @@ DROP TABLE IF EXISTS `xy_member`;
 CREATE TABLE `xy_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL DEFAULT '' COMMENT '登陆用户名',
-  `user_name` varchar(255) DEFAULT NULL COMMENT '实名',
-  `tel` varchar(255) DEFAULT NULL COMMENT '手机号',
-  `last_login_time` varchar(255) DEFAULT NULL COMMENT '上次登录时间',
-  `last_login_ip` varchar(255) DEFAULT NULL COMMENT '上次登录ip',
-  `status` varchar(255) DEFAULT NULL COMMENT '0:正常1：禁止登陆',
-  `password` varchar(255) DEFAULT NULL COMMENT '密码',
-  `password2` varchar(255) DEFAULT NULL COMMENT '二级密码',
-  `pwd1` varchar(255) DEFAULT NULL COMMENT '未加密密码',
-  `pwd2` varchar(255) DEFAULT NULL COMMENT '未加密密码',
-  `wechat` varchar(255) DEFAULT NULL COMMENT '微信',
-  `bank` varchar(255) DEFAULT NULL COMMENT '开户银行',
-  `bankcard_number` varchar(255) DEFAULT NULL COMMENT '银行卡号',
-  `bank_province` varchar(255) DEFAULT NULL COMMENT '开户省份',
-  `bank_city` varchar(255) DEFAULT NULL COMMENT '开户城市',
-  `bank_address` varchar(255) DEFAULT NULL COMMENT '开户详细地址',
-  `register_time` varchar(255) DEFAULT NULL COMMENT '注册时间',
-  `re_id` varchar(255) DEFAULT NULL COMMENT '推荐人ID',
-  `re_name` varchar(255) DEFAULT NULL COMMENT '推荐人姓名',
-  `father_id` varchar(255) DEFAULT NULL COMMENT '节点人ID',
-  `father_name` varchar(255) DEFAULT NULL COMMENT '节点人姓名',
-  `grade` varchar(255) DEFAULT NULL COMMENT '0:普通用户 1:会员 2：管理员',
-  `money` varchar(255) DEFAULT NULL COMMENT '注册金额',
-  `cash` varchar(255) DEFAULT NULL COMMENT '现金币',
-  `point` varchar(255) DEFAULT NULL COMMENT '积分',
-  `recommend_sum` varchar(255) DEFAULT NULL COMMENT '推荐人数',
-  `team_sum` varchar(255) DEFAULT NULL COMMENT '团队人数',
-  `prem` varchar(255) DEFAULT NULL COMMENT '权限',
-  `re_path` varchar(255) DEFAULT NULL COMMENT '推荐路径',
-  `p_path` varchar(255) DEFAULT NULL COMMENT '节点路径',
-  `is_agent` varchar(255) DEFAULT NULL COMMENT '是否是服务中心 0：不是1：是',
-  `is_seller` varchar(255) DEFAULT NULL COMMENT '是否是联盟商家 0：不是 1：是',
-  `update_flag` varchar(255) DEFAULT NULL COMMENT '更新标志：0：未更新1：已更新',
-  `update_time` varchar(255) DEFAULT NULL COMMENT '更新时间',
-  `delete_flag` varchar(255) DEFAULT NULL COMMENT '删除标志',
-  `delete_time` varchar(255) DEFAULT NULL COMMENT '删除时间',
-  `re_money` varchar(255) DEFAULT NULL COMMENT '复投金额',
-  `bk1` varchar(255) DEFAULT NULL COMMENT '推荐绝对层数',
-  `bk2` varchar(255) DEFAULT NULL COMMENT '节点绝对层数',
-  `bk3` varchar(255) DEFAULT NULL COMMENT '多点登录',
-  `bk4` varchar(255) DEFAULT NULL COMMENT '是否支付 0：未支付 1：已支付',
-  `bk5` varchar(255) DEFAULT NULL COMMENT '服务中心ID',
-  `bk6` varchar(255) DEFAULT NULL COMMENT '服务中心姓名',
-  `bk7` varchar(255) DEFAULT NULL COMMENT '开通时间',
-  `bk8` varchar(255) DEFAULT NULL COMMENT '备用字段8',
+  `user_name` varchar(255) DEFAULT '' COMMENT '实名',
+  `tel` varchar(255) DEFAULT '' COMMENT '手机号',
+  `last_login_time` varchar(255) DEFAULT '' COMMENT '上次登录时间',
+  `last_login_ip` varchar(255) DEFAULT '' COMMENT '上次登录ip',
+  `status` varchar(255) DEFAULT '0' COMMENT '0:正常1：禁止登陆',
+  `password` varchar(255) DEFAULT '' COMMENT '密码',
+  `password2` varchar(255) DEFAULT '' COMMENT '二级密码',
+  `pwd1` varchar(255) DEFAULT '' COMMENT '未加密密码',
+  `pwd2` varchar(255) DEFAULT '' COMMENT '未加密密码',
+  `wechat` varchar(255) DEFAULT '' COMMENT '微信',
+  `bank` varchar(255) DEFAULT '' COMMENT '开户银行',
+  `bankcard_number` varchar(255) DEFAULT '' COMMENT '银行卡号',
+  `bank_province` varchar(255) DEFAULT '' COMMENT '开户省份',
+  `bank_city` varchar(255) DEFAULT '' COMMENT '开户城市',
+  `bank_address` varchar(255) DEFAULT '' COMMENT '开户详细地址',
+  `register_time` varchar(255) DEFAULT '' COMMENT '注册时间',
+  `re_id` varchar(255) DEFAULT '' COMMENT '推荐人ID',
+  `re_name` varchar(255) DEFAULT '' COMMENT '推荐人姓名',
+  `father_id` varchar(255) DEFAULT '' COMMENT '节点人ID',
+  `father_name` varchar(255) DEFAULT '' COMMENT '节点人姓名',
+  `grade` varchar(255) DEFAULT '0' COMMENT '0:普通用户 1:会员 2：管理员',
+  `money` varchar(255) DEFAULT '0' COMMENT '注册金额',
+  `cash` varchar(255) DEFAULT '0' COMMENT '现金币',
+  `point` varchar(255) DEFAULT '0' COMMENT '积分',
+  `recommend_sum` varchar(255) DEFAULT '0' COMMENT '推荐人数',
+  `team_sum` varchar(255) DEFAULT '0' COMMENT '团队人数',
+  `prem` varchar(255) DEFAULT '' COMMENT '权限',
+  `re_path` varchar(255) DEFAULT '' COMMENT '推荐路径',
+  `p_path` varchar(255) DEFAULT '' COMMENT '节点路径',
+  `is_agent` varchar(255) DEFAULT '0' COMMENT '是否是服务中心 0：不是1：是',
+  `is_seller` varchar(255) DEFAULT '0' COMMENT '是否是联盟商家 0：不是 1：是',
+  `update_flag` varchar(255) DEFAULT '0' COMMENT '更新标志：0：未更新1：已更新',
+  `update_time` varchar(255) DEFAULT '' COMMENT '更新时间',
+  `delete_flag` varchar(255) DEFAULT '0' COMMENT '删除标志',
+  `delete_time` varchar(255) DEFAULT '' COMMENT '删除时间',
+  `re_money` varchar(255) DEFAULT '0' COMMENT '复投金额',
+  `bk1` varchar(255) DEFAULT '' COMMENT '推荐绝对层数',
+  `bk2` varchar(255) DEFAULT '' COMMENT '节点绝对层数',
+  `bk3` varchar(255) DEFAULT '' COMMENT '多点登录',
+  `bk4` varchar(255) DEFAULT '0' COMMENT '是否支付 0：未支付 1：已支付',
+  `bk5` varchar(255) DEFAULT '' COMMENT '服务中心ID',
+  `bk6` varchar(255) DEFAULT '' COMMENT '服务中心姓名',
+  `bk7` varchar(255) DEFAULT '' COMMENT '开通时间',
+  `bk8` varchar(255) DEFAULT '0' COMMENT '众筹基金',
   `bk9` varchar(255) DEFAULT NULL COMMENT '备用字段9',
   `bk10` varchar(255) DEFAULT NULL COMMENT '备用字段10',
+  `user_code` varchar(255) DEFAULT '' COMMENT '身份证号',
+  `us_img` varchar(255) DEFAULT '' COMMENT '用户头像',
+  `is_fenh` varchar(255) DEFAULT '0' COMMENT '是否开启奖金',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 #
 # Data for table "xy_member"
 #
 
 /*!40000 ALTER TABLE `xy_member` DISABLE KEYS */;
-INSERT INTO `xy_member` VALUES (1,'carNo1','公司','13888888888','1523747572','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','1','1','1','1','1','1523608131','0','0','0','0','2','3000','1977','3000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','4233d6d6ab4d34dff488f0ed99dabf3e','1','carNo1',NULL,'1523699005',NULL,NULL,NULL),(2,'aaa','啊三','15678455446','1523646257','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','1','carNo1',NULL,'1523699005',NULL,NULL,NULL),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0','carNo1',NULL,'1523699005',NULL,NULL,NULL);
+INSERT INTO `xy_member` VALUES (1,'carNo1','公司','13888888881','1523825409','::1','0','3d186804534370c3c817db0563f0e461','3d186804534370c3c817db0563f0e461','321321','321321','1','招商银行','6222083400003222805','广西','南宁','大连市开发区支行','1523608131','0','0','0','0','2','3000','5000','4000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','b1e0b100a0026bc278d971111b268016','1','carNo1',NULL,'1523699005','1000',NULL,NULL,'211224198901267212',NULL,'0'),(2,'aaa','啊三','15678455446','1523801698','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'18fcf6c53bdb24f60c261a2bec465624','1','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(4,'123123',NULL,'15678450412',NULL,NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523775753','1','carNo1',NULL,NULL,'0','0','0','0',NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'ccc',NULL,'15878450415','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523800672','1','carNo1','','','0','0','0','0','0','0','',',1,','','0','0','0','','0','','0','1','','','0','','','','0',NULL,NULL,'','','0');
 /*!40000 ALTER TABLE `xy_member` ENABLE KEYS */;
 
 #
@@ -363,7 +366,7 @@ CREATE TABLE `xy_message` (
   `s_read` varchar(255) DEFAULT NULL COMMENT '收件人是否已读',
   `f_read` varchar(255) DEFAULT NULL COMMENT '发件人是否已读',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言板';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='留言板';
 
 #
 # Data for table "xy_message"
@@ -397,7 +400,7 @@ CREATE TABLE `xy_news` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `baile` varchar(255) DEFAULT NULL COMMENT '是否置顶',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
 
 #
 # Data for table "xy_news"
@@ -498,21 +501,21 @@ CREATE TABLE `xy_product` (
   `img6` varchar(255) DEFAULT NULL COMMENT '产品图片',
   `stock_count` varchar(255) DEFAULT NULL COMMENT '库存',
   `cptype` varchar(255) DEFAULT NULL COMMENT '产品分类类型',
-  `yc_cp` varchar(255) DEFAULT NULL COMMENT '产品是否被屏蔽 0：否 1:是',
+  `yc_cp` varchar(255) DEFAULT '0' COMMENT '产品是否被屏蔽 0：否 1:是',
   `update_flag` varchar(255) DEFAULT NULL COMMENT '更新标志',
   `delete_flag` varchar(255) DEFAULT NULL COMMENT '删除标志',
   `update_time` varchar(255) DEFAULT NULL COMMENT '更新时间',
   `delete_time` varchar(255) DEFAULT NULL COMMENT '删除时间',
   `content` varchar(255) DEFAULT NULL COMMENT '商品详情描述',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='产品表';
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='产品表';
 
 #
 # Data for table "xy_product"
 #
 
 /*!40000 ALTER TABLE `xy_product` DISABLE KEYS */;
-INSERT INTO `xy_product` VALUES (1,'aaa','aaa','京东','aaa',NULL,'90','91','92','93',NULL,NULL,NULL,NULL,NULL,NULL,'10','1','0','0','0',NULL,NULL,'加量不加价');
+INSERT INTO `xy_product` VALUES (4,'aaa','啊三','天猫旗舰店','红牛','1523818127','1','6','4','5','__PUBLIC__/Uploads/image/2018041602483222.jpg',NULL,NULL,NULL,NULL,NULL,'100','2','0',NULL,NULL,NULL,NULL,'<p>&nbsp;活力燃烧！</p>'),(5,'aaa','啊三','京东旗舰店','苹果笔记本','1523818231','2000','8000','5000','6000','__PUBLIC__/Uploads/image/2018041602501566.jpg',NULL,NULL,NULL,NULL,NULL,'100','9','0',NULL,NULL,NULL,NULL,'<p>&nbsp;速度极限！</p>'),(6,'aaa','啊三','华为旗舰店','华为P10','1523818304','1000','2800','2000','2500','__PUBLIC__/Uploads/image/2018041602512917.jpg',NULL,NULL,NULL,NULL,NULL,'200','5','0',NULL,NULL,NULL,NULL,'<p>&nbsp;高清摄像~</p>'),(8,'aaa','啊三','阿迪达斯旗舰店','阿迪达斯酷跑','1523818912','100','500','300','400','__PUBLIC__/Uploads/image/2018041603014782.jpeg',NULL,NULL,NULL,NULL,NULL,'500','7','0',NULL,NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `xy_product` ENABLE KEYS */;
 
 #

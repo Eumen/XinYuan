@@ -19,8 +19,8 @@ class ChangeAction extends CommonAction {
 			$this->_boxx($url);
 			exit;
 		}
-		$fck   =  M ('cody');
-        $list	=  $fck->where("c_id=$UrlID")->getField('c_id');
+		$member   =  M ('cody');
+ $list	=  $member->where("c_id=$UrlID")->getField('c_id');
 		if (!empty($list)){
 			$this->assign('vo',$list);
 			$this->display('Public:cody');
@@ -35,11 +35,11 @@ class ChangeAction extends CommonAction {
 		$Urlsz = $_POST['Urlsz'];
 		if(empty($_SESSION['user_pwd2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('member');
-		    if (!$fck->autoCheckToken($_POST)){
-	            $this->error('页面过期请刷新页面!');
-	            exit();
-	        }
+			$member   =  M ('member');
+		    if (!$member->autoCheckToken($_POST)){
+	     $this->error('页面过期请刷新页面!');
+	     exit();
+	 }
 			if (empty($pass)){
 				$this->error('二级密码错误!');
 				exit();
@@ -48,7 +48,7 @@ class ChangeAction extends CommonAction {
 			$where =array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
 			$where['password2'] = md5($pass);
-			$list = $fck->where($where)->field('id')->find();
+			$list = $member->where($where)->field('id')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
 				exit();
@@ -60,7 +60,7 @@ class ChangeAction extends CommonAction {
 		switch ($Urlsz){
 			case 1:
 				$_SESSION['DLTZURL02'] = 'changedata';
-				$bUrl = __URL__.'/changedata';//修改资料
+				$bUrl = __URL__.'/profile';//修改资料
 				$this->_boxx($bUrl);
 				break;
 			case 2:
@@ -80,37 +80,26 @@ class ChangeAction extends CommonAction {
 	}
 	
 	/* ---------------显示用户修改资料界面---------------- */
-	public function changedata(){
+	public function profile(){
 		if ($_SESSION['DLTZURL02'] == 'changedata'){
-			$fck	 =	 M('fck');
+			$member	 =	 M('member');
 			$id   = $_SESSION[C('USER_AUTH_KEY')];
 			//输出登录用户资料记录
-			$vo	= $fck -> getById($id);  //该登录会员记录
+			$vo	= $member -> getById($id);  //该登录会员记录
 			if(empty($vo['us_img'])){
 				$vo['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
 			}
 			$this->assign('vo',$vo);
 			unset($vo);
-
 			//输出银行
-			$b_bank = $fck -> where('id='.$id) -> field("bank,user_name") -> find();
+			$b_bank = $member -> where('id='.$id) -> field("bank,user_name") -> find();
 			$this->assign('b_bank',$b_bank);
-
-			$fee = M ('fee');
-			$fee_s = $fee->field('s2,s9,i4,str29,str99,str24,str25,str17')->find();
-			$wentilist = explode('|',$fee_s['str99']);
-			$bank = explode('|',$fee_s['str29']);
-			$you = explode('|',$fee_s['str17']);
-			$this->assign('bank',$bank);
-			$this->assign('you',$you);
-			$lang= explode('|',$fee_s['str24']);
-			$countrys = explode('|',$fee_s['str25']);
-			$this->assign('lang',$lang);
-
 			unset($bank,$b_bank);
-
+			$fee = M ('fee');
+			$fee_s = $fee->field('*')->find();
+			$bank = explode('|',$fee_s['s10']);
+			$this->assign('bank',$bank);
 			$this->display('profile');
-
 		}else{
 			$this->error('操作错误!');
 			exit;
@@ -119,74 +108,32 @@ class ChangeAction extends CommonAction {
 
 	/* --------------- 修改保存会员信息 ---------------- */
 	public function changedataSave(){
-		if($_POST['ID'] != $_SESSION[C('USER_AUTH_KEY')]){
-			$this->error('操作错误!');
-			exit;
-		}
-
 		if ($_SESSION['DLTZURL02'] == 'changedata'){
-			$fck = M('fck');
-
+			$member = M('member');
 			$myw = array();
 			$myw['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$mrs = $fck->where($myw)->field('id,wenti_dan')->find();
+			$mrs = $member->where($myw)->field('*')->find();
 			if(!$mrs){
 				$this->error('非法提交数据!');
 				exit;
-			}else{
-				$mydaan = $mrs['wenti_dan'];
 			}
-
-//			$huida = trim($_POST['wenti_dan']);
-//			if(empty($huida)){
-//				$this->error('请输入底部的密保答案！');
-//				exit;
-//			}
-//			if($huida!=$mydaan){
-//				$this->error('密保答案验证不正确！');
-//				exit;
-//			}
-
 			$data = array();
-			$data['nickname']         = $_POST['NickName'];        //会员昵称
-			$data['bank_name']        = $_POST['BankName'];        //银行名称
-			$data['bank_card']        = $_POST['BankCard'];        //银行卡号
-			$data['user_name']        = $_POST['UserName'];        //开户姓名
-
-			$data['bank_province']    = $_POST['BankProvince'];    //省份
-			$data['bank_city']        = $_POST['BankCity'];        //城市
-			$data['bank_address']     = $_POST['BankAddress'];     //开户地址
-//			$data['user_code']        = $_POST['UserCode'];        //身份证号码
-// 			$data['user_address']     = $_POST['UserAddress'];     //联系地址
- 			$data['email']            = $_POST['UserEmail'];       //电子邮箱
-			$data['user_tel']         = $_POST['UserTel'];         //联系电话
-			$data['qq']         = $_POST['qq'];         //qq
-			
-			$data['lang']        = $_POST['Lang'];
-			$data['countrys']        = $_POST['Countrys'];
-			$data['youname']        = $_POST['you'];
-			$data['youcar']        = $_POST['youcar'];
-			
-			$usimg = trim($_POST['image']);
+			$data['id'] = $_SESSION[C('USER_AUTH_KEY')]; //主键
+			$data['bank'] = $_POST['bank']; //银行名称
+			$data['bankcard_number']  = $_POST['bankcard_number']; //银行卡号
+			$data['user_name'] = $_POST['user_name']; //开户姓名
+			$data['bank_province'] = $_POST['bank_province'];    //省份
+			$data['bank_city'] = $_POST['bank_city']; //城市
+			$data['bank_address'] = $_POST['bank_address'];     //开户地址
+			$data['user_code'] = $_POST['user_code']; //身份证号码
+			$data['tel']  = $_POST['tel'];  //联系电话
+			$usimg = trim($_POST['us_img']);// 用户头像
 			if(!empty($usimg)){
-				$data['us_img']		  = $usimg;
+				$data['us_img'] = $usimg;
 			}
-
-			$xg_wenti = trim($_POST['xg_wenti']);
-			$xg_wenti_dan = trim($_POST['xg_wenti_dan']);
-			if(!empty($xg_wenti)){
-				$data['wenti']			= $xg_wenti;//问题
-			}
-			if(!empty($xg_wenti_dan)||strlen($xg_wenti_dan)>0){
-				$data['wenti_dan']		= $xg_wenti_dan;//答案
-			}
-
-
-			$data['id']               = $_SESSION[C('USER_AUTH_KEY')];//要修改资料的AutoId
-
-			$rs = $fck->save($data);
+			$rs = $member->save($data);
 			if($rs){
-				$bUrl = __URL__.'/changedata';
+				$bUrl = __URL__.'/profile';
 				$this->_box(1,'资料修改成功！',$bUrl,1);
 			}else{
 				$this->error('操作错误!');
@@ -201,13 +148,13 @@ class ChangeAction extends CommonAction {
 	/* ********************** 修改密码 ********************* */
 	public function changepassword(){
 		if ($_SESSION['DLTZURL01'] == 'changepassword'){
-			$fck = M('fck');
+			$member = M('member');
 
 			$id   = $_SESSION[C('USER_AUTH_KEY')];
 			//输出登录用户资料记录
 			$where = array();
 			$where['id'] = array('eq',$id);
-			$vo	= $fck ->where($where)->find();
+			$vo	= $member ->where($where)->find();
 			$this->assign('vo',$vo);
 			unset($vo);
 
@@ -222,7 +169,7 @@ class ChangeAction extends CommonAction {
     /* ********************** 修改密码 ********************* */
     public function changepasswordSave(){
     	if ($_SESSION['DLTZURL01'] == 'changepassword'){
-			$fck    =   M('fck');
+			$member    =   M('member');
 			if(md5($_POST['verify']) != $_SESSION['verify']) {
 				$this->error('验证码错误！');
 				exit;
@@ -230,7 +177,7 @@ class ChangeAction extends CommonAction {
 	
 			$myw = array();
 			$myw['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$mrs = $fck->where($myw)->field('id,wenti_dan')->find();
+			$mrs = $member->where($myw)->field('id,wenti_dan')->find();
 			if(!$mrs){
 				$this->error('非法提交数据!');
 				exit;
@@ -268,50 +215,50 @@ class ChangeAction extends CommonAction {
 				exit;
 			}
 	
-	        if(isset($_POST['account'])){
-	            $map['user_id']	 =	 $_POST['account'];
-	        }elseif(isset($_SESSION[C('USER_AUTH_KEY')])){
-	            $map['id']	     =	 $_SESSION[C('USER_AUTH_KEY')];
-	        }
+	 if(isset($_POST['account'])){
+	     $map['user_id']	 =	 $_POST['account'];
+	 }elseif(isset($_SESSION[C('USER_AUTH_KEY')])){
+	     $map['id']	     =	 $_SESSION[C('USER_AUTH_KEY')];
+	 }
 	
-	        //检查用户
-			$result = $fck->where($map)->field('id')->find();
-	        if(!$result){
-	            $this->error('旧密码错误！');
-	        }else {
+	 //检查用户
+			$result = $member->where($map)->field('id')->find();
+	 if(!$result){
+	     $this->error('旧密码错误！');
+	 }else {
 				//修改密码
 				$pwds = pwdHash($_POST['password']);
 				if ($_POST['type'] == 1){
-					$fck->where($map)->setField('pwd1',$_POST['password']);  //一级密码不加密
-					$fck->where($map)->setField('password',$pwds);           //一级密码加密
+					$member->where($map)->setField('pwd1',$_POST['password']);  //一级密码不加密
+					$member->where($map)->setField('password',$pwds);    //一级密码加密
 				}elseif($_POST['type'] == 2){
-					$fck->where($map)->setField('pwd2',$_POST['password']);  //二级密码不加密
-					$fck->where($map)->setField('passopen',$pwds);           //二级密码加密
+					$member->where($map)->setField('pwd2',$_POST['password']);  //二级密码不加密
+					$member->where($map)->setField('passopen',$pwds);    //二级密码加密
 				}elseif($_POST['type'] == 3){
-					$fck->where($map)->setField('pwd3',$_POST['password']);  //三级密码不加密
-					$fck->where($map)->setField('passopentwo',$pwds);          //三级密码加密
+					$member->where($map)->setField('pwd3',$_POST['password']);  //三级密码不加密
+					$member->where($map)->setField('passopentwo',$pwds);   //三级密码加密
 				}
 				//9260729
-				//$fck->save();
+				//$member->save();
 			//生成认证条件
-	        $mapp            =   array();
+	 $mapp     =   array();
 			// 支持使用绑定帐号登录
 			$mapp['id']    = $_SESSION[C('USER_AUTH_KEY')];
 			$mapp['user_id']	= $_SESSION['loginUseracc'];
 			import ( '@.ORG.RBAC' );
-	        $authInfoo = RBAC::authenticate($mapp);
-	        if(false === $authInfoo) {
-	            $this->LinkOut();
+	 $authInfoo = RBAC::authenticate($mapp);
+	 if(false === $authInfoo) {
+	     $this->LinkOut();
 				$this->error('帐号不存在！');
 				exit;
-	        }else {
+	 }else {
 				//更新session
 				$_SESSION['login_sf_list_u'] = md5($authInfoo['user_id'].'wodetp_new_1012!@#'.$authInfoo['password'].$_SERVER['HTTP_USER_AGENT']);
 			}
 				$bUrl = __URL__.'/changepassword';
 				$this->_box(1,'修改密码成功！',$bUrl,1);
 				exit;
-	        }
+	 }
     	}else{
 			$this->error('操作错误!');
 			exit;
@@ -321,9 +268,9 @@ class ChangeAction extends CommonAction {
     public function pprofile() {
 		//列表过滤器，生成查询Map对象
 		$id  = $_SESSION[C('USER_AUTH_KEY')];
-		$fck = M ('fck');
+		$member = M ('member');
 		//会员
-        $u_all = $fck -> where('id='.$id)->field('*') -> find();
+ $u_all = $member -> where('id='.$id)->field('*') -> find();
 		$lev = $u_all['u_level']-1;
 
 		$fee = M('fee');

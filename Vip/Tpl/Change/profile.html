@@ -20,6 +20,10 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace-fonts.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/fonts-awesome.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/buttons.css">
+<link href="__PUBLIC__/avatar/css/cropper.min.css" rel="stylesheet"/> 
+<script src="__PUBLIC__/avatar/assets/js/jquery.min.js"></script> 
+<script src="__PUBLIC__/avatar/js/cropper.min.js"></script> 
+<script src="__PUBLIC__/avatar/js/main.js"></script>
 <style>
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -68,6 +72,65 @@ code {
 
 </head>
 <body>
+<div class="container" id="crop-avatar">
+			            <!-- Cropping modal -->
+			            <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+			                <div class="modal-dialog modal-lg">
+			                    <div class="modal-content">
+			                        <form class="avatar-form" action="crop.php" enctype="multipart/form-data" method="post">
+			                            <div class="modal-header">
+			                                <button class="close" data-dismiss="modal" type="button">&times;</button>
+			                                <h4 class="modal-title" id="avatar-modal-label">更换头像</h4>
+			                            </div>
+			                            <div class="modal-body">
+			                                <div class="avatar-body">
+			                                    <!-- Upload image and data -->
+			                                    <div class="avatar-upload">
+			                                        <input class="avatar-src" name="avatar_src" type="hidden"/>
+			                                        <input class="avatar-data" name="avatar_data" type="hidden"/>
+			                                        <label for="avatarInput">头像上传</label>
+			                                        <input class="avatar-input" id="avatarInput" name="avatar_file" type="file"/>
+			                                    </div>
+			                                    <!-- Crop and preview -->
+			                                    <div class="row">
+			                                        <div class="col-md-9">
+			                                            <div class="avatar-wrapper"></div>
+			                                        </div>
+			                                        <div class="col-md-3">
+			                                            <div class="avatar-preview preview-lg"></div>
+			                                            <div class="avatar-preview preview-md"></div>
+			                                            <div class="avatar-preview preview-sm"></div>
+			                                        </div>
+			                                    </div>
+			                                    <div class="row avatar-btns">
+			                                        <div class="col-md-9">
+			                                            <div class="btn-group">
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees">Rotate Left</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="-15" type="button">-15deg</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="-30" type="button">-30deg</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="-45" type="button">-45deg</button>
+			                                            </div>
+			                                            <div class="btn-group">
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees">Rotate Right</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="15" type="button">15deg</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="30" type="button">30deg</button>
+			                                                <button class="btn btn-primary" data-method="rotate" data-option="45" type="button">45deg</button>
+			                                            </div>
+			                                        </div>
+			                                        <div class="col-md-3">
+			                                            <button class="btn btn-primary btn-block avatar-save" type="submit">Done</button>
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        </form>
+			                    </div>
+			                </div>
+			            </div><!-- /.modal -->
+
+            <!-- Loading state -->
+            <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+        </div>
 <!-- Wrap all page content here -->
 <div id="wrap">
   
@@ -84,110 +147,131 @@ code {
   <div class="container">
   <div class="row">
 	  <div class="col-xs-12">
-	      <h4><a href="javascript:history.back();" class="btn-xs btn-info"><img src="__PUBLIC__/Images/left.png"></a>个人资料</h4>
+	      <h4><a href="__APP__/" class="btn-xs btn-info"><img src="__PUBLIC__/Images/left.png"></a>个人资料</h4>
 	   </div>
    </div>
 	<div class="row">
 		<div class="col-xs-12">
-			<form class="form-horizontal" role="form">
+			<form class="form-horizontal" action="__URL__/changedataSave" id="registerForm" method="post">
 				<!-- #section:elements.form -->
 				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1">用户账号</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1" placeholder="用户账号" class="col-xs-10 col-sm-5" />
-					</div>
+					<label class="col-sm-3 control-label no-padding-right" >头像：</label>
+					<!-- Current avatar -->
+		            <div class="avatar-view" title="更换头像">
+		                <img name="us_img" type="text" id="us_img" value="{$vo['us_img']}" 
+								  		 src="{$vo['us_img']}"  class="img-responsive thumbnail" >
+		            </div>
 				</div>
-
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">姓名</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="姓名" class="col-xs-10 col-sm-5" />
-					</div>
 				</div>
-				
 				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">身份证号</label>
-
+					<label class="col-sm-3 control-label no-padding-right" >用户名</label>
 					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">用户卡号</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
+						<input name="user_id" type="text" id="user_id" value="{$vo['user_id']}" class="col-xs-12 col-sm-5"  style="background-color: #ddd;" readonly="readonly" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">开户银行</label>
-
+					<label class="col-sm-3 control-label no-padding-right" >姓名</label>
 					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">省份</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">城市</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">手机号</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">密码</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">确认密码</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">二级密码</label>
-
-					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
+							<eq name="vo['user_name']" value="">
+								<input name="user_name" type="text" id="user_name" value="{$vo['user_name']}" class="col-xs-12 col-sm-5" />
+							<else />
+								<input name="user_name" type="text" id="user_name" value="{$vo['user_name']}" class="col-xs-12 col-sm-5"  readonly="readonly" />
+							</eq>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1">确认二级密码</label>
-
+					<label class="col-sm-3 control-label no-padding-right" >手机号</label>
 					<div class="col-sm-9">
-						<input type="text" id="form-field-1-1" placeholder="Text Field" class="col-xs-10 col-sm-5" />
+						<input name="tel" type="text" id="tel" value="{$vo['tel']}" class="col-xs-12 col-sm-5" readonly="readonly"/>
 					</div>
 				</div>
-				
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >身份证号</label>
+					<div class="col-sm-9">
+							<eq name="vo['user_code']" value="">
+								<input name="user_code" type="text" id="user_code" value="{$vo['user_code']}" class="col-xs-12 col-sm-5" />
+							<else />
+								<input name="user_code" type="text" id="user_code" value="{$vo['user_code']}" class="col-xs-12 col-sm-5" readonly="readonly" />
+							</eq>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >银行卡号</label>
+					<div class="col-sm-9">
+						<input name="bankcard_number" type="text" id="bankcard_number" value="{$vo['bankcard_number']}" class="col-xs-12 col-sm-5"  maxlength="19" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >开户银行</label>
+					<div class="col-sm-9">
+						<select name="bank" id="bank" class="col-xs-12 col-sm-5" >
+							<volist name='bank' id='voo'>
+								<eq name='bank[$key]' value="$b_bank['bank']">
+								<option value="{$bank[$key]}" selected="selected" class="col-xs-offset-0" >{$bank[$key]}</option>
+								<else />
+								<option value="{$bank[$key]}">{$bank[$key]}</option>
+								</eq>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >省份</label>
+					<div class="col-sm-9">
+						<input name="bank_province" type="text" id="bank_province" value="{$vo['bank_province']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >城市</label>
+					<div class="col-sm-9">
+						<input name="bank_city" type="text" id="bank_city" value="{$vo['bank_city']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >开户详细地址</label>
+					<div class="col-sm-9">
+						<input name="bank_address" type="text" id="bank_address" value="{$vo['bank_address']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >密码</label>
+
+					<div class="col-sm-9">
+						<input name="password" type="password" id="password" value="{$vo['password']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >确认密码</label>
+					<div class="col-sm-9">
+						<input name="confirm_password" type="password" id="confirm_password" value="{$vo['password']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >二级密码</label>
+					<div class="col-sm-9">
+						<input name="password2" type="password" id="password2" value="{$vo['password2']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >确认二级密码</label>
+					<div class="col-sm-9">
+						<input name="confirm_password2" type="password" id="confirm_password2" value="{$vo['password2']}" class="col-xs-12 col-sm-5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >手机验证码：</label>
+					<div class="col-sm-9">
+						<input name="confirm_password2" type="text" id="confirm_password2" placeholder="请输入手机验证码" class="col-xs-10 col-sm-5" />
+						<button class="btn-xs btn-default col-xs-2 col-sm-1 col-md-1" type="button">
+							<i class="ace-icon fa fa-check bigger-110"></i>
+							发送
+						</button>
+					</div>
+				</div>
+				&nbsp;<br>
 				<div class="form-group">
 					<div class="col-md-offset-3 col-md-9">
-						<button class="btn btn-info" type="button">
+						<button class="btn btn-info" type="submit">
 							<i class="ace-icon fa fa-check bigger-110"></i>
 							确认
 						</button>

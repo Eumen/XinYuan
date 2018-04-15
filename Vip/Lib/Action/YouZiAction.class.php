@@ -1,18 +1,15 @@
 <?php
-
 class YouZiAction extends CommonAction
 {
-
     function _initialize()
     {
-        // $this->_inject_check(1);//调用过滤函数
         $this->_inject_check(0); // 调用过滤函数
         $this->_checkUser();
         $this->_Admin_checkUser(); // 后台权限检测
         $this->_Config_name(); // 调用参数
         header("Content-Type:text/html; charset=utf-8");
     }
-    // ================================================二级验证
+    // 二级密码验证
     public function cody()
     {
         $UrlID = (int) $_GET['c_id'];
@@ -20,7 +17,7 @@ class YouZiAction extends CommonAction
             $this->error('二级密码错误!');
             exit();
         }
-        if (! empty($_SESSION['user_pwd2'])) {
+        if (! empty($_SESSION['password2'])) {
             $url = __URL__ . "/codys/Urlsz/$UrlID";
             $this->_boxx($url);
             exit();
@@ -36,11 +33,11 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-    // ====================================二级验证后调转页面
+    // 二级密码验证后调转页面
     public function codys()
     {
         $Urlsz = $_POST['Urlsz'];
-        if (empty($_SESSION['user_pwd2'])) {
+        if (empty($_SESSION['password2'])) {
             $pass = $_POST['oldpassword'];
             $member = M('member');
             if (! $member->autoCheckToken($_POST)) {
@@ -53,15 +50,13 @@ class YouZiAction extends CommonAction
             }
             $where = array();
             $where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-            $where['passopen'] = md5($pass);
-            $list = $member->where($where)
-                ->field('id')
-                ->find();
+            $where['password2'] = md5($pass);
+            $list = $member->where($where)->field('id')->find();
             if ($list == false) {
                 $this->error('二级密码错误!');
                 exit();
             }
-            $_SESSION['user_pwd2'] = 1;
+            $_SESSION['password2'] = 1;
         } else {
             $Urlsz = $_GET['Urlsz'];
         }
@@ -81,24 +76,9 @@ class YouZiAction extends CommonAction
                 $bUrl = __URL__ . '/setParameter'; // 参数设置
                 $this->_boxx($bUrl);
                 break;
-            case 4:
-                $_SESSION['UrlPTPass'] = 'MyssPingGuo';
-                $bUrl = __URL__ . '/adminParameter'; // 比例设置
-                $this->_boxx($bUrl);
-                break;
-            case 5:
-                $_SESSION['UrlPTPass'] = 'MyssMiHouTao';
-                $bUrl = __URL__ . '/adminFinance'; // 拨出比例
-                $this->_boxx($bUrl);
-                break;
             case 6:
                 $_SESSION['UrlPTPass'] = 'MyssGuanPaoYingTao';
                 $bUrl = __URL__ . '/adminCurrency'; // 提现管理
-                $this->_boxx($bUrl);
-                break;
-            case 7:
-                $_SESSION['UrlPTPass'] = 'MyssHaMiGua';
-                $bUrl = __APP__ . '/Backup/'; // 数据库管理
                 $this->_boxx($bUrl);
                 break;
             case 8:
@@ -111,29 +91,9 @@ class YouZiAction extends CommonAction
                 $bUrl = __URL__ . '/delTable'; // 清空数据
                 $this->_boxx($bUrl);
                 break;
-            case 10:
-                $_SESSION['UrlPTPass'] = 'MyssGuanXiGua';
-                $bUrl = __URL__ . '/adminAgents'; // 代理商管理
-                $this->_boxx($bUrl);
-                break;
-            case 11:
-                $_SESSION['UrlPTPass'] = 'MyssBaiGuoJS';
-                $bUrl = __URL__ . '/adminClearing'; // 奖金结算
-                $this->_boxx($bUrl);
-                break;
             case 12:
                 $_SESSION['UrlPTPass'] = 'MyssGuanMangGuo';
                 $bUrl = __URL__ . '/adminCurrencyRecharge'; // 充值管理
-                $this->_boxx($bUrl);
-                break;
-            case 13:
-                $_SESSION['UrlPTPass'] = 'MyssGuansingle';
-                $bUrl = __URL__ . '/adminsingle'; // 加单管理
-                $this->_boxx($bUrl);
-                break;
-            case 17:
-                $_SESSION['UrlPTPass'] = 'MyssGuancash';
-                $bUrl = __URL__ . '/adminCash'; // 加单管理
                 $this->_boxx($bUrl);
                 break;
             case 18:
@@ -151,29 +111,9 @@ class YouZiAction extends CommonAction
                 $bUrl = __URL__ . '/adminIndex'; // 管理员初始页面
                 $this->_boxx($bUrl);
                 break;
-            case 22:
-                $_SESSION['UrlPTPass'] = 'MyssPingGuoCPB';
-                $bUrl = __URL__ . '/setParameter_B';
-                $this->_boxx($bUrl);
-                break;
-            case 23:
-                $_SESSION['UrlPTPass'] = 'MyssOrdersList';
-                $bUrl = __URL__ . '/OrdersList'; // 加单管理
-                $this->_boxx($bUrl);
-                break;
             case 24:
                 $_SESSION['UrlPTPass'] = 'MyssWuliuList';
                 $bUrl = __URL__ . '/adminLogistics'; // 物流管理
-                $this->_boxx($bUrl);
-                break;
-//             case 25:
-//                 $_SESSION['UrlPTPass'] = 'MyssGuanXiGuaJB';
-//                 $bUrl = __URL__ . '/adminJB'; // 金币中心管理
-//                 $this->_boxx($bUrl);
-//                 break;
-            case 25:
-                $_SESSION['UrlPTPass'] = 'bonusCheck';
-                $bUrl = __URL__ . '/bonusCheck';
                 $this->_boxx($bUrl);
                 break;
             case 26:
@@ -181,42 +121,19 @@ class YouZiAction extends CommonAction
                 $bUrl = __URL__ . '/pro_index'; // 产品管理
                 $this->_boxx($bUrl);
                 break;
-            case 27:
-                $_SESSION['UrlPTPass'] = 'MyssGuanzy';
-                $bUrl = __URL__ . '/admin_zy'; // 专营店管理
-                $this->_boxx($bUrl);
-                break;
-            case 28:
-                $_SESSION['UrlPTPass'] = 'MyssShenqixf';
-                $bUrl = __URL__ . '/adminXiaofei'; // 消费申请
-                $this->_boxx($bUrl);
-                break;
-            case 29:
-                $_SESSION['UrlPTPass'] = 'MyssJinji';
-                $bUrl = __URL__ . '/adminmemberJJ'; // 晋级
-                $this->_boxx($bUrl);
-                break;
-            case 30:
-                $_SESSION['UrlPTPass'] = 'Myssadminlookfhall';
-                $bUrl = __URL__ . '/adminlookfhall';
-                $this->_boxx($bUrl);
-                break;
             default:
                 $this->error('二级密码错误!');
                 break;
         }
     }
-    
-    // =====================================================奖金查询(所有期所有会员)
+    // 奖金查询(所有期所有会员)
     public function adminFinanceTable()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssPiPa') {
-            
             $this->check_prem('adminFinanceTable');
             $bonus = M('bonus'); // 奖金表
             $fee = M('fee'); // 参数表
             $times = M('times'); // 结算时间表
-            
             $fee_rs = $fee->field('s18,s13')->find();
             $fee_s7 = explode('|', $fee_rs['s13']);
             $this->assign('fee_s7', $fee_s7); // 输出奖项名称数组
@@ -230,7 +147,6 @@ class YouZiAction extends CommonAction
                     $sql = "where e_date >= $time1 and e_date <= $time2";
                 }
             }
-            
             $sql2 = "where 1";
             $field = '*';
             // =====================分页开始==============================================
@@ -258,8 +174,6 @@ class YouZiAction extends CommonAction
                 }
             }
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-                                         
             // 各项奖每页汇总
             $count = array();
             foreach ($list as $vo) {
@@ -268,173 +182,19 @@ class YouZiAction extends CommonAction
                     $count[$b] = $this->_2Mal($count[$b], 2);
                 }
             }
-            
             // 奖项名称与显示
-            
             $this->assign('b_b', $b_b);
             $this->assign('c_b', $c_b);
             $this->assign('count', $count);
-            
             // 输出扣费奖索引
             $this->assign('ind', 7); // 数组索引 +1
-            
             $this->display('adminFinanceTable');
         } else {
             $this->error('错误');
             exit();
         }
     }
-    
-    // =====================================================奖金检测(所有期所有会员)
-    public function bonusCheck()
-    {
-        // 奖金检测
-        if ($_SESSION['UrlPTPass'] == 'bonusCheck') {
-            // 会员表
-            $member = M('member');
-            // 奖金历史记录表
-            $history = M('history');
-            // 开始日期
-            $sDate = $_REQUEST['S_Date'];
-            // 结束日期
-            $eDate = $_REQUEST['E_Date'];
-            // 用户名
-            $UserID = $_REQUEST['UserID'];
-            // tp为奖金筛选条件
-            $ss_type = (int) $_REQUEST['tp'];
-            $map['_string'] = "1=1";
-            // **************日期判断开始************************
-            $s_Date = 0;
-            $e_Date = 0;
-            if (!empty($sDate)) {
-                $s_Date = strtotime($sDate);
-            } else {
-                $sDate = "2000-01-01";
-            }
-            if (!empty($eDate)) {
-                $e_Date = strtotime($eDate);
-            } else {
-                $eDate = date("Y-m-d");
-            }
-            if ($s_Date > $e_Date && $e_Date > 0) {
-                $temp_d = $s_Date;
-                $s_Date = $e_Date;
-                $e_Date = $temp_d;
-            }
-            if ($s_Date > 0) {
-                $map['_string'] .= " and pdt>=" . $s_Date;
-            }
-            if ($e_Date > 0) {
-                $e_Date = $e_Date + 3600 * 24 - 1;
-                $map['_string'] .= " and pdt<=" . $e_Date;
-            }
-            // **************日期判断结束************************
-            // 判断筛选何种奖金
-            if ($ss_type > 0) {
-                if ($ss_type == 15) {
-                    $map['action_type'] = array('lt',7);
-                } else {
-                    $map['action_type'] = array('eq',$ss_type);
-                }
-            }
-            if ($ss_type == 1) {
-                // 静态奖检测
-                
-            } else if ($ss_type == 2) {
-                // 直推奖检测
-                $fee = M('fee'); // 参数表
-                $fee_rs = $fee->field('s11')->find();
-                // 直推奖比例
-                $fee_s11 = explode('|', $fee_rs['s11']);
-                // 检索全部历史数据
-                $map['action_type'] = $ss_type;
-                if (! empty($UserID)) {
-                import("@.ORG.KuoZhan"); // 导入扩展类
-                $KuoZhan = new KuoZhan();
-                if ($KuoZhan->is_utf8($UserID) == false) {
-                    $UserID = iconv('GB2312', 'UTF-8', $UserID);
-                }
-                
-                unset($KuoZhan);
-                $history_rs = $history->where('action_type = 2')->field('user_id')->select();
-                foreach ($history_rs as $historyValue){
-                    // 历史记录表的注册会员
-                    $historyUserId = $historyValue['user_id'];
-                    $where = array();
-                    if (!empty($UserID)) {
-                        $where['user_id'] = array('eq',$UserID);
-                    } else {
-                        $where['user_id'] = array('eq',$historyUserId);
-                    }
-                    $usrs = $member->where($where)->field('id,user_id,re_id,cpzj')->find();
-                    if ($usrs) {
-                        $usid = $usrs['id'];
-                        $usuid = $usrs['user_id'];
-                        // 推荐人ID
-                        $reid = $usrs['re_id'];
-                        // 投资金额
-                        $cpzj = $usrs['cpzj'];
-                        // 直推奖
-                        $directBonus = $cpzj * $fee_s11[0];
-                        $map['action_type'] = $ss_type;
-                        $map['_string'] .= " and (uid=" . $usid . " or user_id='" . $usuid . "')";
-                    } else {
-                        $map['_string'] .= " and id=0";
-                    }
-                    unset($where, $usrs);
-                    $UserID = urlencode($UserID);
-                }
-            }
-            $this->assign('S_Date', $sDate);
-            $this->assign('E_Date', $eDate);
-            $this->assign('ry', $ss_type);
-            $this->assign('UserID', $UserID);
-                // 查询字段
-                $field = '*';
-                // =====================分页开始==============================================
-                import("@.ORG.ZQPage"); // 导入分页类
-                $count = $history->where($map)->count(); // 总页数
-                $listrows = 20; // 每页显示的记录数
-                $page_where = 'UserID=' . $UserID . '&S_Date=' . $sDate . '&E_Date=' . $eDate . '&tp=' . $ss_type; // 分页条件
-                $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-                // ===============(总页数,每页显示记录数,css样式 0-9)
-                $show = $Page->show(); // 分页变量
-                $this->assign('page', $show); // 分页变量输出到模板
-                $list = $history->where($map)->field($field)->order('pdt desc,id desc')->page($Page->getPage() . ',' . $listrows)->select();
-                
-                $this->assign('list', $list); // 数据输出到模板
-                // =======================分页结束===========================================
-                
-                $fee = M('fee'); // 参数表
-                $fee_rs = $fee->field('s18')->find();
-                // 静态奖|直推奖|推荐奖|隔推奖|管理奖|领导奖|报单奖|董事分红|管理费
-                $fee_s7 = explode('|', $fee_rs['s18']);
-                $this->assign('fee_s7', $fee_s7); // 输出奖项名称数组
-                $this->display();
-            } else if ($ss_type == 3) {
-                // 推荐奖检测
-            } else if ($ss_type == 4) {
-                // 隔推奖检测
-                
-            } else if ($ss_type == 5) {
-                // 管理奖检测
-            } else if ($ss_type == 6) {
-                // 领导奖检测
-            } else if ($ss_type == 7) {
-                //报单奖检测
-            } else if ($ss_type == 8) {
-                // 董事分红检测
-            } else if ($ss_type == 9) {
-                // 管理费检测
-            }
-            
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
-    }
-    
-    // =====================================================查询这一期得奖会员资金
+    // 查询这一期得奖会员资金
     public function adminFinanceTableShow()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssPiPa' || $_SESSION['UrlPTPass'] == 'MyssMiHouTao') {
@@ -455,10 +215,6 @@ class YouZiAction extends CommonAction
             $did = (int) $_REQUEST['did'];
             
             $field = '*';
-            
-            // if($UserID !=""){
-            // $sql =" and user_id like '%".$UserID."%'";
-            // }
             $sql = "b8<0";
             $sql2 = "where b8<0";
             // =====================分页开始==============================================92607291105
@@ -476,8 +232,6 @@ class YouZiAction extends CommonAction
             $this->assign('page', $show); // 分页变量输出到模板
             $status_rs = ($Page->getPage() - 1) * $listrows;
             $list = $bonus->query("select * from __TABLE__ where b8<0  order by did desc limit " . $status_rs . "," . $listrows);
-            // $list = $bonus -> query("select e_date,did,sum(b0) as b0,sum(b8) as b8,sum(b9) as b9,sum(b10) as b10,sum(b11) as b11,sum(b12) as b12,sum(b13) as b13,sum(b14) as b14,sum(b15) as b15,sum(b16) as b16,sum(b17) as b17,sum(b18) as b18,sum(b19) as b19,sum(b20) as b20 from __TABLE__ ". $sql2 ." group by did order by did desc limit ". $status_rs .",". $listrows);
-            
             foreach ($list as $key => $value) {
                 for ($i = 8; $i < 50; $i ++) {
                     if ($value['b' . $i] != 0) {
@@ -486,7 +240,6 @@ class YouZiAction extends CommonAction
                 }
             }
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
             $this->assign('did', $did);
             // 查看的这期的结算时间
             $this->assign('confirm', $list[0]['e_date']);
@@ -498,9 +251,7 @@ class YouZiAction extends CommonAction
                     $count[$b] = $this->_2Mal($count[$b], 2);
                 }
             }
-            
             // 奖项名称与显示
-            
             $this->assign('b_b', $b_b);
             $this->assign('c_b', $c_b);
             $this->assign('count', $count);
@@ -565,8 +316,6 @@ class YouZiAction extends CommonAction
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $fee = M('fee'); // 参数表
             $fee_rs = $fee->field('s18,s13')->find();
             $fee_s7 = explode('|', $fee_rs['s13']);
@@ -579,77 +328,7 @@ class YouZiAction extends CommonAction
         }
     }
     
-    // ============================================会员升级页面显示
-    public function admin_level($GPid = 0)
-    {
-        // 列表过滤器，生成查询Map对象
-        if ($_SESSION['UrlPTPass'] == 'MyssGuanUplevel') {
-            $member = M('member');
-            $UserID = $_POST['UserID'];
-            if (! empty($UserID)) {
-                import("@.ORG.KuoZhan"); // 导入扩展类
-                $KuoZhan = new KuoZhan();
-                if ($KuoZhan->is_utf8($UserID) == false) {
-                    $UserID = iconv('GB2312', 'UTF-8', $UserID);
-                }
-                unset($KuoZhan);
-                $where['nickname'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-                $where['user_id'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-                $where['_logic'] = 'or';
-                $map['_complex'] = $where;
-                $UserID = urlencode($UserID);
-            }
-            $map['sel_level'] = array(
-                'lt',
-                90
-            );
-            
-            // 查询字段
-            $field = 'id,user_id,nickname,bank_name,bank_card,user_name,user_address,user_tel,rdt,f4,cpzj,pdt,u_level,sel_level';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $member->where($map)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = 'UserID=' . $UserID; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $member->where($map)
-                ->field($field)
-                ->order('rdt desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            
-            $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
-            $this->display('admin_level');
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
-    }
-    
-    // ========================================数据库管理
-    public function adminManageTables()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssHaMiGua') {
-            $Url = __ROOT__ . '/HaMiGua/';
-            $_SESSION['shujukuguanli!12312g@#$%^@#$!@#$~!@#$'] = md5("^&%#hdgfhfg$@#$@gdfsg13123123!@#!@#");
-            $this->_boxx($Url);
-        }
-    }
-    // ============================================审核会员
+    // 审核会员
     public function auditMenber($GPid = 0)
     {
         // 列表过滤器，生成查询Map对象
@@ -704,8 +383,6 @@ class YouZiAction extends CommonAction
             $this->_levelConfirm($HYJJ, 1);
             $this->assign('voo', $HYJJ); // 会员级别
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $this->display('auditMenber');
         } else {
             $this->error('数据错误!');
@@ -772,7 +449,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function auditMenberData2AC()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
@@ -795,7 +471,6 @@ class YouZiAction extends CommonAction
                     exit();
                 }
             }
-            
             $data['bank_name'] = $_POST['BankName'];
             $data['bank_card'] = $_POST['BankCard'];
             $data['user_name'] = $_POST['UserName'];
@@ -924,8 +599,7 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-    
-    // ===============================================设为空单
+    // 设为空单
     private function _auditMenberOpenNull($PTid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
@@ -994,17 +668,10 @@ class YouZiAction extends CommonAction
         }
     }
     
-    // ===============================================开通会员
+    // 开通会员
     private function _auditMenberOpenUser($PTid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
-            
-            // $length_arr = count($PTid);
-            // if($length_arr > 1){
-            // $this->error('一次只能开通一个会员');
-            // exit;
-            // }
-            
             $member = D('member');
             $shouru = M('shouru');
             $blist = M('blist');
@@ -1028,18 +695,7 @@ class YouZiAction extends CommonAction
             $nowday = strtotime(date('Y-m-d'));
             $nowmonth = date('m');
             $member->emptyTime();
-            
             foreach ($vo as $voo) {
-                // $ppath = $voo['p_path'];
-                // //上级未开通不能开通下级员工
-                // $frs_where['is_pay'] = array('eq',0);
-                // $frs_where['id'] = $voo['father_id'];
-                // $frs = $member -> where($frs_where) -> find();
-                // if($frs){
-                // $this->error('开通失败，上级未开通');
-                // exit;
-                // }
-                
                 // 给推荐人添加推荐人数或单数
                 $member->query("update __TABLE__ set `re_nums`=re_nums+1,re_f4=re_f4+" . $voo['f4'] . " where `id`=" . $voo['re_id']);
                 // 购物车管理
@@ -1050,19 +706,12 @@ class YouZiAction extends CommonAction
                     ->order('n_pai desc')
                     ->find();
                 $mynpai = ((int) $nnrs['n_pai']) + 1;
-                
-                // $in_gp = $s3[$voo['u_level']-1]*$voo['cpzj']/100;
-                // 新
-                // $member->adduser($voo['id'],$voo['cpzj']);
                 $data = array();
                 $data['is_pay'] = 1;
                 $data['pdt'] = $nowdate;
                 $data['open'] = 1;
                 $data['get_date'] = $nowday;
                 $data['fanli_time'] = $nowday - 1; // 当天没有分红奖
-                                                 // $data['agent_lock'] = $in_gp;//
-                                                 // $data['agent_gp'] = $in_gp;//
-                                                 // $data['gp_num'] = $in_gp;//
                 $data['n_pai'] = $mynpai;
                 if ($voo['f4'] == 50) {
                     $data['adt'] = $nowdate;
@@ -1131,17 +780,6 @@ class YouZiAction extends CommonAction
                     $this->error('错误!');
                 }
             }
-            
-            // $rs = $member->where($where)->delete();
-            // if ($rs){
-            // $bUrl = __URL__.'/auditMenber';
-            // $this->_box(1,'删除会员！',$bUrl,1);
-            // exit;
-            // }else{
-            // $bUrl = __URL__.'/auditMenber';
-            // $this->_box(0,'删除会员！',$bUrl,1);
-            // exit;
-            // }
         } else {
             $this->error('错误!');
         }
@@ -1222,8 +860,6 @@ class YouZiAction extends CommonAction
             }
             $this->assign('level', $level);
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $title = '会员管理';
             $this->assign('title', $title);
             $this->display('adminMenber');
@@ -1267,45 +903,12 @@ class YouZiAction extends CommonAction
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
             $this->display();
         } else {
             $this->error('数据错误!');
             exit();
         }
     }
-
-    public function adminlookfhall()
-    {
-        if ($_SESSION['UrlPTPass'] == 'Myssadminlookfhall') {
-            
-            $fenhong = M('fenhong');
-            $where = array();
-            // 查询字段
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fenhong->where($where)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = ''; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fenhong->where($where)
-                ->field($field)
-                ->order('f_num asc,id asc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            $this->display();
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
-    }
-
     public function premAdd()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
@@ -1400,8 +1003,6 @@ class YouZiAction extends CommonAction
                 exit();
             }
             $where = array();
-            // 查询条件
-            // $where['ReID'] = $_SESSION[C('USER_AUTH_KEY')];
             $where['id'] = $ID;
             $field = '*';
             $vo = $member->where($where)
@@ -1440,66 +1041,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
-    /* --------------- 修改保存会员信息 ---------------- */
-    // public function adminuserDataSave(){
-    // if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao' || $_SESSION['UrlPTPass'] == 'MyssGuanXiGua' || $_SESSION['UrlPTPass'] == 'MyssGuansingle' || $_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao'){
-    // $member = M('member');
-    //
-    // // $_POST['shop_name'] = trim($_POST['shopname']);
-    // // $whe = array();
-    // // $whe['user_id'] = $_POST['shop_name'];
-    // // $whe['is_agent'] = 2;
-    // // $shop_rs = $member -> where($whe) -> field('id,user_id') -> find();
-    // // if(!$shop_rs){
-    // // $this->error ('没有该报单中心!');
-    // // exit;
-    // // }
-    //
-    //
-    // //$_POST['NickName'] = $this->nickname($_POST['NickName'],$_POST['ID']); //检测昵称
-    // $_POST['BankName'] = $this->bank_name($_POST['BankName']); //检测银行
-    //
-    //
-    // $data = array();
-    // // $data['shop_id'] = $shop_rs['id']; //所属报单中心ID
-    // // $data['shop_name'] = $shop_rs['user_id']; //所属报单中心user_id
-    // $data['pwd1'] = trim($_POST['pwd1']); //一级密码不加密
-    // $data['pwd2'] = trim($_POST['pwd2']);
-    // $data['pwd3'] = trim($_POST['pwd3']);
-    // $data['password'] = md5(trim($_POST['pwd1'])); //一级密码加密
-    // $data['passopen'] = md5(trim($_POST['pwd2']));
-    // $data['passopentwo'] = md5(trim($_POST['pwd3']));
-    // $data['nickname'] = $_POST['NickName']; //会员昵称
-    // $data['bank_name'] = $_POST['BankName']; //银行名称
-    // $data['bank_card'] = $_POST['BankCard']; //银行卡号
-    // $data['user_name'] = $_POST['UserName']; //开户姓名
-    //
-    // $data['bank_province'] = $_POST['BankProvince']; //省份
-    // $data['bank_city'] = $_POST['BankCity']; //城市
-    // $data['bank_address'] = $_POST['BankAddress']; //开户地址
-    // $data['user_code'] = $_POST['UserCode']; //身份证号码
-    // $data['user_address'] = $_POST['UserAddress']; //联系地址
-    // $data['email'] = $_POST['email']; //电子邮箱
-    // $data['user_tel'] = $_POST['UserTel']; //联系电话
-    // $data['qq'] = $_POST['qq']; //联系电话
-    // $data['id'] = $_POST['ID']; //要修改资料的AutoId
-    // $data['agent_use'] = $_POST['AgentUse']; //K币账户
-    // $data['agent_cash'] = $_POST['AgentCash']; //注册币
-    //
-    // $rs = $member->save($data);
-    // if($rs){
-    // $bUrl = __URL__.'/adminuserData/PT_id/'.$_POST['ID'];
-    // $this->_box(1,'修改成功！',$bUrl,1);
-    // }else{
-    // $this->error('修改错误!');
-    // exit;
-    // }
-    // }else{
-    // $this->error('操作错误!');
-    // exit;
-    // }
-    // }
     public function adminuserDataSave()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao' || $_SESSION['UrlPTPass'] == 'MyssGuanXiGua' || $_SESSION['UrlPTPass'] == 'MyssGuansingle' || $_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
@@ -2639,155 +2180,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-    
-    // ===============================================消费管理
-    public function adminXiaofei()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssShenqixf') {
-            $xiaof = M('xiaof');
-            $UserID = $_POST['UserID'];
-            if (! empty($UserID)) {
-                $map['user_id'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-            }
-            
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $xiaof->where($map)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = 'UserID=' . $UserID; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $xiaof->where($map)
-                ->field($field)
-                ->order('id desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
-            $this->display('adminXiaofei');
-        } else {
-            $this->error('错误!');
-            exit();
-        }
-    }
-    // 处理消费
-    public function adminXiaofeiAC()
-    {
-        // 处理提交按钮
-        $action = $_POST['action'];
-        // 获取复选框的值
-        $PTid = $_POST['tabledb'];
-        $member = M('member');
-        // if (!$member->autoCheckToken($_POST)){
-        // $this->error('页面过期，请刷新页面！');
-        // exit;
-        // }
-        if (empty($PTid)) {
-            $bUrl = __URL__ . '/adminXiaofei';
-            $this->_box(0, '请选择！', $bUrl, 1);
-            exit();
-        }
-        switch ($action) {
-            case '确认':
-                $this->_adminXiaofeiConfirm($PTid);
-                break;
-            case '删除':
-                $this->_adminXiaofeiDel($PTid);
-                break;
-            default:
-                $bUrl = __URL__ . '/adminXiaofei';
-                $this->_box(0, '没有该记录！', $bUrl, 1);
-                break;
-        }
-    }
-    
-    // ====================================================确认消费
-    private function _adminXiaofeiConfirm($PTid)
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssShenqixf') {
-            $xiaof = M('xiaof');
-            $member = M('member'); //
-            $where = array();
-            $where['is_pay'] = 0; // 未审核的申请
-            $where['id'] = array(
-                'in',
-                $PTid
-            ); // 所有选中的会员ID
-            $rs = $xiaof->where($where)->select(); // tiqu表要通过的申请记录数组
-            $history = M('history');
-            $data = array();
-            $member_where = array();
-            $nowdate = strtotime(date('c'));
-            foreach ($rs as $rss) {
-                // 开始事务处理
-                $member->startTrans();
-                // 明细表
-                $data['uid'] = $rss['uid'];
-                $data['user_id'] = $rss['user_id'];
-                $data['action_type'] = '重复消费';
-                $data['pdt'] = $nowdate;
-                $data['epoints'] = - $rss['money'];
-                $data['bz'] = '重复消费';
-                $data['did'] = 0;
-                $data['allp'] = 0;
-                $history->create();
-                $rs1 = $history->add($data);
-                if ($rs1) {
-                    // 提交事务
-                    $xiaof->execute("UPDATE __TABLE__ set `is_pay`=1 where `id`=" . $rss['id']);
-                    $member->commit();
-                } else {
-                    // 事务回滚：
-                    $member->rollback();
-                }
-            }
-            unset($xiaof, $member, $where, $rs, $history, $data, $nowdate, $member_where);
-            $bUrl = __URL__ . '/adminXiaofei';
-            $this->_box(1, '确认消费成功！', $bUrl, 1);
-        } else {
-            $this->error('错误!');
-            exit();
-        }
-    }
-    // 删除消费
-    private function _adminXiaofeiDel($PTid)
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssShenqixf') {
-            $xiaof = M('xiaof');
-            $where = array();
-            $where['is_pay'] = 0;
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $trs = $xiaof->where($where)->select();
-            $member = M('member');
-            foreach ($trs as $vo) {
-                $member->execute("UPDATE __TABLE__ SET agent_cash=agent_cash+{$vo['money']} WHERE id={$vo['uid']}");
-            }
-            $rs = $xiaof->where($where)->delete();
-            if ($rs) {
-                $bUrl = __URL__ . '/adminXiaofei';
-                $this->_box(1, '删除成功！', $bUrl, 1);
-                exit();
-            } else {
-                $bUrl = __URL__ . '/adminXiaofei';
-                $this->_box(1, '删除成功！', $bUrl, 1);
-                exit();
-            }
-        } else {
-            $this->error('错误!');
-            exit();
-        }
-    }
-
     public function financeDaoChu_ChuN()
     {
         // 导出excel
@@ -3773,39 +3165,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
-    public function setParameterSave_B()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssPingGuoCPB') {
-            $fee = M('fee');
-            $member = M('member');
-            $rs = $fee->find();
-            
-            $where = array();
-            $where['id'] = (int) $_POST['id'];
-            for ($i = 1; $i <= 40; $i ++) {
-                $arr_sts[$i] = $_POST['str' . $i];
-            }
-            $str_sql = "";
-            for ($i = 1; $i <= 40; $i ++) {
-                if (strlen(trim($arr_sts[$i])) > 0) {
-                    if (empty($str_sql)) {
-                        $str_sql = 'str' . $i . "='{$arr_sts[$i]}'";
-                    } else {
-                        $str_sql .= ',str' . $i . "='{$arr_sts[$i]}'";
-                    }
-                }
-            }
-            
-            $fee->execute("update __TABLE__ SET " . $str_sql . "  where `id`=1");
-            $this->success('首页图片设置！');
-            exit();
-        } else {
-            $this->error('错误!');
-            exit();
-        }
-    }
-
     public function MenberBonus()
     {
         // 列表过滤器，生成查询Map对象
@@ -3857,8 +3216,6 @@ class YouZiAction extends CommonAction
             }
             $this->assign('voo', $voo); // 会员级别
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $title = '会员管理';
             $this->assign('title', $title);
             $this->display('MenberBonus');
@@ -3868,7 +3225,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function MenberBonusSave()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssPingGuoCP') {
@@ -3903,10 +3259,9 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function delTable()
     {
-        // 清空数据库===========================
+        // 清空数据库
         $this->display();
     }
 
@@ -3920,208 +3275,6 @@ class YouZiAction extends CommonAction
         unset($member);
         $this->_delTable();
         exit();
-    }
-
-    public function adminClearing()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssBaiGuoJS') {
-            $times = M('times');
-            $trs = $times->where('type=0')
-                ->order('id desc')
-                ->find();
-            if (! $trs) {
-                $trs['benqi'] = strtotime('2010-01-01');
-            }
-            if ($trs['benqi'] == strtotime(date("Y-m-d"))) {
-                $isPay = 1;
-            } else {
-                $isPay = 0;
-            }
-            $this->assign('is_pay', $isPay);
-            $this->assign('trs', $trs);
-            
-            $fee = M('fee');
-            $fee_rs = $fee->field('a_money,b_money')->find();
-            $a_money = $fee_rs['a_money'];
-            $this->assign('a_money', $a_money);
-            $b_money = $fee_rs['b_money'];
-            $this->assign('b_money', $b_money);
-            
-            $this->display();
-        } else {
-            $this->error('错误!');
-        }
-    }
-
-    public function adminClearingSave()
-    { // 资金结算
-        if ($_SESSION['UrlPTPass'] == 'MyssBaiGuoJS') {
-            set_time_limit(0); // 是页面不过期
-            $times = M('times');
-            $member = D('member');
-            $ydate = mktime();
-            
-            $a1 = $_GET['a1'];
-            // if(empty($a1)){
-            // $this->error("请输入分红比例");
-            // exit;
-            // }
-            
-            // 结算分红
-            $member->mr_fenhong(1);
-            
-            // $gp = M('gp');
-            // $Guzhi = A('Guzhi');
-            // $gp->query("UPDATE __TABLE__ set opening=".$a1." where id=1");
-            // $Guzhi->stock_past_due();
-            
-            sleep(1);
-            $this->success('日利息结算完成！');
-            // $bUrl = __URL__.'/adminClearing';
-            // $this->_box(1,'结算分红完成！',$bUrl,1);
-            exit();
-        } else {
-            $this->error('错误!');
-        }
-    }
-
-    public function adminsingle($GPid = 0)
-    {
-        // ============================================审核会员加单
-        if ($_SESSION['UrlPTPass'] == 'MyssGuansingle') {
-            $jiadan = M('jiadan');
-            $UserID = $_POST['UserID'];
-            if (! empty($UserID)) {
-                $map['user_id'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-            }
-            
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $jiadan->where($map)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = 'UserID=' . $UserID; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $jiadan->where($map)
-                ->field($field)
-                ->order('id desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
-            $this->display('adminsingle');
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
-    }
-
-    public function adminsingleAC()
-    {
-        // 处理提交按钮
-        $member = M('member');
-        $action = $_POST['action'];
-        // 获取复选框的值
-        $PTid = $_POST['tabledb'];
-        if (! $member->autoCheckToken($_POST)) {
-            $this->error('页面过期，请刷新页面！');
-            exit();
-        }
-        if (! isset($PTid) || empty($PTid)) {
-            $bUrl = __URL__ . '/adminsingle';
-            $this->_box(0, '请选择！', $bUrl, 1);
-            exit();
-        }
-        unset($member);
-        switch ($action) {
-            case '确认':
-                $this->_adminsingleConfirm($PTid);
-                break;
-            case '删除':
-                $this->_adminsingleDel($PTid);
-                break;
-            default:
-                $bUrl = __URL__ . '/adminsingle';
-                $this->_box(0, '没有该注册！', $bUrl, 1);
-                break;
-        }
-    }
-
-    private function _adminsingleConfirm($PTid = 0)
-    {
-        // ===============================================确认加单
-        if ($_SESSION['UrlPTPass'] == 'MyssGuansingle') {
-            $member = D('member');
-            $jiadan = M('jiadan');
-            $fee = M('fee');
-            $fee_rs = $fee->find(1);
-            $where = array();
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $where['is_pay'] = 0;
-            $field = '*';
-            $vo = $jiadan->where($where)
-                ->field($field)
-                ->select();
-            $member_where = array();
-            $nowdate = strtotime(date('c'));
-            foreach ($vo as $voo) {
-                $member->xiangJiao($voo['uid'], $voo['danshu']); // 统计单数
-                $member_where['id'] = $voo['uid'];
-                $member_rs = $member->where($member_where)
-                    ->field('user_id,re_id,f5')
-                    ->find();
-                if ($member_rs) {
-                    // 给推荐人添加推荐人数
-                    $member->query("update `xt_member` set `re_nums`=re_nums+" . $voo['danshu'] . " where `id`=" . $member_rs['re_id']);
-                    $member->upLevel($member_rs['re_id']); // 晋级
-                }
-                $member->userLevel($voo['uid'], $voo['danshu']); // 自己晋级
-                                                              
-                // 加上单数到自身认购字段
-                $money = 0;
-                $money = $fee_rs['uf1'] * $voo['danshu']; // 金额
-                $member->xsjOne($member_rs['re_id'], $member_rs['user_id'], $money, $member_rs['f5']); // 销售奖第一部分中的第二部分
-                $member->query("update `xt_member` set `f4`=f4+" . $voo['danshu'] . ",`cpzj`=cpzj+" . $money . " where `id`=" . $voo['uid']);
-                // 改变状态
-                $jiadan->query("UPDATE `xt_jiadan` SET `pdt`=$nowdate,`is_pay`=1 where `id`=" . $voo['id']);
-            }
-            unset($jiadan, $where, $field, $vo, $member, $member_where);
-            $bUrl = __URL__ . '/adminsingle';
-            $this->_box(1, '确认！', $bUrl, 1);
-        } else {
-            $this->error('错误！');
-            exit();
-        }
-    }
-
-    private function _adminsingleDel($PTid = 0)
-    {
-        // ====================================删除加单
-        if ($_SESSION['UrlPTPass'] == 'MyssGuansingle') {
-            $jdan = M('jiadan');
-            // $member->query("UPDATE `xt_member` SET `single_ispay`=0,`single_money`=0 where `ID` in (".$PTid.")");
-            $jwhere['id'] = array(
-                'in',
-                $PTid
-            );
-            $jwhere['is_pay'] = 0;
-            $jdan->where($jwhere)->delete();
-            $bUrl = __URL__ . '/adminsingle';
-            $this->_box(1, '删除！', $bUrl, 1);
-            exit();
-        } else {
-            $this->error('错误!');
-        }
     }
 
     private function _delTableBonus()
@@ -4304,21 +3457,15 @@ class YouZiAction extends CommonAction
 
     public function menber()
     {
-        
         // 列表过滤器，生成查询Map对象
         $member = M('member');
         $map = array();
         $id = $PT_id;
         $map['re_id'] = (int) $_GET['PT_id'];
-        // $map['is_pay'] = 0;
         $UserID = $_POST['UserID'];
         if (! empty($UserID)) {
-            $map['user_id'] = array(
-                'like',
-                "%" . $UserID . "%"
-            );
+            $map['user_id'] = array( 'like',"%" . $UserID . "%");
         }
-        
         // 查询字段
         $field = 'id,user_id,nickname,bank_name,bank_card,user_name,user_address,user_tel,rdt,f4,cpzj,is_pay';
         // =====================分页开始==============================================
@@ -4330,24 +3477,15 @@ class YouZiAction extends CommonAction
         // ===============(总页数,每页显示记录数,css样式 0-9)
         $show = $Page->show(); // 分页变量
         $this->assign('page', $show); // 分页变量输出到模板
-        $list = $member->where($map)
-            ->field($field)
-            ->order('rdt desc')
-            ->page($Page->getPage() . ',' . $listrows)
-            ->select();
+        $list = $member->where($map)->field($field) ->order('rdt desc')->page($Page->getPage() . ',' . $listrows)->select();
         $this->assign('list', $list); // 数据输出到模板
-                                     // =================================================
-        
         $where = array();
         $where['id'] = $id;
-        $member_rs = $member->where($where)
-            ->field('agent_cash')
-            ->find();
+        $member_rs = $member->where($where)->field('agent_cash') ->find();
         $this->assign('frs', $member_rs); // 注册币
         $this->display('menber');
         exit();
     }
-
     public function adminmoneyflows()
     {
         // 货币流向
@@ -4452,7 +3590,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-    
     // 会员升级
     public function adminUserUp($GPid = 0)
     {
@@ -4498,7 +3635,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function adminUserUpAC($GPid = 0)
     {
         // 列表过滤器，生成查询Map对象
@@ -4529,7 +3665,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     private function _adminUserUpOK($PTid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanXiGuaUp') {
@@ -4562,7 +3697,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     private function _adminUserUpDel($PTid = 0)
     {
         // 删除会员
@@ -4570,16 +3704,9 @@ class YouZiAction extends CommonAction
             $member = M('member');
             $ispay = M('ispay');
             $ulevle = M('ulevel');
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $where['is_pay'] = array(
-                'eq',
-                0
-            );
+            $where['id'] = array('in',$PTid);
+            $where['is_pay'] = array( 'eq', 0 );
             $rss1 = $ulevle->where($where)->delete();
-            
             if ($rss1) {
                 $bUrl = __URL__ . '/adminUserUp';
                 $this->_box(1, '删除升级申请成功！', $bUrl, 1);
@@ -4663,8 +3790,6 @@ class YouZiAction extends CommonAction
             }
             $this->assign('level', $level);
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $title = '会员管理';
             $this->assign('title', $title);
             $this->display('adminMenberJL');
@@ -4674,7 +3799,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function upload_fengcai_aa()
     {
         if (! empty($_FILES)) {
@@ -4694,31 +3818,22 @@ class YouZiAction extends CommonAction
         
         // 设置上传文件大小
         $upload->maxSize = 1048576 * 20; // TODO 50M 3M 3292200 1M 1048576
-                                           
         // 设置上传文件类型
         $upload->allowExts = explode(',', 'flv');
-        
         // 设置附件上传目录
         $upload->savePath = './Public/Uploads/media/';
-        
         // 设置需要生成缩略图，仅对图像文件有效
         $upload->thumb = false;
-        
         // 设置需要生成缩略图的文件前缀
         $upload->thumbPrefix = 'm_'; // 生产2张缩略图
-                                        
         // 设置缩略图最大宽度
         $upload->thumbMaxWidth = '800';
-        
         // 设置缩略图最大高度
         $upload->thumbMaxHeight = '600';
-        
         // 设置上传文件规则
         $upload->saveRule = date("Y") . date("m") . date("d") . date("H") . date("i") . date("s") . rand(1, 100);
-        
         // 删除原图
         $upload->thumbRemoveOrigin = true;
-        
         if (! $upload->upload()) {
             // 捕获上传异常
             $error_p = $upload->getErrorMsg();
@@ -4735,7 +3850,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function upload_fengcai_bb()
     {
         if (! empty($_FILES)) {
@@ -4743,7 +3857,6 @@ class YouZiAction extends CommonAction
             $this->_upload_fengcai_bb();
         }
     }
-
     protected function _upload_fengcai_bb()
     {
         header("content-type:text/html;charset=utf-8");
@@ -4752,34 +3865,24 @@ class YouZiAction extends CommonAction
         // 载入文件上传类
         import("@.ORG.UploadFile");
         $upload = new UploadFile();
-        
         // 设置上传文件大小
         $upload->maxSize = 1048576 * 2; // TODO 50M 3M 3292200 1M 1048576
-                                          
         // 设置上传文件类型
         $upload->allowExts = explode(',', 'jpg,gif,png,jpeg');
-        
         // 设置附件上传目录
         $upload->savePath = './Public/Uploads/';
-        
         // 设置需要生成缩略图，仅对图像文件有效
         $upload->thumb = false;
-        
         // 设置需要生成缩略图的文件前缀
         $upload->thumbPrefix = 'm_'; // 生产2张缩略图
-                                        
         // 设置缩略图最大宽度
         $upload->thumbMaxWidth = '800';
-        
         // 设置缩略图最大高度
         $upload->thumbMaxHeight = '600';
-        
         // 设置上传文件规则
         $upload->saveRule = date("Y") . date("m") . date("d") . date("H") . date("i") . date("s") . rand(1, 100);
-        
         // 删除原图
         $upload->thumbRemoveOrigin = true;
-        
         if (! $upload->upload()) {
             // 捕获上传异常
             $error_p = $upload->getErrorMsg();
@@ -4796,7 +3899,6 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
     public function upload_fengcai_cc()
     {
         if (! empty($_FILES)) {
@@ -4809,38 +3911,27 @@ class YouZiAction extends CommonAction
     {
         header("content-type:text/html;charset=utf-8");
         // 文件上传处理函数
-        
         // 载入文件上传类
         import("@.ORG.UploadFile");
         $upload = new UploadFile();
-        
         // 设置上传文件大小
         $upload->maxSize = 1048576 * 2; // TODO 50M 3M 3292200 1M 1048576
-                                          
         // 设置上传文件类型
         $upload->allowExts = explode(',', 'jpg,gif,png,jpeg');
-        
         // 设置附件上传目录
         $upload->savePath = './Public/Uploads/';
-        
         // 设置需要生成缩略图，仅对图像文件有效
         $upload->thumb = false;
-        
         // 设置需要生成缩略图的文件前缀
         $upload->thumbPrefix = 'm_'; // 生产2张缩略图
-                                        
         // 设置缩略图最大宽度
         $upload->thumbMaxWidth = '800';
-        
         // 设置缩略图最大高度
         $upload->thumbMaxHeight = '600';
-        
         // 设置上传文件规则
         $upload->saveRule = date("Y") . date("m") . date("d") . date("H") . date("i") . date("s") . rand(1, 100);
-        
         // 删除原图
         $upload->thumbRemoveOrigin = true;
-        
         if (! $upload->upload()) {
             // 捕获上传异常
             $error_p = $upload->getErrorMsg();
@@ -4851,7 +3942,6 @@ class YouZiAction extends CommonAction
             $U_path = $uploadList[0]['savepath'];
             $U_nname = $uploadList[0]['savename'];
             $U_inpath = (str_replace('./Public/', '__PUBLIC__/', $U_path)) . $U_nname;
-            
             echo "<script>window.parent.myform.str23.value='" . $U_inpath . "';</script>";
             echo "<span style='font-size:12px;'>上传完成！</span>";
             exit();

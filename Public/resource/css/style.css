@@ -6,6 +6,14 @@ html, body {
 	/* The html and body elements cannot have any padding or margin. */
 }
 
+.footer {
+	padding-top: 15px;
+	margin-top:50px;
+	width: 100%;
+	height:40px;
+	border-top: 4px solid #269abc;
+}
+
 /* Wrapper for page content to push down footer */
 #wrap {
 	min-height: 100%;
@@ -73,23 +81,12 @@ html, body {
 	margin-top: 15px;
 }
 
-/* Set the fixed height of the footer here */
-#footer {
-	height: 60px;
-	background-color: #cccccc;
-}
-
 #wrap>.container {
 	padding: 60px 15px 0;
 }
 
 .container .credit {
 	margin: 20px 0;
-}
-
-footer>.container {
-	padding-top: 5px;
-	border-top: solid #CCCCCC 1px;
 }
 
 code {

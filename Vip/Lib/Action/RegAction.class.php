@@ -124,63 +124,30 @@ class RegAction extends CommonAction{
 	}
 	// 找回密码
 	public function find_pw_s() {
-		if(empty($_SESSION['us_openemail'])){
-			if(empty($_POST['us_name'])&&empty($_POST['us_email'])) {
-				$_SESSION = array();
-				$this->display('Public:LinkOut');
-				return;
+			if(empty($_POST['user_id']) || empty($_POST['tel'])) {
+				$errarry['err']='<font color=red>注：用户名或者手机号不能为空！</font>';
+				$this->assign('errarry',$errarry);
+				$this->display('find_pw');
 			}
-			$ptname=$_POST['us_name'];
-			$us_email=$_POST['us_email'];
+			// 验证用户是否存在
+			$ptname=$_POST['user_id'];
+			$tel=$_POST['tel'];
 			$member = M('member');
-			$rs=$member->where("user_id='".$ptname."'")->field('id,email,user_id,user_name,pwd1,pwd2')->find();
+			$rs=$member->where("user_id='".$ptname."'")->field('id,tel,user_id,user_name,pwd1,pwd2')->find();
 			if ($rs==false){
-				$errarry['err']='<font color=red>注：找不到此会员编号！</font>';
+				$errarry['err']='<font color=red>注：没有此用户，请正确填写登录用户名！</font>';
 				$this->assign('errarry',$errarry);
 				$this->display('find_pw');
 			}else{
-				if($us_email<>$rs['email']){
-					$errarry['err']='<font color=red>注：邮箱验证失败！</font>';
+			    // 验证手机号
+				if($tel<>$rs['tel']){
+					$errarry['err']='<font color=red>注：手机号码错误，请正确填写绑定手机号！</font>';
 					$this->assign('errarry',$errarry);
 					$this->display('find_pw');
 				}else{
-
-					$passarr=array();
-					$passarr[0]=$rs['pwd1'];
-					$passarr[1]=$rs['pwd2'];
-					
-					$title = '感谢您使用密码找回';
-					
-					$body="<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"font-size:12px; line-height:24px;\">";
-					$body=$body."<tr>";
-					$body=$body."<td height=\"30\">尊敬的客户:".$rs['user_name']."</td>";
-					$body=$body."</tr>";
-					$body=$body."<tr>";
-					$body=$body."<td height=\"30\">你的账户编号:".$rs['user_id']."</td>";
-					$body=$body."</tr>";
-					$body=$body."<tr>";
-					$body=$body."<td height=\"30\">一级密码为:".$rs['pwd1']."</td>";
-					$body=$body."</tr>";
-					$body=$body."<tr>";
-					$body=$body."<td height=\"30\">二级密码为:".$rs['pwd2']."</td>";
-					$body=$body."</tr>";
-					$body=$body."此邮件由系统发出，请勿直接回复。<br>";
-					$body=$body."</td></tr>";
-					$body=$body."<tr>";
-					$body=$body."<td height=\"30\" align=\"right\">".date("Y-m-d H:i:s")."</td>";
-					$body=$body."</tr>";
-					$body=$body."</table>";
-
-					$this->send_email($us_email,$title,$body);
-
-					$_SESSION['us_openemail']=$us_email;
-					$this->find_pw_e($us_email);
+				    $this->display('find_pw_s');
 				}
 			}
-		}else{
-			$us_email=$_SESSION['us_openemail'];
-			$this->find_pw_e($us_email);
-		}
 	}
 }
 ?>

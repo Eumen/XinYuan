@@ -379,9 +379,6 @@ class YouZiAction extends CommonAction
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
             $this->assign('list', $list); // 数据输出到模板
             $this->display('auditMenber');
         } else {
@@ -471,8 +468,8 @@ class YouZiAction extends CommonAction
                     exit();
                 }
             }
-            $data['bank_name'] = $_POST['BankName'];
-            $data['bank_card'] = $_POST['BankCard'];
+            $data['bank'] = $_POST['BankName'];
+            $data['bankcard_number'] = $_POST['bankcard_number'];
             $data['user_name'] = $_POST['UserName'];
             $data['bank_province'] = $_POST['BankProvince'];
             $data['bank_city'] = $_POST['BankCity'];
@@ -792,8 +789,8 @@ class YouZiAction extends CommonAction
             $member = M('member');
             $UserID = $_REQUEST['UserID'];
             $ss_type = (int) $_REQUEST['type'];
-            
             $map = array();
+            // 模糊查询
             if (! empty($UserID)) {
                 import("@.ORG.KuoZhan"); // 导入扩展类
                 $KuoZhan = new KuoZhan();
@@ -801,29 +798,13 @@ class YouZiAction extends CommonAction
                     $UserID = iconv('GB2312', 'UTF-8', $UserID);
                 }
                 unset($KuoZhan);
-                $where['nickname'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
-                $where['user_id'] = array(
-                    'like',
-                    "%" . $UserID . "%"
-                );
+                $where['user_name'] = array( 'like',"%" . $UserID . "%");
+                $where['user_id'] = array( 'like', "%" . $UserID . "%");
                 $where['_logic'] = 'or';
                 $map['_complex'] = $where;
                 $UserID = urlencode($UserID);
             }
-            $uulv = (int) $_REQUEST['ulevel'];
-            if (! empty($uulv)) {
-                $map['u_level'] = array(
-                    'eq',
-                    $uulv
-                );
-            }
-            $map['is_pay'] = array(
-                'egt',
-                1
-            );
+            $map['is_pay'] = array('egt',1);
             // 查询字段
             $field = '*';
             // =====================分页开始==============================================
@@ -831,34 +812,16 @@ class YouZiAction extends CommonAction
             $count = $member->where($map)->count(); // 总页数
             $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
             $listrows = 20; // 每页显示的记录数
-            $page_where = 'UserID=' . $UserID . '&ulevel=' . $uulv; // 分页条件
+            $page_where = 'UserID=' . $UserID; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $member->where($map)
-                ->field($field)
-                ->order('pdt desc,id desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            
-            $f4_count = $member->where($map)->sum('cpzj');
-            $this->assign('f4_count', $f4_count);
-            $f4_count22 = $member->where('id>1')->sum('cpzj');
-            $this->assign('f4_count22', $f4_count22);
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
-            
-            $getLev = "";
-            $this->_getLevelConfirm($getLev, 1);
-            $this->assign('gvoo', $getLev); // 会员团队级别
-            
-            $level = array();
-            for ($i = 0; $i < count($HYJJ); $i ++) {
-                $level[$i] = $HYJJ[$i + 1];
-            }
-            $this->assign('level', $level);
+            $list = $member->where($map)->field($field)->order('register_time desc,id desc')->page($Page->getPage() . ',' . $listrows)->select();
+            $money_count = $member->where($map)->sum('money');
+            $this->assign('$money_count', $money_count);
+            $f4_count = $member->where('id>1')->sum('money');
+            $this->assign('f4_count22', $f4_count);
             $this->assign('list', $list); // 数据输出到模板
             $title = '会员管理';
             $this->assign('title', $title);
@@ -869,115 +832,11 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
-    public function adminlookfh()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
-            
-            $uid = (int) $_GET['uid'];
-            if (empty($uid)) {
-                $this->error('数据错误!');
-                exit();
-            }
-            $fenhong = M('fenhong');
-            $where = array();
-            $where['uid'] = array(
-                'eq',
-                $uid
-            );
-            
-            // 查询字段
-            $field = '*';
-            // =====================分页开始==============================================
-            import("@.ORG.ZQPage"); // 导入分页类
-            $count = $fenhong->where($where)->count(); // 总页数
-            $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
-            $page_where = ''; // 分页条件
-            $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-            // ===============(总页数,每页显示记录数,css样式 0-9)
-            $show = $Page->show(); // 分页变量
-            $this->assign('page', $show); // 分页变量输出到模板
-            $list = $fenhong->where($where)
-                ->field($field)
-                ->order('f_num asc,id asc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
-            $this->assign('list', $list); // 数据输出到模板
-            $this->display();
-        } else {
-            $this->error('数据错误!');
-            exit();
-        }
-    }
-    public function premAdd()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
-            $id = (int) $_GET['id'];
-            $table = M('member');
-            $rs = $table->field('id,is_boss,prem,user_id')->find($id);
-            if ($rs) {
-                $ars = array();
-                $arr = explode(',', $rs['prem']);
-                for ($i = 1; $i <= 30; $i ++) {
-                    if (in_array($i, $arr)) {
-                        $ars[$i] = "checked";
-                    } else {
-                        $ars[$i] = "";
-                    }
-                }
-                $this->assign('ars', $ars);
-                $this->assign('rs', $rs);
-                $title = '修改权限';
-            } else {
-                $title = '添加权限';
-            }
-            
-            $this->assign('title', $title);
-            $this->display('premAdd');
-        } else {
-            $this->error('权限错误!');
-        }
-    }
-
-    public function premAddSave()
-    {
-        if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
-            $id = (int) $_POST['id'];
-            if ($id == 1 && $_SESSION[C('USER_AUTH_KEY')] != 1) {
-                $this->error('不能修改该会员的权限!');
-                exit();
-            }
-            $table = M('member');
-            $is_boss = $_POST['is_boss'];
-            $boss = $_POST['isBoss'];
-            $arr = ',';
-            if (is_array($is_boss)) {
-                foreach ($is_boss as $vo) {
-                    $arr .= $vo . ',';
-                }
-            }
-            $data = array();
-            $data['is_boss'] = $boss;
-            $data['prem'] = $arr;
-            $data['id'] = $id;
-            // if ($id == 1){
-            // $this->error('不能修改最高会员！');
-            // }
-            $table->save($data);
-            $title = '修改权限';
-            $bUrl = __URL__ . '/adminMenber';
-            $this->_box(1, $title, $bUrl, 2);
-        } else {
-            $this->error('权限错误!');
-        }
-    }
-    
     // 显示劳资详细
     public function BonusShow($GPid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $hi = M('history');
-            
             $where = array();
             $where['Uid'] = $_REQUEST['PT_id'];
             $where['type'] = 19;
@@ -990,47 +849,32 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
+    
+    // 会员详细信息显示
     public function adminuserData()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao' || $_SESSION['UrlPTPass'] == 'MyssGuanXiGua' || $_SESSION['UrlPTPass'] == 'MyssGuansingle' || $_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
             // 查看会员详细信息
             $member = M('member');
             $ID = (int) $_GET['PT_id'];
-            // 判断获取数据的真实性 是否为数字 长度
-            if (strlen($ID) > 15) {
+            // 判断获取数据的真实性 长度
+            if (strlen($ID) > 11) {
                 $this->error('数据错误!');
                 exit();
             }
             $where = array();
             $where['id'] = $ID;
             $field = '*';
-            $vo = $member->where($where)
-                ->field($field)
-                ->find();
+            // 查询会员表
+            $vo = $member->where($where)->field($field)->find();
+            $this->assign('b_bank', $vo);
+            $this->assign('vo', $vo);
             if ($vo) {
-                $this->assign('vo', $vo);
-                $voo = 0;
-                $this->_levelConfirm($voo);
-                
-                $level = array();
-                for ($i = 1; $i <= count($voo); $i ++) {
-                    $level[$i] = $voo[$i];
-                }
-                $this->assign('level', $level);
-                
+                // 查询银行列表
                 $fee = M('fee');
-                $fee_s = $fee->field('str24,str25,str29')->find();
-                $lang = explode('|', $fee_s['str24']);
-                $countrys = explode('|', $fee_s['str25']);
-                
-                $bank = explode('|', $fee_s['str29']);
+                $fee_s = $fee->field('s10')->find();
+                $bank = explode('|', $fee_s['s10']);
                 $this->assign('bank', $bank);
-                $this->assign('b_bank', $vo);
-                
-                $this->assign('lang', $lang);
-                $this->assign('countrys', $countrys);
-                
                 $this->display();
             } else {
                 $this->error('数据错误!');
@@ -1041,6 +885,7 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
+    // 管理员修改会员信息保存
     public function adminuserDataSave()
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao' || $_SESSION['UrlPTPass'] == 'MyssGuanXiGua' || $_SESSION['UrlPTPass'] == 'MyssGuansingle' || $_SESSION['UrlPTPass'] == 'MyssShenShuiPuTao') {
@@ -1050,213 +895,43 @@ class YouZiAction extends CommonAction
             }
             $ID = (int) $_POST['ID'];
             $data = array();
-            $data['pwd1'] = trim($_POST['pwd1']); // 一级密码不加密
-            $data['pwd2'] = trim($_POST['pwd2']);
-            $data['pwd3'] = trim($_POST['pwd3']);
-            $data['password'] = md5(trim($_POST['pwd1'])); // 一级密码加密
-            $data['passopen'] = md5(trim($_POST['pwd2']));
-            $data['passopentwo'] = md5(trim($_POST['pwd3']));
             
-            $wenti = trim($_POST['wenti']);
-            $wenti_dan = trim($_POST['wenti_dan']);
-            if (! empty($wenti)) {
-                $data['wenti'] = $wenti;
-            }
-            if (! empty($wenti_dan)) {
-                $data['wenti_dan'] = $wenti_dan;
-            }
-            
-            $data['nickname'] = $_POST['NickName'];
-            
-            $data['lang'] = $_POST['Lang'];
-            $data['countrys'] = $_POST['Countrys'];
-            
-            $data['bank_name'] = $_POST['BankName'];
-            $data['bank_card'] = $_POST['BankCard'];
-            $data['user_name'] = $_POST['UserName'];
-            $data['bank_province'] = $_POST['BankProvince'];
-            $data['bank_city'] = $_POST['BankCity'];
-            $data['bank_address'] = $_POST['BankAddress'];
-            $data['user_code'] = $_POST['UserCode'];
-            // $data['user_address'] = $_POST['UserAddress'];
-            // $data['user_post'] = $_POST['UserPost'];
-            // $data['user_phone'] = $_POST['user_phone'];//邮编
-            $data['user_tel'] = $_POST['UserTel'];
-            // $data['is_lock'] = $_POST['isLock'];
-            $data['qq'] = $_POST['qq'];
-            $data['email'] = $_POST['email'];
-            $data['agent_use'] = $_POST['AgentUse'];
-            $data['agent_cash'] = $_POST['AgentCash'];
-            $data['zjj'] = $_POST['zjj'];
+            // ID
             $data['id'] = $_POST['ID'];
-            
-            $data['agent_kt'] = $_POST['AgentKt'];
-            $data['agent_xf'] = $_POST['AgentXf'];
-            $data['agent_gp'] = $_POST['AgentGp'];
-            $data['agent_cf'] = $_POST['agent_cf'];
-            $data['agent_zc'] = $_POST['agent_zc'];
-            $data['gp_num'] = (int) $_POST['gp_num'];
-            
-            $data['wang_j'] = (int) $_POST['wang_j'];
-            $data['wang_t'] = (int) $_POST['wang_t'];
-            
-            // $data['u_level'] = $_POST['uLevel'];
-            // if ($_POST['ID'] == 1){
-            // $data['is_boss'] = 1;
-            // }else{
-            // $data['is_boss'] = $_POST['isBoss'];
-            // }
-            // $data['agent_use'] = $_POST['AgentUse'];
-            // $data['agent_cash'] = $_POST['AgentCash'];
-            $ReName = $_POST['ReName'];
-            $re_where = array();
-            $where = array();
-            $where['nickname'] = $ReName;
-            $where['user_id'] = $ReName;
-            $where['_logic'] = 'or';
-            $re_where['_complex'] = $where;
-            $re_member_rs = $member->where($re_where)
-                ->field('id,nickname,user_id')
-                ->find();
-            if ($re_member_rs) {
-                if ($ID == 1) {
-                    $data['re_id'] = 0;
-                    $data['re_name'] = 0;
-                } else {
-                    $data['re_id'] = $re_member_rs['id'];
-                    $data['re_name'] = $re_member_rs['user_id'];
-                }
-            } else {
-                if ($ID != 1) {
-                    $this->error('推荐人不存在，请重新输入！');
-                    exit();
-                }
-            }
-            
-            $p_shop = $_POST['p_shop'];
-            $c_shop = $_POST['c_shop'];
-            $a_shop = $_POST['a_shop'];
-            $p_shop_id = 0;
-            if (! empty($p_shop)) {
-                $p_where = array();
-                $p_where['nickname'] = $p_shop;
-                $p_where['is_agent'] = 2;
-                $p_where['shoplevel'] = 3;
-                $p_rs = $member->where($p_where)
-                    ->field('id,nickname,shop_path')
-                    ->find();
-                if (! $p_rs) {
-                    $this->error('省级代理不存在，请重新输入！');
-                    exit();
-                }
-                $p_shop_id = $p_rs['id'];
-            }
-            $c_shop_id = 0;
-            if (! empty($c_shop)) {
-                $p_where = array();
-                $p_where['nickname'] = $c_shop;
-                $p_where['is_agent'] = 2;
-                $p_where['shoplevel'] = 2;
-                $p_rs = $member->where($p_where)
-                    ->field('id,nickname,shop_path')
-                    ->find();
-                if (! $p_rs) {
-                    $this->error('市级代理不存在，请重新输入！');
-                    exit();
-                }
-                $c_shop_id = $p_rs['id'];
-            }
-            $a_shop_id = 0;
-            if (! empty($a_shop)) {
-                $p_where = array();
-                $p_where['nickname'] = $a_shop;
-                $p_where['is_agent'] = 2;
-                $p_where['shoplevel'] = 1;
-                $p_rs = $member->where($p_where)
-                    ->field('id,nickname,shop_path')
-                    ->find();
-                if (! $p_rs) {
-                    $this->error('县级代理不存在，请重新输入！');
-                    exit();
-                }
-                $a_shop_id = $p_rs['id'];
-            }
-            // $where_nic = array();
-            // $where_nic['nickname'] = $data['nickname'];
-            // $rs = $member -> where($where_nic) -> find();
-            // if($rs){
-            // if($rs['id'] != $data['id']){
-            // $this->error ('该会员编号已经存在!');
-            // exit;
-            // }
-            // }
-            $where = array();
-            $id = $_SESSION[C('USER_AUTH_KEY')];
-            $where['id'] = $data['id'];
-            $frs = $member->where($where)
-                ->field('id,user_id,password,passopen,p_shop,c_shop,a_shop')
-                ->find();
-            if ($frs) {
-                if ($frs['p_shop'] != $p_shop_id) {
-                    $data['p_shop'] = $p_shop_id;
-                }
-                if ($frs['c_shop'] != $c_shop_id) {
-                    $data['c_shop'] = $c_shop_id;
-                }
-                if ($frs['a_shop'] != $a_shop_id) {
-                    $data['a_shop'] = $a_shop_id;
-                }
-                //
-                // if ($_POST['Password']!= $frs['password']){
-                // $data['password'] = md5($_POST['Password']);
-                // if ($id == $data['id']){
-                // $_SESSION['login_sf_list_u'] = md5($frs['user_id']. ALL_PS .$data['password'].$_SERVER['HTTP_USER_AGENT']);
-                // }
-                // }
-                // if ($_POST['PassOpen'] != $frs['passopen']){
-                // $data['passopen'] = md5($_POST['PassOpen']);
-                // }
-            }
-            
-            $newlv = (int) $_POST['newulevel'];
-            $oldlv = (int) $_POST['oldulevel'];
+            // 用户名
+            $data['user_name'] = $_POST['user_name'];
+            // 一级密码不加密
+            $data['pwd1'] = trim($_POST['pwd1']);
+            // 二级密码不加密
+            $data['pwd2'] = trim($_POST['pwd2']);
+            // 一级密码加密
+            $data['password'] = md5(trim($_POST['pwd1']));
+            // 二级密码加密
+            $data['password2'] = md5(trim($_POST['pwd2']));
+            // 开户银行
+            $data['bank'] = $_POST['bank'];
+            // 开户银行卡号
+            $data['bankcard_number'] = $_POST['bankcard_number'];
+            // 开户银行省份
+            $data['bank_province'] = $_POST['bank_province'];
+            // 开户银行城市
+            $data['bank_city'] = $_POST['bank_city'];
+            // 开户银行详细地址
+            $data['bank_address'] = $_POST['bank_address'];
+            // 身份证号
+            $data['user_code'] = $_POST['user_code'];
+            // 手机号
+            $data['tel'] = $_POST['tel'];
+            // 现金币
+            $data['cash'] = $_POST['cash'];
+            // 积分
+            $data['point'] = $_POST['point'];
+            // 基金
+            $data['bk8'] = $_POST['bk8'];
             
             $result = $member->save($data);
             unset($data);
-            if ($result || $newlv != $oldlv) {
-                if ($newlv != $oldlv) {
-                    
-                    $promo = M('promo');
-                    
-                    $myrs = $member->where('id=' . $ID)
-                        ->field('id,user_id,bank_name')
-                        ->find();
-                    
-                    $content = " <font color=red>後台升降級</font>";
-                    
-                    $wdata = array();
-                    $wdata['money'] = 0;
-                    $wdata['u_level'] = $oldlv;
-                    $wdata['uid'] = $myrs['id'];
-                    $wdata['user_id'] = $myrs['user_id'];
-                    $wdata['create_time'] = time();
-                    $wdata['pdt'] = time();
-                    $wdata['up_level'] = $newlv;
-                    $wdata['danshu'] = 0;
-                    $wdata['is_pay'] = 1;
-                    $wdata['user_name'] = $content;
-                    $wdata['u_bank_name'] = $myrs['bank_name'];
-                    $wdata['type'] = 0;
-                    $promo->add($wdata);
-                    
-                    $newmo = $s3[$newlv - 1];
-                    $newdl = $s2[$newlv - 1];
-                    
-                    $member->query("update __TABLE__ set u_level=" . $newlv . ",cpzj=" . $newmo . ",f4=" . $newdl . " where `id`=" . $myrs['id']);
-                    
-                    unset($promo, $wdata, $myrs, $fee, $fee_rs, $s3, $s2);
-                }
-                
+            if ($result) {
                 $bUrl = __URL__ . '/adminMenber';
                 $this->_box(1, '资料修改成功！', $bUrl, 1);
                 exit();
@@ -1778,19 +1453,14 @@ class YouZiAction extends CommonAction
         }
         unset($where, $field, $vo, $pdt, $t_rs);
     }
-
+    
+    // 开启奖金
     private function adminMenberFenhong($PTid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $where['is_pay'] = array(
-                'gt',
-                0
-            );
+            $where['id'] = array('in',$PTid);
+            $where['is_pay'] = array('gt',0);
             $rs = $member->where($where)->setField('is_fenh', '0');
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
@@ -1806,23 +1476,15 @@ class YouZiAction extends CommonAction
             exit();
         }
     }
-
+    // 关闭奖金
     private function _Lockfenh($PTid = 0)
     {
-        // 锁定会员
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $where['is_pay'] = array(
-                'egt',
-                1
-            );
+            $where['is_pay'] = array('egt',1);
             $where['_string'] = 'id>1';
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
+            $where['id'] = array('in',$PTid);
             $rs = $member->where($where)->setField('is_fenh', '1');
-            
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
                 $this->_box(1, '关闭奖金成功！', $bUrl, 1);
@@ -1837,22 +1499,22 @@ class YouZiAction extends CommonAction
         }
     }
     
-    // 实体服务中心设置
+    // 服务中心设置
     private function _relAgent($PTid = 0)
     {
         // 设置实体服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
             $where['id'] = array('in',$PTid);
-            $rs = $member->where($where)->setField('is_aa', '1');
+            $rs = $member->where($where)->setField('is_agent', '1');
     
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(1, '实体服务中心设置成功！', $bUrl, 1);
+                $this->_box(1, '服务中心设置成功！', $bUrl, 1);
                 exit();
             } else {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(0, '实体服务中心设置失败！', $bUrl, 1);
+                $this->_box(0, '服务中心设置失败！', $bUrl, 1);
                 exit();
             }
         } else {
@@ -1860,7 +1522,7 @@ class YouZiAction extends CommonAction
         }
     }
     
-    // 实体服务中心解除
+    // 服务中心解除
     private function _relAgentCancel($PTid = 0)
     {
         // 设置实体服务中心
@@ -1868,7 +1530,7 @@ class YouZiAction extends CommonAction
             $member = M('member');
             $where['is_aa'] = array('egt',1);
             $where['id'] = array('in',$PTid);
-            $rs = $member->where($where)->setField('is_aa', '0');
+            $rs = $member->where($where)->setField('is_agent', '0');
     
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
@@ -1889,19 +1551,15 @@ class YouZiAction extends CommonAction
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $data['is_pay'] = 1;
-            $rs = $member->where($where)->setField('is_lock', '0');
+            $where['id'] = array('in',$PTid);
+            $rs = $member->where($where)->setField('status', '0');
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(1, '开启会员！', $bUrl, 1);
+                $this->_box(1, '开启会员成功！', $bUrl, 1);
                 exit();
             } else {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(0, '开启会员！', $bUrl, 1);
+                $this->_box(0, '开启会员失败！', $bUrl, 1);
                 exit();
             }
         } else {
@@ -1915,23 +1573,15 @@ class YouZiAction extends CommonAction
         // 锁定会员
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $where['is_pay'] = array(
-                'egt',
-                1
-            );
-            $where['is_boss'] = 0;
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $rs = $member->where($where)->setField('is_lock', '1');
+            $where['id'] = array('in', $PTid);
+            $rs = $member->where($where)->setField('status', '1');
             if ($rs) {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(1, '锁定会员！', $bUrl, 1);
+                $this->_box(1, '锁定会员成功！', $bUrl, 1);
                 exit();
             } else {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(0, '锁定会员！', $bUrl, 1);
+                $this->_box(0, '锁定会员失败！', $bUrl, 1);
                 exit();
             }
         } else {
@@ -1939,54 +1589,22 @@ class YouZiAction extends CommonAction
         }
     }
     
-    // 设为报单中心
+    // 设为服务中心
     private function _adminMenberAgent($PTid = 0)
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             
             $member = M('member');
-            $where['id'] = array(
-                'in',
-                $PTid
-            );
-            $where['is_agent'] = array(
-                'lt',
-                2
-            );
-            $rs2 = $member->where($where)->setField('adt', mktime());
-            
-            foreach ($PTid as $key => $value) {
-                
-                $list = $member->where('id=' . $value)
-                    ->field('*')
-                    ->find();
-                
-                if ($list['is_agent'] >= 2) {
-                    
-                    $da['re_pathb'] = $list['re_pathb'] . $list['id'] . ','; // 开通路径
-                    $member->where('id=' . $value)->save($da);
-                } else {
-                    
-                    $kt_id = $list['kt_id'];
-                    
-                    $one = $this->cate($kt_id);
-                    $two = $member->where('id=' . $one)
-                        ->field('*')
-                        ->find();
-                    
-                    $da['re_pathb'] = $two['re_pathb'] . $two['id'] . ','; // 开通路径
-                    $member->where('id=' . $value)->save($da);
-                }
-            }
-            $rs1 = $member->where($where)->setField('is_agent', '2');
-            
+            $where['id'] = array('in',$PTid);
+            $where['is_agent'] = array('lt',1);
+            $rs1 = $member->where($where)->setField('is_agent', '1');
             if ($rs1) {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(1, '设置报单中心成功！', $bUrl, 1);
+                $this->_box(1, '设置服务中心成功！', $bUrl, 1);
                 exit();
             } else {
                 $bUrl = __URL__ . '/adminMenber';
-                $this->_box(0, '设置报单中心失败！', $bUrl, 1);
+                $this->_box(0, '设置服务中心失败！', $bUrl, 1);
                 exit();
             }
         } else {
@@ -1998,11 +1616,7 @@ class YouZiAction extends CommonAction
     public function cate($id = 0)
     {
         $member = M('member');
-        $res = $member->where('id=' . $id)
-            ->field('id,kt_id,is_agent')
-            ->find();
-        // print_r($res);die;
-        
+        $res = $member->where('id=' . $id)->field('id,kt_id,is_agent')->find();
         if ($res) {
             
             if ($res['is_agent'] == 2) {
@@ -2127,7 +1741,7 @@ class YouZiAction extends CommonAction
                 'egt',
                 100
             );
-            $field = 'id,user_id,agent_use,bank_name,bank_card,user_name';
+            $field = 'id,user_id,agent_use,bank,bankcard_number,user_name';
             $member_rs = $member->where($where)
                 ->field($field)
                 ->select();
@@ -2166,8 +1780,8 @@ class YouZiAction extends CommonAction
                     $data['money_two'] = $ePoints;
                     $data['is_pay'] = 1;
                     $data['user_name'] = $vo['user_name'];
-                    $data['bank_name'] = $vo['bank_name'];
-                    $data['bank_card'] = $vo['bank_card'];
+                    $data['bank'] = $vo['bank'];
+                    $data['bankcard_number'] = $vo['bankcard_number'];
                     $tiqu->add($data);
                 }
             }
@@ -2430,10 +2044,7 @@ class YouZiAction extends CommonAction
             0
         );
         $field = '*';
-        $list = $member->where($map)
-            ->field($field)
-            ->order('pdt asc')
-            ->select();
+        $list = $member->where($map)->field($field)->order('register_time asc')->select();
         
         $title = "会员表 导出时间:" . date("Y-m-d   H:i:s");
         
@@ -2448,19 +2059,14 @@ class YouZiAction extends CommonAction
         echo "<td>银行卡号</td>";
         echo "<td>开户行地址</td>";
         echo "<td>联系电话</td>";
-        echo "<td>联系地址</td>";
-        echo "<td>QQ号</td>";
         echo "<td>身份证号</td>";
         echo "<td>注册时间</td>";
         echo "<td>开通时间</td>";
-        echo "<td>总奖金</td>";
-        echo "<td>剩余奖金</td>";
-        echo "<td>剩余注册币</td>";
+        echo "<td>现金币</td>";
+        echo "<td>积分</td>";
+        echo "<td>剩余基金</td>";
         echo '</tr>';
         // 输出内容
-        
-        // dump($list);exit;
-        
         $i = 0;
         foreach ($list as $row) {
             $i ++;
@@ -2478,17 +2084,15 @@ class YouZiAction extends CommonAction
             echo '<td>' . chr(28) . $num . '</td>';
             echo "<td>" . $row['user_id'] . "</td>";
             echo "<td>" . $row['user_name'] . "</td>";
-            echo "<td>" . sprintf('%s', (string) chr(28) . $row['bank_card'] . chr(28)) . "</td>";
+            echo "<td>" . sprintf('%s', (string) chr(28) . $row['bankcard_number'] . chr(28)) . "</td>";
             echo "<td>" . $row['bank_province'] . $row['bank_city'] . $row['bank_address'] . "</td>";
-            echo "<td>" . $row['user_tel'] . "&nbsp;</td>";
-            echo "<td>" . $row['user_address'] . "</td>";
-            echo "<td>" . $row['qq'] . "</td>";
+            echo "<td>" . $row['tel'] . "&nbsp;</td>";
             echo "<td>" . sprintf('%s', (string) chr(28) . $row['user_code'] . chr(28)) . "</td>";
-            echo "<td>" . date("Y-m-d H:i:s", $row['rdt']) . "</td>";
-            echo "<td>" . date("Y-m-d H:i:s", $row['pdt']) . "</td>";
-            echo "<td>" . $row['zjj'] . "</td>";
-            echo "<td>" . $row['agent_use'] . "</td>";
-            echo "<td>" . $row['agent_cash'] . "</td>";
+            echo "<td>" . date("Y-m-d H:i:s", $row['register_time']) . "</td>";
+            echo "<td>" . date("Y-m-d H:i:s", $row['bk7']) . "</td>";
+            echo "<td>" . $row['cash'] . "</td>";
+            echo "<td>" . $row['point'] . "</td>";
+            echo "<td>" . $row['bk8'] . "</td>";
             echo '</tr>';
         }
         echo '</table>';
@@ -2610,9 +2214,9 @@ class YouZiAction extends CommonAction
         // 查询字段
         $field = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
         $field .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-        $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+        $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bankcard_number';
         $field .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
-        $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
+        $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank,xt_member.bank_address';
         import("@.ORG.ZQPage"); // 导入分页类
         $count = $bonus->where($map)->count(); // 总页数
         $listrows = 1000000; // 每页显示的记录数
@@ -2641,9 +2245,9 @@ class YouZiAction extends CommonAction
                 $num = '0' . $i;
             }
             echo '<tr align=center>';
-            echo '<td>' . sprintf('%s', (string) chr(28) . $row['bank_card'] . chr(28)) . '</td>';
+            echo '<td>' . sprintf('%s', (string) chr(28) . $row['bankcard_number'] . chr(28)) . '</td>';
             echo '<td>' . $row['user_name'] . '</td>';
-            echo "<td>" . $row['bank_name'] . "</td>";
+            echo "<td>" . $row['bank'] . "</td>";
             echo '<td>' . $row['bank_province'] . '</td>';
             echo '<td>' . $row['bank_city'] . '</td>';
             echo '<td>' . $row['b0'] . '</td>';
@@ -2687,9 +2291,9 @@ class YouZiAction extends CommonAction
             // 查询字段
             $field = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
             $field .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-            $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+            $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bankcard_number';
             $field .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
-            $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
+            $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank,xt_member.bank_address';
             import("@.ORG.ZQPage"); // 导入分页类
             $count = $bonus->where($map)->count(); // 总页数
             $listrows = 1000000; // 每页显示的记录数
@@ -2722,8 +2326,8 @@ class YouZiAction extends CommonAction
                 echo '<tr align=center>';
                 echo "<td>'" . $row['user_id'] . '</td>';
                 echo '<td>' . $row['user_name'] . '</td>';
-                echo "<td>" . $row['bank_name'] . "</td>";
-                echo '<td>' . $row['bank_card'] . '</td>';
+                echo "<td>" . $row['bank'] . "</td>";
+                echo '<td>' . $row['bankcard_number'] . '</td>';
                 echo '<td>' . $row['money'] . '</td>';
                 echo '<td>' . $date . '</td>';
                 echo "<td>'" . $num . '</td>';
@@ -2766,9 +2370,9 @@ class YouZiAction extends CommonAction
         // 查询字段
         $field = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
         $field .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-        $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+        $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bankcard_number';
         $field .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
-        $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
+        $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank,xt_member.bank_address';
         import("@.ORG.ZQPage"); // 导入分页类
         $count = $bonus->where($map)->count(); // 总页数
         $listrows = 1000000; // 每页显示的记录数
@@ -2797,9 +2401,9 @@ class YouZiAction extends CommonAction
                 $num = '0' . $i;
             }
             echo '<tr align=center>';
-            echo "<td>'" . sprintf('%s', (string) chr(28) . $row['bank_card'] . chr(28)) . '</td>';
+            echo "<td>'" . sprintf('%s', (string) chr(28) . $row['bankcard_number'] . chr(28)) . '</td>';
             echo '<td>' . $row['user_name'] . '</td>';
-            echo "<td>" . $row['bank_name'] . "</td>";
+            echo "<td>" . $row['bank'] . "</td>";
             echo '<td>' . $row['bank_province'] . '</td>';
             echo '<td>' . $row['bank_city'] . '</td>';
             echo '<td>' . $row['b0'] . '</td>';
@@ -2824,9 +2428,9 @@ class YouZiAction extends CommonAction
             // 查询字段
             $field = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
             $field .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-            $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+            $field .= ',xt_member.user_id,xt_member.user_tel,xt_member.bankcard_number';
             $field .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
-            $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
+            $field .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank,xt_member.bank_address';
             import("@.ORG.ZQPage"); // 导入分页类
             $count = $bonus->where($map)->count(); // 总页数
             $listrows = 1000000; // 每页显示的记录数
@@ -2856,7 +2460,7 @@ class YouZiAction extends CommonAction
                 } elseif ($num == 3) {
                     $num = '0' . $i;
                 }
-                $ko .= $row['bank_card'] . "|" . $row['user_name'] . "|" . $row['bank_name'] . "|" . $row['bank_province'] . "|" . $row['bank_city'] . "|" . $row['b0'] . "|" . $num . "\r\n";
+                $ko .= $row['bankcard_number'] . "|" . $row['user_name'] . "|" . $row['bank'] . "|" . $row['bank_province'] . "|" . $row['bank_city'] . "|" . $row['b0'] . "|" . $num . "\r\n";
                 $m_ko += $row['b0'];
                 $e_da = $row['e_date'];
             }
@@ -2900,39 +2504,7 @@ class YouZiAction extends CommonAction
             $fee_s16 = $fee_rs['s16'];
             $fee_s17 = $fee_rs['s17'];
             $fee_s18 = $fee_rs['s18'];
-            
-            $fee_str1 = $fee_rs['str1'];
-            $fee_str2 = $fee_rs['str2'];
-            $fee_str3 = $fee_rs['str3'];
-            $fee_str4 = $fee_rs['str4'];
-            $fee_str5 = $fee_rs['str5'];
-            $fee_str6 = $fee_rs['str6'];
-            $fee_str7 = $fee_rs['str7'];
-            $fee_str9 = $fee_rs['str9'];
-            
-            $fee_str10 = $fee_rs['str10'];
-            $fee_str11 = $fee_rs['str11'];
-            
-            $fee_str17 = $fee_rs['str17'];
-            $fee_str18 = $fee_rs['str18'];
-            $fee_str19 = $fee_rs['str19'];
-            
-            $fee_str21 = $fee_rs['str21'];
-            $fee_str22 = $fee_rs['str22'];
-            $fee_str23 = $fee_rs['str23'];
-            $fee_str24 = $fee_rs['str24'];
-            $fee_str25 = $fee_rs['str25'];
-            
-            $fee_str27 = $fee_rs['str27'];
-            $fee_str28 = $fee_rs['str28'];
-            $fee_str29 = $fee_rs['str29'];
-            
-            $fee_str99 = $fee_rs['str99'];
-            
-            $a_money = $fee_rs['a_money'];
-            $b_money = $fee_rs['b_money'];
-            
-            // $fee_s20 = explode('|',$fee_rs['s20']);
+            $fee_s19 = $fee_rs['s19'];
             $this->assign('fee_s1', $fee_s1);
             $this->assign('fee_s2', $fee_s2);
             $this->assign('fee_s3', $fee_s3);
@@ -2951,45 +2523,7 @@ class YouZiAction extends CommonAction
             $this->assign('fee_s16', $fee_s16);
             $this->assign('fee_s17', $fee_s17);
             $this->assign('fee_s18', $fee_s18);
-            // $this -> assign('fee_s20',$fee_s20);
-            $this->assign('fee_i1', $fee_rs['i1']);
-            $this->assign('fee_i2', $fee_rs['i2']);
-            $this->assign('fee_i3', $fee_rs['i3']);
-            $this->assign('fee_i4', $fee_rs['i4']);
-            $this->assign('fee_i9', $fee_rs['i9']);
-            $this->assign('fee_id', $fee_rs['id']); // 记录ID
-            
-            $this->assign('b_money', $fee_rs['b_money']);
-            
-            $this->assign('fee_str1', $fee_str1);
-            $this->assign('fee_str2', $fee_str2);
-            $this->assign('fee_str3', $fee_str3);
-            $this->assign('fee_str4', $fee_str4);
-            $this->assign('fee_str5', $fee_str5);
-            $this->assign('fee_str6', $fee_str6);
-            $this->assign('fee_str7', $fee_str7);
-            $this->assign('fee_str9', $fee_str9);
-            
-            $this->assign('fee_str10', $fee_str10);
-            $this->assign('fee_str11', $fee_str11);
-            
-            $this->assign('fee_str17', $fee_str17);
-            $this->assign('fee_str18', $fee_str18);
-            $this->assign('fee_str19', $fee_str19);
-            
-            $this->assign('fee_str21', $fee_str21);
-            $this->assign('fee_str22', $fee_str22);
-            $this->assign('fee_str23', $fee_str23);
-            $this->assign('fee_str24', $fee_str24);
-            $this->assign('fee_str25', $fee_str25);
-            
-            $this->assign('fee_str27', $fee_str27);
-            $this->assign('fee_str28', $fee_str28);
-            $this->assign('fee_str29', $fee_str29);
-            $this->assign('fee_str99', $fee_str99);
-            
-            $this->assign('a_money', $a_money);
-            $this->assign('b_money', $b_money);
+            $this->assign('fee_s19', $fee_s19);
             
             $this->display('setParameter');
         } else {
@@ -3004,142 +2538,55 @@ class YouZiAction extends CommonAction
             $fee = M('fee');
             $member = M('member');
             $rs = $fee->find();
-            
-            // $s18 = (int) trim($_POST['s18']);
-            // $i1 = (int) trim($_POST['i1']);
-            // if(empty($s18) or empty($i1)){
-            // $this->error('请输入完整的参数，否则系统不能正常运行!');
-            // exit;
-            // }
-            //
-            // $arr = array(3,11,12,13,14,17,20);
-            // foreach($arr as $i){
-            // $i = 's'. $i;
-            // $str = $_POST[$i];
-            // foreach($str as $s){
-            // if($i != 's20'){ //s20为各网名称可以不为数字
-            // $s = trim($s);
-            // }
-            // if(empty($s)){
-            // $this->error('请输入完整的参数，否则系统不能正常运行 !');
-            // }}}
-            
-            $i1 = $_POST['i1'];
-            $i2 = $_POST['i2'];
-            $i3 = $_POST['i3'];
-            $i4 = $_POST['i4'];
-            $a_money = $_POST['a_money'];
-            $b_money = $_POST['b_money'];
-            // $s2 = $_POST['s2'];
-            // $s3 = $_POST['s3'];
-            // $s4 = $_POST['s4'];
-            // $s5 = $_POST['s5'];
-            // $s6 = $_POST['s6'];
-            // $s8 = $_POST['s8'];
-            // $s9 = $_POST['s9'];
-            // $s10 = $_POST['s10'];
-            // $s11 = $_POST['s11'];
-            // $s12 = $_POST['s12'];
-            // $s13 = $_POST['s13'];
-            // $s14 = $_POST['s14'];
-            // $s15 = $_POST['s15'];
-            // $s16 = $_POST['s16'];
-            // $s17 = $_POST['s17'];
-            // $s18 = $_POST['s18'];
-            // $s20 = $_POST['s20'];
-            //
+            $s1 = $_POST['s1'];
+            $s2 = $_POST['s2'];
+            $s3 = $_POST['s3'];
+            $s4 = $_POST['s4'];
+            $s5 = $_POST['s5'];
+            $s6 = $_POST['s6'];
+            $s7 = $_POST['s7'];
+            $s8 = $_POST['s8'];
+            $s9 = $_POST['s9'];
+            $s10 = $_POST['s10'];
+            $s11 = $_POST['s11'];
+            $s12 = $_POST['s12'];
+            $s13 = $_POST['s13'];
+            $s14 = $_POST['s14'];
+            $s15 = $_POST['s15'];
+            $s16 = $_POST['s16'];
+            $s17 = $_POST['s17'];
+            $s18 = $_POST['s18'];
+            $s19 = $_POST['s19'];
+            $s20 = $_POST['s20'];
+            //待存入数据库数据
             $where = array();
             $where['id'] = 1;
             $data = array();
-            if (empty($a_money) == false || strlen($a_money) > 0) {
-                $data['a_money'] = trim($a_money);
-            }
-            if (empty($b_money) == false || strlen($b_money) > 0) {
-                $data['b_money'] = trim($b_money);
-            }
-            // $data['s3'] = trim($s3[0]) .'|'. trim($s3[1]) .'|'. trim($s3[2]) .'|'. trim($s3[3]) .'|'. trim($s3[4]) .'|'. trim($s3[5]);
-            // $data['s5'] = trim($s5[0]) .'|'. trim($s5[1]) .'|'. trim($s5[2]) ;
-            // $data['s2'] = trim($s2);
-            // $data['s3'] = trim($s3);
-            // $data['s4'] = trim($s4);
-            // $data['s5'] = trim($s5);
-            // $data['s6'] = trim($s6);
-            // $data['s8'] = trim($s8);
-            // $data['s9'] = trim($s9);
-            // $data['s10'] = trim($s10);
-            // $data['s11'] = trim($s11);
-            // $data['s12'] = trim($s12);
-            // $data['s13'] = trim($s13);
-            // $data['s14'] = trim($s14);
-            // $data['s15'] = trim($s15);
-            // $data['s16'] = trim($s16);
-            // $data['s17'] = trim($s17);
-            // $data['s10'] = trim($s10[0]) .'|'. trim($s10[0]);
-            // $data['s11'] = trim($s11[0]) .'|'. trim($s11[1]) .'|'. trim($s11[2]) .'|'. trim($s11[3]) .'|'. trim($s11[4]) .'|'. trim($s11[5]);
-            // $data['s12'] = trim($s12[0]) .'|'. trim($s12[1]) .'|'. trim($s12[2]) .'|'. trim($s12[3]) .'|'. trim($s12[4]) .'|'. trim($s12[5]);
-            // $data['s13'] = trim($s13[0]) .'|'. trim($s13[1]) .'|'. trim($s13[2]);
-            // $data['s14'] = trim($s14[0]) .'|'. trim($s14[1]) .'|'. trim($s14[2]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]) .'|'. trim($s14[3]);
-            // $data['s15'] = trim($s15[0]) .'|'. trim($s15[0]);
-            // $data['s16'] = trim($s16[0]) .'|'. trim($s16[0]);
-            // $data['s17'] = trim($s17[0]) .'|'. trim($s17[1]);
-            // $data['s18'] = '0000|0000|'. trim($s18);
-            // $data['s20'] = trim($s20[0]) .'|'. trim($s20[1]) .'|'. trim($s20[2]) .'|'. trim($s20[3]) .'|'. trim($s20[4]) .'|'. trim($s20[5]);
-            
-            for ($j = 1; $j <= 10; $j ++) {
-                $arr_rs[$j] = $_POST['i' . $j];
-            }
-            
-            $s_sql2 = "";
-            for ($j = 1; $j <= 10; $j ++) {
-                if ($arr_rs[$j] != '') {
-                    if (empty($s_sql2)) {
-                        $s_sql2 = 'i' . $j . "='{$arr_rs[$j]}'";
-                    } else {
-                        $s_sql2 .= ',i' . $j . "='{$arr_rs[$j]}'";
-                    }
-                }
-            }
-            
-            for ($i = 1; $i <= 35; $i ++) {
-                $arr_s[$i] = $_POST['s' . $i];
-            }
-            
-            $s_sql = "";
-            for ($i = 1; $i <= 35; $i ++) {
-                if (empty($arr_s[$i]) == false || strlen($arr_s[$i]) > 0) {
-                    if (empty($s_sql2)) {
-                        $s_sql = 's' . $i . "='{$arr_s[$i]}'";
-                    } else {
-                        $s_sql .= ',s' . $i . "='{$arr_s[$i]}'";
-                    }
-                }
-            }
-            
-            for ($i = 1; $i <= 40; $i ++) {
-                $arr_sts[$i] = $_POST['str' . $i];
-            }
-            $str_sql = "";
-            for ($i = 1; $i <= 40; $i ++) {
-                if (strlen(trim($arr_sts[$i])) > 0) {
-                    if (empty($s_sql2) && empty($s_sql)) {
-                        $str_sql = 'str' . $i . "='{$arr_sts[$i]}'";
-                    } else {
-                        $str_sql .= ',str' . $i . "='{$arr_sts[$i]}'";
-                    }
-                }
-            }
-            
-            $str99 = trim($_POST['str99']);
-            $ttst_sql = ',str99="' . $str99 . '"';
-            
-            $fee->execute("update __TABLE__ SET " . $s_sql2 . $s_sql . $str_sql . $ttst_sql . "  where `id`=1");
-            $fee->where($where)
-                ->data($data)
-                ->save();
+            $data['s1'] = trim($s1);
+            $data['s2'] = trim($s2);
+            $data['s3'] = trim($s3);
+            $data['s4'] = trim($s4);
+            $data['s5'] = trim($s5);
+            $data['s6'] = trim($s6);
+            $data['s7'] = trim($s7);
+            $data['s8'] = trim($s8);
+            $data['s9'] = trim($s9);
+            $data['s10'] = trim($s10);
+            $data['s11'] = trim($s11);
+            $data['s12'] = trim($s12);
+            $data['s13'] = trim($s13);
+            $data['s14'] = trim($s14);
+            $data['s15'] = trim($s15);
+            $data['s16'] = trim($s16);
+            $data['s17'] = trim($s17);
+            $data['s18'] = trim($s18);
+            $data['s19'] = trim($s19);
+//             $data['s20'] = trim($s20);
+            $fee->where($where)->data($data)->save();
             $this->success('参数设置！');
             exit();
         } else {
-            $this->error('错误!'); // 12345678901112131417181920s3
+            $this->error('错误!');
             exit();
         }
     }
@@ -3193,7 +2640,7 @@ class YouZiAction extends CommonAction
             }
             $map['is_pay'] = 1;
             // 查询字段
-            $field = 'id,user_id,nickname,bank_name,bank_card,user_name,user_address,user_tel,rdt,f4,cpzj,pdt,u_level,zjj,agent_use,is_lock,f3,b3';
+            $field = 'id,user_id,nickname,bank,bankcard_number,user_name,user_address,user_tel,rdt,f4,cpzj,pdt,u_level,zjj,agent_use,is_lock,f3,b3';
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
             $count = $member->where($map)->count(); // 总页数
@@ -3209,12 +2656,6 @@ class YouZiAction extends CommonAction
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            foreach ($list as $vo) {
-                $voo[$vo['id']] = $HYJJ[$vo['u_level']];
-            }
-            $this->assign('voo', $voo); // 会员级别
             $this->assign('list', $list); // 数据输出到模板
             $title = '会员管理';
             $this->assign('title', $title);
@@ -3467,7 +2908,7 @@ class YouZiAction extends CommonAction
             $map['user_id'] = array( 'like',"%" . $UserID . "%");
         }
         // 查询字段
-        $field = 'id,user_id,nickname,bank_name,bank_card,user_name,user_address,user_tel,rdt,f4,cpzj,is_pay';
+        $field = 'id,user_id,nickname,bank,bankcard_number,user_name,user_address,user_tel,rdt,f4,cpzj,is_pay';
         // =====================分页开始==============================================
         import("@.ORG.ZQPage"); // 导入分页类
         $count = $member->where($map)->count(); // 总页数
@@ -3620,13 +3061,7 @@ class YouZiAction extends CommonAction
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
-            
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-            
             $title = '会员升级管理';
             $this->display('adminuserUp');
             return;
@@ -3780,15 +3215,6 @@ class YouZiAction extends CommonAction
                 ->order('pdt desc,id desc')
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
-            
-            $HYJJ = '';
-            $this->_levelConfirm($HYJJ, 1);
-            $this->assign('voo', $HYJJ); // 会员级别
-            $level = array();
-            for ($i = 0; $i < count($HYJJ); $i ++) {
-                $level[$i] = $HYJJ[$i + 1];
-            }
-            $this->assign('level', $level);
             $this->assign('list', $list); // 数据输出到模板
             $title = '会员管理';
             $this->assign('title', $title);

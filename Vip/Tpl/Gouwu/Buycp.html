@@ -60,7 +60,7 @@
 									<tr>
 										<td align="center" style="font-weight: bold">
 											<a href="__URL__/Cpcontent/id/{$vo.id}" style="cursor: hand;">
-												<img src="{$vo.img}" style="width: 220px; height: 150px; border: solid 2px #f8f8f8">
+												<img src="{$vo.img1}" style="width: 220px; height: 150px; border: solid 2px #f8f8f8">
 										</a></td>
 									</tr>
 									<tr>
@@ -69,11 +69,11 @@
 											<a href="__URL__/Cpcontent/id/{$vo.id}" style="cursor: hand;">{$vo.name}</a></span></td>
 									</tr>
 									<tr>
-										<td height="20" align="center">会员价：<span class="pri_a">{$cc[$vo['id']]}</span>
+										<td height="20" align="center">会员价：<span class="pri_a">{$vo['vip_price']}</span>
 										</td>
 									</tr>
 									<tr>
-										<td height="20" align="center">市场价：<span class="pri_a">{$cc[$vo['cid']]}</span>
+										<td height="20" align="center">市场价：<span class="pri_a">{$vo['sale_price']}</span>
 										</td>
 									</tr>
 								</tbody>

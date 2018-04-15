@@ -4,49 +4,49 @@
 <table cellpadding=3 cellspacing=0 width=100% >
 <form method='post' id="form1" name="form1" action="__URL__/pro_inserts">
 <tr>
-	<td width="15%" height="22" align="right">产品名称：</td>
-	<td><input type="text"  name="title" size="40"></td>
+	<td width="15%" align="right">产品名称：</td>
+	<td><input type="text" class="huge bLeftRequire" name="name" value="{$rs.name}"></td>
 </tr>
 <tr>
-	<td height="22" align="right">商品编号：</td>
-	<td><input type="text"  name="cid" size="40" maxlength="40"></td>
+	<td width="15%" align="right">联盟商家用户名：</td>
+	<td><input type="text" class="huge bLeftRequire" name="user_id" value="{$rs.user_id}"></td>
 </tr>
 <tr>
-	<td height="22" align="right">是否显示在注册页面：</td>
-	<td><input name="isreg" type="radio" value="1" />是   <input name="isreg" type="radio" value="0" checked="checked"/>否</td>
+	<td width="15%" align="right">联盟商家店名：</td>
+	<td><input type="text" class="huge bLeftRequire" name="shopName" value="{$rs.shopName}"></td>
+</tr>
+<tr>
+	<td width="15%" align="right">库存：</td>
+	<td><input type="text" class="huge bLeftRequire" name="stock_count" value="{$rs.stock_count}"></td>
 </tr>
 <tr>
 	<td height="22" align="right">产品分类：</td>
 	<td>
     <select name="cptype">
     <volist name='list' id='voo'>
-    <option value="{$voo['id']}">{$voo['tpname']}</option>
+    <option value="{$voo['id']}" <eq name="rs.cptype" value="$voo['id']">selected</eq>>{$voo['tpname']}</option>
     </volist>
     </select></td>
 </tr>
-<tr style="display:none">
-	<td height="22" align="right">尺寸：</td>
-	<td><input type="text"  name="ccname" size="40" maxlength="100"></td>
+<tr>
+	<td height="22" align="right">成本价：</td>
+	<td><input type="text" name="price" id="price" value="{$rs.price}" size="10" maxlength="10"></td>
 </tr>
-<tr style="display:none">
-	<td height="22" align="right">型号：</td>
-	<td><input type="text"  name="xhname" size="40" maxlength="100"></td>
-</tr>
-<tr  style="display:none">
-	<td height="22" align="right">会员价：</td>
-	<td><input type="text" name="money" id="money" value="{$rs.money}" size="10" maxlength="10"></td>
+<tr>
+	<td height="22" align="right">零售价：</td>
+	<td><input type="text" name="sale_price" id="sale_price" value="{$rs.sale_price}" size="10" maxlength="10"></td>
 </tr>
 <tr>
 	<td height="22" align="right">会员价：</td>
-	<td><input type="text" name="a_money" id="a_money" value="{$rs.a_money}" size="10" maxlength="10"></td>
+	<td><input type="text" name="vip_price" id="vip_price" value="{$rs.vip_price}" size="10" maxlength="10"></td>
 </tr>
 <tr>
-	<td height="22" align="right">市场价：</td>
-	<td><input type="text" name="b_money" id="b_money" value="{$rs.b_money}" size="10" maxlength="10"></td>
+	<td height="22" align="right">批发价：</td>
+	<td><input type="text" name="whole_sale_price" id="whole_sale_price" value="{$rs.whole_sale_price}" size="10" maxlength="10"></td>
 </tr>
 <tr>
 	<td align="right">产品图片：</td>
-	<td class="center"><input name="image" type="text" id="image" value="" size="50" maxlength="500" /></td>
+	<td class="center"><input name="img1" type="text" id="img1" value="" size="50" maxlength="500" /></td>
 </tr>
 <tr>
 	<td align="right">本地上传：</td>

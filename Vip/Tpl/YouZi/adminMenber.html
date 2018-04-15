@@ -12,26 +12,13 @@
         <th><span>会员编号</span></th>
 		<th><span>推荐人</span></th>
         <th><span>姓名</span></th>
-        <th><span>昵称</span></th>
-        <th><span>会员级别</span></th>
         <th><span>联系电话</span></th>
-        <th><span>报单中心</span></th>
-        <th><span>合伙人</span></th>
-        <!-- <th><span>管理员</span></th> -->
-        <th><span>实体服务中心</span></th>
+        <th><span>服务中心</span></th>
         <th><span>开通时间</span></th>
         <th><span>注册金额</span></th>
-        <th><span>单数</span></th>
-         <th><span>复投单数</span></th>
-        <th><span>提现总额</span></th>
-       <!--  <th><span>内部认购</span></th>
-		<th><span>投资配股</span></th>
-		<th><span>买入股票</span></th>
-		<th><span>平仓配股</span></th>
-		<th><span>赠送股票</span></th> -->
+         <th><span>复投金额</span></th>
         <th><span>状态</span></th>
-     <!--   <th><span>分红</span></th>-->
-        <th><span>是否奖金</span></th>
+        <th><span>是否开启奖金</span></th>
         </tr>
     </thead>
     <volist name="list" id="vo">
@@ -40,46 +27,23 @@
         <td><a href="__URL__/adminuserData/PT_id/{$vo['id']}">{$vo['user_id']}</a></td>
 		<td>{$vo['re_name']}</td>
         <td>{$vo['user_name']}</td>
-        <td>{$vo['nickname']}</td>
-        <td>{$voo[$vo['u_level']]}</td>
-        <td>{$vo['user_tel']}</td>
-        <td><eq name="vo['is_agent']" value='2'><span style="color:BLUE;">是</span><else/>否</eq></td>
-        <td><eq name="vo['sh_level']" value='0'>否</eq>
-            <eq name="vo['sh_level']" value='1'><span style="color:BLUE;">合伙人</span></eq>
-        	<eq name="vo['sh_level']" value='2'><span style="color:BLUE;">市场总监</span></eq>
-            <eq name="vo['sh_level']" value='3'><span style="color:BLUE;">市场监理</span></eq>
-            <eq name="vo['sh_level']" value='4'><span style="color:BLUE;">市场董事</span></eq>
-            <eq name="vo['sh_level']" value='5'><span style="color:BLUE;">全国董事</span></eq>
-        <td><eq name="vo['is_aa']" value='1'><span style="color:BLUE;">是</span><else/>否</eq></td>
-        <td>{$vo.pdt|date='Y-m-d H:i:s',###}</td>
-        <td>{$vo['cpzj']}</td>
-          <td>{$vo['f4']}</td>
-        <td>{$vo['is_cc']}</td>
-        <td>{$vo['shang_ach']}</td>
-		<!-- <td>{$vo['out_gupiao']}</td>
-		<td>{$vo['buy_gupiao']}</td>
-		<td>{$vo['flat_gupiao']}</td>
-		<td>{$vo['give_gupiao']}</td> -->
-        <td><eq name="vo['is_lock']" value='0'><span style="color: #FF0000;">未锁定</span><else />已锁定</eq><eq name="vo['is_pay']" value='2'>[空单]</eq></td>
-        <!--<td><eq name="vo['is_aa']" value='0'><span style="color: #FF0000;">正常</span><else />出局</eq></td>-->
-        <td><eq name="vo['is_fenh']" value='0'><span style="color: #FF0000;">开启奖金</span><else />关闭奖金</eq></td>
+        <td>{$vo['tel']}</td>
+        <td><eq name="vo['is_agent']" value='1'><span style="color:BLUE;">是</span><else/>否</eq></td>
+        <td>{$vo.bk7|date='Y-m-d H:i:s',###}</td>
+        <td>{$vo['money']}</td>
+        <td>{$vo['re_money']}</td>
+        <td><eq name="vo['status']" value='0'>未锁定<else /><span style="color: #FF0000;">已锁定</span></eq></td>
+        <td><eq name="vo['is_fenh']" value='0'>已开启<else /><span style="color: #FF0000;">已关闭</span></eq></td>
         </tr>
     </volist>
-
-
-<!--<tr style="display:none">
-<td colspan="13" align="center"><font color="#FF0000">总业绩： {$f4_count}</font></td>
-</tr>-->
 </table>
-
-
 <table width="100%" class="tab3_bottom" border="0" cellpadding="0" cellspacing="1">
     <tr>
    	  <td width="60%">
       <input name="全选" type="button" class="button_text" id="全选" onclick="CheckAll(this.form)" value="全选" />	  &nbsp;&nbsp;
 	  <input type="submit" name="action" value="开启会员" class="button_text" onclick="{if(confirm('确定要开启会员吗?')){return true;}return false;}">&nbsp;&nbsp;
 	  <input type="submit" name="action" value="锁定会员" class="button_text" onclick="{if(confirm('确定要锁定会员吗?')){return true;}return false;}">&nbsp;&nbsp;
-      <input type="submit" name="action" value="删除会员" class="button_text" onclick="{if(confirm('确定要删除会员吗?')){return true;}return false;}">&nbsp;&nbsp;
+      <!--<input type="submit" name="action" value="删除会员" class="button_text" onclick="{if(confirm('确定要删除会员吗?')){return true;}return false;}">&nbsp;&nbsp;-->
 	  <input type="submit" name="action" value="开启奖金" class="button_text" onclick="{if(confirm('确定要开启奖金吗?')){return true;}return false;}">&nbsp;&nbsp;
 	  <input type="submit" name="action" value="关闭奖金" class="button_text" onclick="{if(confirm('确定要关闭奖金吗?')){return true;}return false;}">&nbsp;&nbsp;
   	  <input type="submit" name="action" value="设为实体服务中心" class="button_text" onclick="{if(confirm('确定要设为实体服务中心吗?')){return true;}return false;}">&nbsp;&nbsp;

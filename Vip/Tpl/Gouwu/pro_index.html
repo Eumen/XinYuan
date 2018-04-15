@@ -12,14 +12,13 @@
 	<th ></th>
 	<th nowrap >商品编号</th>
 	<th nowrap >商品名称</th>
-	<!--<th nowrap >结算账号</th>-->
+	<th nowrap >库存</th>
 	<th nowrap >分类</th>
 	<th nowrap >会员价</th>
 	<th nowrap >市场价</th>
-	<th nowrap >发布时间</th>
+	<th nowrap >上架时间</th>
 	<th nowrap >屏蔽</th>
 	<th nowrap >图片地址</th>
-	<th nowrap >是否注册产品</th>
 	<th nowrap >操作</th>
 	</tr>
 <volist name="list" id="vo">
@@ -27,18 +26,22 @@
 	<td><div align="center">
 	  <input type="checkbox" name="checkbox[]" value="{$vo['id']}" class="btn2">
 	  </div></td>
-	<td>{$vo['cid']}</td>
-	
+	<td>{$vo['id']}</td>
 	<td nowrap >{$vo['name']|substr=0,60}</td>
-	<!--<td>{$vo['countid']}</td>-->
+	<td>{$vo['stock_count']}</td>
 	<td nowrap >{$vo.cptype|cp_name}</td>
-	<td nowrap >{$vo.a_money|default=0.00}</td>
-	<td nowrap >{$vo.b_money|default=0.00}</td>
-	<td nowrap >{$vo.create_time|date='Y-m-d H:i:s',###}</td>
-	<td nowrap ><eq name="vo['yc_cp']" value="1"><font color="red">屏蔽</font><else/>不屏蔽</eq></td>
-	<td nowrap ><eq name="vo['img']" value=""><else/>
-	  <a href="{$vo['img']}" target="_blank" title="查看原图">查看大图<img src="__PUBLIC__/Images/image_arrow.png" width="16" height="16" align="middle"/></a></eq></td>
-	  <td nowrap ><eq name="vo['is_reg']" value="1"><font color="red">是</font><else/>否</eq></td>
+	<td nowrap >{$vo.vip_price|default=0.00}</td>
+	<td nowrap >{$vo.sale_price|default=0.00}</td>
+	<td nowrap >{$vo.sell_time|date='Y-m-d H:i:s',###}</td>
+	<td nowrap ><eq name="vo['yc_cp']" value="1"><font color="red">已屏蔽</font><else/>未屏蔽</eq></td>
+	<td nowrap >
+		<eq name="vo['img1']" value="">
+		<else/>
+	  	<a href="{$vo['img1']}" target="_blank" title="查看原图">查看大图
+	  		<img src="__PUBLIC__/Images/image_arrow.png" width="16" height="16" align="middle"/>
+	  	</a>
+	  	</eq>
+	</td>
 	<td><a href="__URL__/pro_edit/EDid/{$vo['id']}">编辑</a></td>
 	</tr>
 </volist>

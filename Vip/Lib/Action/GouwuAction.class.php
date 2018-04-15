@@ -287,10 +287,8 @@ class GouwuAction extends CommonAction{
         $list = $product->where($where)->field($field)->order('id asc')->page($Page->getPage().','.$listrows)->select();
         //=================================================
         foreach($list as $voo){
-    // 零售价
+            // 零售价
 			$w_money = $voo['sale_price'];
-			// 批发价
-			$whole_sale_price = $voo['whole_sale_price'];
 			// 会员价
 			$e_money = $voo['vip_price'];
 			$cc[$voo['id']] = $w_money;
@@ -594,7 +592,7 @@ public function dizhiAdd(){
 		$path = ',';
 		foreach ($rs as $vo){
 			$str = explode(',',$vo);
-			$p_rs = $pora->where('id='.$str[0].'')->find();
+			$p_rs = $pora->where('id='.$str[0])->find();
 			if(!$p_rs){
 				$this->error("您所购买的产品暂时没货！");
 				exit;
@@ -615,7 +613,7 @@ public function dizhiAdd(){
 		// 会员表查询，判断二级密码
 		$member = D('member');
 		$member_rs = $member->where('id='.$Id) ->find();
-		$pw = md5(trim($_POST['Password']));
+		$pw = md5(trim($_POST['password2']));
 		if($member_rs['password2'] != $pw){
 			$this->error('二级密码输入错误!!');
 			exit;
@@ -628,12 +626,11 @@ public function dizhiAdd(){
 			exit;
 		}
 		$id = $_SESSION[C('USER_AUTH_KEY')];
-		
 		$gouwu = M('gouwu');
 		// 待存入数据库数据
 		$gwd = array();
 		// 邮寄地址
-		$gwd['address']     = $ars['address'];
+		$gwd['address'] = $ars['address'];
 		// 用户名
 		$gwd['user_id'] = $member_rs['user_id'];
 		// 用户姓名
@@ -648,14 +645,12 @@ public function dizhiAdd(){
 		$gwd['receive_name'] = $ars['user_name'];
 		// 收货人联系电话
 		$gwd['tel'] = $ars['tel'];
-		
 		// 发货人用户名============待修改部分
 		$gwd['send_id'] = $ars['user_id'];
 		// 发货人姓名============待修改部分
 		$gwd['send_name'] = $ars['user_name'];
 		// 发货人联系电话============待修改部分
 		$gwd['tel'] = $ars['tel'];
-		
 // 		// 确认发货人用户名============待修改部分
 // 		$gwd['confirm_send_id'] = $ars['user_id'];
 // 		// 确认发货人姓名============待修改部分
@@ -760,7 +755,7 @@ public function dizhiAdd(){
 				$map['name'] = array('like','%'. $title .'%');
 			}
 			$map['id'] = array('gt',0);
-			$orderBy = 'create_time desc,id desc';
+			$orderBy = 'sell_time desc,id desc';
 			$field  = '*';
 	        //=====================分页开始==============================================
 	        import ( "@.ORG.ZQPage" );  //导入分页类
@@ -791,7 +786,7 @@ public function dizhiAdd(){
 		$rs = $product->where($where)->field($field)->find();
 		if ($rs){
 			$this->assign('rs',$rs);
-			$this->us_membereditor('content',$rs['content'],400,"96%");
+			$this->us_fckeditor('content',$rs['content'],400,"96%");
 
 			$cptype = M('cptype');
 			$list = $cptype->where('status=0')->order('id asc')->select();
@@ -809,66 +804,80 @@ public function dizhiAdd(){
 		$this->_Admin_checkUser();
 		$product = M ('product');
 		$data = array();
-		//h 函数转换成安全html
-		$money = trim($_POST['money']);
-		$a_money = $_POST['a_money'];
-		$b_money = $_POST['b_money'];
-		$content = stripslashes($_POST['content']);
-		$title = trim($_POST['title']);
-		$cid = trim($_POST['cid']);
-		$image = $_POST['image'];
-		$ctime = trim($_POST['ctime']);
-		$ccname = $_POST['ccname'];
-		$xhname = $_POST['xhname'];
-		$countid = $_POST['countid'];
-		
+		// 产品名称
+		$name = trim($_POST['name']);
+		//联盟商家用户名
+		$user_id = trim($_POST['user_id']);
+		// 联盟商家店名
+		$shopName = trim($_POST['shopName']);
+		// 库存
+		$stock_count = trim($_POST['stock_count']);
+		// 产品分类
 		$cptype = trim($_POST['cptype']);
-		$isreg   =  trim($_POST['isreg']);
 		$cptype = (int)$cptype;
+		// 成本价
+		$price = $_POST['price'];
+		// 零售价
+		$sale_price = $_POST['sale_price'];
+		// 会员价
+		$vip_price = $_POST['vip_price'];
+		// 批发价
+		$whole_sale_price = $_POST['whole_sale_price'];
+		// 商品详情描述
+		$content = stripslashes($_POST['content']);
+		// 商品图片
+		$img1 = $_POST['img1'];
+		// 上架时间
+		$ctime = trim($_POST['sell_time']);
 		$ctime = strtotime($ctime);
-		if (empty($title)){
-			$this->error('标题不能为空!');
+		if (empty($name)){
+			$this->error('产品名称不能为空!');
 			exit;
 		}
-		if (empty($cid)){
-			$this->error('商品编号不能为空!');
+		if (empty($user_id)){
+		    $this->error('联盟商家用户名不能为空!');
+		    exit;
+		}
+		if (empty($shopName)){
+		    $this->error('联盟商家店名不能为空!');
+		    exit;
+		}
+		if (empty($stock_count)){
+			$this->error('库存不能为空!');
 			exit;
 		}
-		dump($isreg);
-// 		if (empty($countid)){
-// 			$this->error('结算账号不能为空!');
-// 			exit;
-// 		}
-//		if (empty($xhname)){
-//			$this->error('商品型号不能为空!');
-//			exit;
-//		}
-		if (empty($money)||!is_numeric($money)||empty($a_money)||!is_numeric($a_money)){
+		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;
 		}
-		if($money <= 0||$a_money <= 0){
-			$this->error('输入的价格有误!');
-			exit;
+		$member = M ('member');
+		$where = array();
+		$where['user_id'] = $user_id;
+		$member_rs = $member->where($where)->field('user_name')->find();
+		if (!$member_rs) {
+		    $this->error('该联盟商家不存在!');
+		    exit;
 		}
-
 		if(!empty($ctime)){
-			$data['create_time'] = $ctime;
+			$data['sell_time'] = $ctime;
 		}
-		$data['cid'] = $cid;
-		$data['ccname'] = $ccname;
-		$data['xhname'] = $xhname;
-		$data['money'] = $money;
-		$data['a_money'] = $a_money;
-		$data['b_money'] = $b_money;
-		$data['name'] = $title;
+		$data['id'] = $_POST['ID'];
+		$data['name'] = $name;
+		$data['user_id'] = $user_id;
+		$data['user_name'] = $member_rs['user_name'];
+		$data['shopName'] = $shopName;
+		$data['stock_count'] = $stock_count;
+		$data['cptype'] = $cptype;
+		$data['price'] = $price;
+		$data['sale_price'] = $sale_price;
+		$data['vip_price'] = $vip_price;
+		$data['whole_sale_price'] = $whole_sale_price;
 		$data['content'] = $content;
 		$data['cptype'] = $cptype;
-		$data['is_reg'] = $isreg;
-		$data['img'] = $image;
-// 		$data['countid'] = $countid;
-		$data['id'] = $_POST['ID'];
-
+		$data['img1'] = $img1;
+		$data['sell_time'] = $ctime;
+		
 		$rs = $product->save($data);
 		if (!$rs){
 			$this->error('编辑失败！');
@@ -887,13 +896,11 @@ public function dizhiAdd(){
 		//获取复选框的值
 		$PTid = $_POST["checkbox"];
 		if ($action=='添加'){
-
 			$cptype = M('cptype');
 			$list = $cptype->where('status=0')->order('id asc')->select();
 			$this->assign('list',$list);
 
-			$this->us_membereditor('content',"",400,"96%");
-
+			$this->us_fckeditor('content',"",400,"96%");
 			$this->display('pro_add');
 			exit;
 		}
@@ -950,49 +957,73 @@ public function dizhiAdd(){
 		$this->_Admin_checkUser();
 		$product = M('product');
 		$data = array();
-		//h 函数转换成安全html
-		$content = trim($_POST['content']);
-		$title = trim($_POST['title']);
-		$cid = trim($_POST['cid']);
-		$image = trim($_POST['image']);
-		$money = $_POST['money'];
-		$a_money = $_POST['a_money'];
-		$b_money = $_POST['b_money'];
-		$ccname = $_POST['ccname'];
-		$xhname = $_POST['xhname'];
-		$countid = $_POST['countid'];
+		// 产品名称
+		$name = trim($_POST['name']);
+		//联盟商家用户名
+		$user_id = trim($_POST['user_id']);
+		// 联盟商家店名
+		$shopName = trim($_POST['shopName']);
+		// 库存
+		$stock_count = trim($_POST['stock_count']);
+		// 产品分类
 		$cptype = trim($_POST['cptype']);
-		$isreg = trim($_POST['isreg']);
-	
-		if (empty($title)){
-			$this->error('商品名称不能为空!');
+		$cptype = (int)$cptype;
+		// 成本价
+		$price = $_POST['price'];
+		// 零售价
+		$sale_price = $_POST['sale_price'];
+		// 会员价
+		$vip_price = $_POST['vip_price'];
+		// 批发价
+		$whole_sale_price = $_POST['whole_sale_price'];
+		// 商品详情描述
+		$content = stripslashes($_POST['content']);
+		// 商品图片
+		$img1 = $_POST['img1'];
+		$ctime = strtotime($ctime);
+		if (empty($name)){
+			$this->error('产品名称不能为空!');
 			exit;
 		}
-		if (empty($cid)){
-			$this->error('商品编号不能为空!');
+		if (empty($user_id)){
+		    $this->error('联盟商家用户名不能为空!');
+		    exit;
+		}
+		if (empty($shopName)){
+		    $this->error('联盟商家店名不能为空!');
+		    exit;
+		}
+		if (empty($stock_count)){
+			$this->error('库存不能为空!');
 			exit;
 		}
-		if (empty($a_money)||!is_numeric($a_money)){
+		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;
 		}
-		if($a_money <= 0){
-			$this->error('输入的价格有误!');
-			exit;
+		$member = M ('member');
+		$where = array();
+		$where['user_id'] = $user_id;
+		$member_rs = $member->where($where)->field('user_name')->find();
+		if (!$member_rs) {
+		    $this->error('该联盟商家不存在!');
+		    exit;
 		}
-
-		$data['name'] = $title;
-		$data['cid'] = $cid;
-		$data['content'] = stripslashes($content);
-		$data['img'] = $image;
-		$data['create_time'] = mktime();
-		$data['money'] = $money;
-		$data['a_money'] = $a_money;
-		$data['b_money'] = $b_money;
-		$data['ccname'] = $ccname;
-		$data['xhname'] = $xhname;
+		$data['name'] = $name;
+		$data['user_id'] = $user_id;
+		$data['user_name'] = $member_rs['user_name'];
+		$data['shopName'] = $shopName;
+		$data['stock_count'] = $stock_count;
 		$data['cptype'] = $cptype;
-		$data['is_reg'] = $isreg;
+		$data['price'] = $price;
+		$data['sale_price'] = $sale_price;
+		$data['vip_price'] = $vip_price;
+		$data['whole_sale_price'] = $whole_sale_price;
+		$data['content'] = $content;
+		$data['cptype'] = $cptype;
+		$data['img1'] = $img1;
+		$data['sell_time'] = mktime();
 		$form_rs = $product->add($data);
 		if (!$form_rs){
 			$this->error('添加失败');
@@ -1302,53 +1333,41 @@ public function dizhiAdd(){
         header("content-type:text/html;charset=utf-8");
         $this->_Admin_checkUser();//后台权限检测
         // 文件上传处理函数
-
         //载入文件上传类
         import("@.ORG.UploadFile");
         $upload = new UploadFile();
-
         //设置上传文件大小
         $upload->maxSize  = 1048576 * 2 ;// TODO 50M   3M 3292200 1M 1048576
-
         //设置上传文件类型
         $upload->allowExts  = explode(',','jpg,gif,png,jpeg');
-
         //设置附件上传目录
         $upload->savePath =  './Public/Uploads/image/';
-
         //设置需要生成缩略图，仅对图像文件有效
        $upload->thumb =  false;
-
        //设置需要生成缩略图的文件前缀
         $upload->thumbPrefix   =  'm_';  //生产2张缩略图
-
        //设置缩略图最大宽度
         $upload->thumbMaxWidth =  '800';
-
        //设置缩略图最大高度
         $upload->thumbMaxHeight = '600';
-
        //设置上传文件规则
-//		$upload->saveRule = uniqid;
 		$upload->saveRule = date("Y").date("m").date("d").date("H").date("i").date("s").rand(1,100);
-
        //删除原图
        $upload->thumbRemoveOrigin = true;
-
         if(!$upload->upload()) {
-    //捕获上传异常
-    $error_p=$upload->getErrorMsg();
-    echo "<script>alert('".$error_p."');history.back();</script>";
-        }else {
-    //取得成功上传的文件信息
-    $uploadList = $upload->getUploadFileInfo();
-    $U_path=$uploadList[0]['savepath'];
-    $U_nname=$uploadList[0]['savename'];
-    $U_inpath=(str_replace('./Public/','__PUBLIC__/',$U_path)).$U_nname;
-
-    echo "<script>window.parent.form1.image.value='".$U_inpath."';</script>";
-    echo "<span style='font-size:12px;'>上传完成！</span>";
-    exit;
+        //捕获上传异常
+        $error_p=$upload->getErrorMsg();
+        echo "<script>alert('".$error_p."');history.back();</script>";
+            }else {
+        //取得成功上传的文件信息
+        $uploadList = $upload->getUploadFileInfo();
+        $U_path=$uploadList[0]['savepath'];
+        $U_nname=$uploadList[0]['savename'];
+        $U_inpath=(str_replace('./Public/','__PUBLIC__/',$U_path)).$U_nname;
+    
+        echo "<script>window.parent.form1.img1.value='".$U_inpath."';</script>";
+        echo "<span style='font-size:12px;'>上传完成！</span>";
+        exit;
 
         }
     }

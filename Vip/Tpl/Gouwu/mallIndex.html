@@ -86,6 +86,10 @@ body {
   padding-right: 15px;
 }
 
+.float-left {
+	float: left;
+}
+
 code {
   font-size: 80%;
 }
@@ -94,17 +98,20 @@ code {
 <script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
 </head>
 <body>
+
+<div class="col-xs-12" style="background-color: #269abc;">
+		<div class="float-left"
+			style="color: #ffffff; font-weight: bold; padding-top: 2px; font-size: 20px; height: inherit;">
+			车壹号管理系统</div>
+		<div class="pull-right">
+			<img src="__PUBLIC__/resource/image/escape.png"
+				class="img-responsive" style="cursor:pointer;"
+				onclick="javascript:window.location.href='__APP__/Index/index'" />
+		</div>
+	</div>
+
 <!-- Wrap all page content here -->
 <div id="wrap">
-  <!-- Fixed navbar -->
-  <div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand center" >车壹号尾气净化剂管理系统</a>
-      </div>
-    </div>
-  </div>
-  <a href="javascript:history.back();" class="btn-sm btn-info">返回</a>
 <div class="container">
 	<div class="row center">
 		<div class="col-xs-12">

@@ -130,7 +130,7 @@
 	                     	<li class='news-item'>
 	                   		<?php printf($value["title"])?>
 	                   		<a href='__APP__/News/News'>查看更多...</a></li>
-	 					 <?php } ?>
+	 					 <?php }; ?>
 	 					 </ul>
 					</div>
 				</div>
@@ -234,15 +234,13 @@
       </div>
     </div>
   </div>
-  
-
-
 <script src="__PUBLIC__/Js/Jquery/jquery.bootstrap.newsbox.min.js"
 	type="text/javascript"></script>
 <script type="text/javascript" src="__PUBLIC__/Js/Jquery/jquery.qrcode.min.js"></script>  
 <script type="text/javascript">
 	window.onload =function(){
-	$('#qrDiv').qrcode("http://www.baidu.com");
+	$('#qrDiv').qrcode("http://localhost/index.php/Reg/reg?rid={$_SESSION['loginUseracc']}");
+	
 	 }
 	$(function() {
 		$(".demo2").bootstrapNews({

@@ -359,8 +359,8 @@ class ChangeAction extends CommonAction {
 		//裁剪原图
 		$Think_img->open($pic_path)->crop($params['w'],$params['h'],$params['x'],$params['y'])->save($real_path);
 		//生成缩略图
-		$final_path = $path.$randPath.'avatar_200_200.jpg';
-		$Think_img->open($pic_path)->thumb(200,200, 1)->save($final_path);
+		$final_path = $path.$randPath.'avatar_150_150.jpg';
+		$Think_img->open($pic_path)->thumb(150,150, 1)->save($final_path);
 // 		$Think_img->open($real_path)->thumb(60,60, 1)->save($path.'avatar_60.jpg');
 // 		$Think_img->open($real_path)->thumb(30,30, 1)->save($path.'avatar_30.jpg');
 		$out_realpath = str_replace("./","/",__ROOT__.$final_path);

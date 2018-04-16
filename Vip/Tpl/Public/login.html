@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="__PUBLIC__/resource/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="__PUBLIC__/resource/assets/css/style.css">
 <script type="text/javascript">
-	document
-			.write("<scr"+"ipt src=\"__PUBLIC__/Js/jquery-1.7.2.min.js\"></sc"+"ript>")
+	document.write("<scr"+"ipt src=\"__PUBLIC__/Js/jquery-1.7.2.min.js\"></sc"+"ript>")
 </script>
-
+<script src="__PUBLIC__/resource/assets/js/scripts.js"></script>
+<script src="__PUBLIC__/resource/assets/js/jquery.backstretch.min.js"></script>
 <script type="text/javascript">
 	document.write("<scr"+"ipt src=\"__PUBLIC__/Js/Base.js\"></sc"+"ript>")
 </script>
@@ -32,49 +32,43 @@
 <script type="text/javascript">
 	document.write("<scr"+"ipt src=\"__PUBLIC__/Js/common.js\"></sc"+"ript>")
 </script>
-
-<script type="text/JavaScript" language="JavaScript"
-	src="__PUBLIC__/Js/jquery.SuperSlide.2.1.1.source.js">
-	
-</script>
-
-
-<!--[if IE 6]>
-<script type="text/javascript">document.write("<scr"+"ipt src=\"__PUBLIC__/Js/DD_belatedPNG_0.0.8a-min.js\"></sc"+"ript>")</script>
-<script>
-  DD_belatedPNG.fix('#login_box,.l-logo');  // IE6，PNG透明
-</script>
-<![endif]-->
-<script type="text/javascript">
-	jQuery.noConflict();
-	jQuery(document).ready(function() {
-		jQuery(".input_0").focus(function(e) {
-			jQuery(this).siblings(".input_hint").hide();
-		});
-		jQuery(".input_0").blur(function(e) {
-			jQuery(this).val(jQuery.trim(jQuery(this).val()));
-			if ((jQuery(this).val()).length == 0)
-				jQuery(this).siblings(".input_hint").show();
-		});
-		jQuery(".input_hint").click(function(e) {
-			e.stopPropagation();
-			jQuery(this).siblings(".input_0").focus();
-		});
-	});
-</script>
+<style>
+div#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -10;
+  background-position: center 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  zoom: 1;
+ 
+  opacity:1;
+  transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+  -webkit-transition: opacity 1s linear;
+  -o-transition: opacity 1s linear;
+}
+</style>
 </head>
 <body>
-
-
-
+	<div id="bg"></div>
 	<div class="header">
 		<div class="container">
 			<div class="span4">
-				<h3 class="blue">车壹号.</h3>
+				<h3 class="blue">车壹号</h3>
 			</div>
 		</div>
 	</div>
 	<div class="register-container container">
+		<div class="iphone span5">
+            <img src="__PUBLIC__/resource/assets/img/iphone.png" alt="">
+        </div>
 		<div class="row" style="margin-left: 20%; max-width: inherit; display: block;">
 			<div class="register span6">
 				<form method='post' name="login" id="form1" onsubmit="return false">
@@ -140,8 +134,6 @@
 
 </body>
 </html>
-
-
 <script language="JavaScript">
 <!--
 	var PUBLIC = '__PUBLIC__';
@@ -178,4 +170,27 @@
 	}
 //-->
 </script>
+<script>
+	// 定义图片路径 {num} 为 可变的图片序号
+	var bgImgUrl = '__PUBLIC__/resource/assets/img/backgrounds/{num}.jpg', bgNum,
+		bgImgArr = [],
+		bgDiv = document.getElementById("bg");
+	// 组合数组 此处 200 为 图开始序号 结束 210
+	for (var i=200; i <= 202; i++){
+		bgImgArr.push(bgImgUrl.replace('{num}', i));
+	}
+	setBGimg();
+	function setBGimg(d){
+		if(!bgNum || bgNum >= bgImgArr.length) bgNum = 0;
+		bgDiv.style.opacity = .001;
+		setTimeout(function(){
+			bgDiv.style.backgroundImage = 'url('+ bgImgArr[bgNum] +')';
+			bgNum++;
+			bgDiv.style.opacity = 1;
+		}, 1000);
+		if(typeof d == 'undefined')
+		setInterval(function(){setBGimg(true);}, 6000);
+		// 上一行的 6000 是背景图片自动切换时间(单位 毫秒)
+	}
+	</script>
 

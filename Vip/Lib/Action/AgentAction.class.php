@@ -768,7 +768,7 @@ class AgentAction extends CommonAction
             }
             // 是否支付
             $map['bk4'] = array('eq',0);
-            // 报单中心
+            // 报单中心以下会员都可以查看
             $map['p_path'] = array( 'like',','.$id.',');
             // 查询字段
             $field = '*';
@@ -831,10 +831,11 @@ class AgentAction extends CommonAction
         // 列表过滤器，生成查询Map对象
         $member = M('member');
         $map = array();
+        $id = $_SESSION[C('USER_AUTH_KEY')];
         $user_id = $_SESSION['loginUseracc'];
         $gid = (int) $_GET['bj_id'];
-        // 服务中心ID
-        $map['bk5'] = $user_id;
+        // 报单中心以下会员都可以查看
+        $map['p_path'] = array( 'like',','.$id.',');
         // 是否支付
         $map['bk4'] = array( 'gt',0);
         $UserID = $_POST['UserID'];

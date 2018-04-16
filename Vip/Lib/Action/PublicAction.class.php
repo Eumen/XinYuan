@@ -254,7 +254,7 @@ class PublicAction extends CommonAction
         }
         import('@.ORG.RBAC');
         $fck = M('member');
-        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8';
+        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8,us_img';
         $authInfo = $fck->where($map)->field($field)->find();
         // 使用用户名、密码和状态的方式进行认证
         if (false == $authInfo) {
@@ -264,35 +264,39 @@ class PublicAction extends CommonAction
                 $this->error('密码错误！');
                 exit();
         }
-            $_SESSION[C('USER_AUTH_KEY')] = $authInfo['id'];
-            $_SESSION['loginUseracc'] = $authInfo['user_id']; // 用户名
-            $_SESSION['loginUserName'] = $authInfo['user_name']; // 用户姓名
-            $_SESSION['register_time'] = $authInfo['register_time'];// 注册时间
-            $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];// 最近登录时间
-            $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否服务中心
-            $_SESSION['cash'] = $authInfo['cash']; // 现金币
-            $_SESSION['point'] = $authInfo['point']; // 积分币
-            $_SESSION['bk8'] = $authInfo['bk8']; // 基金
-            $_SESSION['UserMktimes'] = mktime();
-            // 身份确认 = 用户名+识别字符+密码
-            $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
-            // 登录状态（多点登录设置）
-            $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
-            $_SESSION['login_user_type'] = $user_type;
-            $where['id'] = $authInfo['id'];
-            $fck->where($where)->setField('bk3', $user_type);
-            $fck->where($where)->setField('last_login_time',mktime());
-            // 管理员
-            $parmd = $this->_cheakPrem();
-            if ($authInfo['id'] == 1 || $parmd[11] == 1) {
-                $_SESSION['administrator'] = 1;
-            } else {
-                $_SESSION['administrator'] = 2;
-            }
-            $fck->execute("update __TABLE__ set last_login_time=" . time() . ",last_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
-            // 缓存访问权限
-            RBAC::saveAccessList();
-            $this->success('登录成功！');
+        $news = M('news');
+        $news_result = $news->where('status = 0')->field('title')->select();
+        $_SESSION['news'] = $news_result; // 新闻信息
+        $_SESSION[C('USER_AUTH_KEY')] = $authInfo['id'];
+        $_SESSION['loginUseracc'] = $authInfo['user_id']; // 用户名
+        $_SESSION['loginUserName'] = $authInfo['user_name']; // 用户姓名
+        $_SESSION['register_time'] = $authInfo['register_time'];// 注册时间
+        $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];// 最近登录时间
+        $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否服务中心
+        $_SESSION['cash'] = $authInfo['cash']; // 现金币
+        $_SESSION['point'] = $authInfo['point']; // 积分币
+        $_SESSION['bk8'] = $authInfo['bk8']; // 基金
+        $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
+        $_SESSION['UserMktimes'] = mktime();
+        // 身份确认 = 用户名+识别字符+密码
+        $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);
+        // 登录状态（多点登录设置）
+        $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
+        $_SESSION['login_user_type'] = $user_type;
+        $where['id'] = $authInfo['id'];
+        $fck->where($where)->setField('bk3', $user_type);
+        $fck->where($where)->setField('last_login_time',mktime()); 
+        // 管理员
+        $parmd = $this->_cheakPrem();
+        if ($authInfo['id'] == 1 || $parmd[11] == 1) {
+            $_SESSION['administrator'] = 1;
+        } else {
+            $_SESSION['administrator'] = 2;
+        }
+        $fck->execute("update __TABLE__ set last_login_time=" . time() . ",last_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
+        // 缓存访问权限
+        RBAC::saveAccessList();
+        $this->success('登录成功！');
         }
     }
     // 二级密码验证

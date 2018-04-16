@@ -61,7 +61,7 @@
     <div class="col-xs-12">
         <div class="col-xs-3 text-left">
             <div class="row">
-                <img class="img-circle img-responsive" src="__PUBLIC__/resource/image/grzx.png"/>
+                <img class="img-circle img-responsive" src="{$_SESSION['us_img']}"/>
             </div>
         </div>
         <div class="col-xs-6">
@@ -125,9 +125,13 @@
     <div class="col-xs-12 margin-top">
 				<div class="panel-body">
 					<div class="row">
-							<ul class="demo2">
-								<li class="news-item">2018年04月11日，公司系统正式上线... <a href="__APP__/News/News">查看更多...</a></li>
-							</ul>
+						<ul class='demo2'>
+	                     <?php foreach ($_SESSION['news'] as $key => $value){ ?>
+	                     	<li class='news-item'>
+	                   		<?php printf($value["title"])?>
+	                   		<a href='__APP__/News/News'>查看更多...</a></li>
+	 					 <?php } ?>
+	 					 </ul>
 					</div>
 				</div>
     </div>

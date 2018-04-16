@@ -718,17 +718,6 @@ class AgentAction extends CommonAction
                 exit();
             }
             
-            // $bqycount=0;
-            // if($shoplx==1){
-            // $bqycount = $member->where("is_agent>0 and shop_a=".$shop_a)->count;
-            // }elseif($shoplx==2){
-            // $bqycount = $member->where("is_agent>0 and shop_b=".$shop_b)->count;
-            // }
-            // if($bqycount>0){
-            // $this->error('本区域的服务中心已经存在!');
-            // exit;
-            // }
-            
             if (empty($content)) {
                 $this->error('请输入备注!');
                 exit();
@@ -754,6 +743,7 @@ class AgentAction extends CommonAction
         if ($_SESSION['Urlszpass'] == 'MyssShuiPuTao') {
             $member = M('member');
             $map = array();
+            $id = $_SESSION[C('USER_AUTH_KEY')];
             $user_id = $_SESSION['loginUseracc'];
             $gid = (int) $_GET['bj_id'];
             $UserID = $_POST['UserID'];
@@ -779,7 +769,7 @@ class AgentAction extends CommonAction
             // 是否支付
             $map['bk4'] = array('eq',0);
             // 报单中心
-            $map['bk5'] = array( 'eq',$user_id);
+            $map['p_path'] = array( 'like',','.$id.',');
             // 查询字段
             $field = '*';
             // =====================分页开始==============================================
@@ -791,17 +781,11 @@ class AgentAction extends CommonAction
             // ===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show(); // 分页变量
             $this->assign('page', $show); // 分页变量输出到模板
-            $list = $member->where($map)
-                ->field($field)
-                ->order('bk4 asc,register_time desc')
-                ->page($Page->getPage() . ',' . $listrows)
-                ->select();
+            $list = $member->where($map)->field($field)->order('bk4 asc,register_time desc')->page($Page->getPage() . ',' . $listrows)->select();
             $this->assign('list', $list); // 数据输出到模板
             $where = array();
             $where['user_id'] = $user_id;
-            $member_rs = $member->where($where)
-                ->field('*')
-                ->find();
+            $member_rs = $member->where($where)->field('*')->find();
             $this->assign('frs', $member_rs);
             $this->display('menber');
             exit();

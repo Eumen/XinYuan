@@ -254,7 +254,7 @@ class PublicAction extends CommonAction
         }
         import('@.ORG.RBAC');
         $fck = M('member');
-        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8';
+        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8,us_img';
         $authInfo = $fck->where($map)->field($field)->find();
         // 使用用户名、密码和状态的方式进行认证
         if (false == $authInfo) {
@@ -273,6 +273,8 @@ class PublicAction extends CommonAction
             $_SESSION['cash'] = $authInfo['cash']; // 现金币
             $_SESSION['point'] = $authInfo['point']; // 积分币
             $_SESSION['bk8'] = $authInfo['bk8']; // 基金
+//             $real_path=(str_replace('./Public/','__PUBLIC__/',$authInfo['us_img']));
+            $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
             $_SESSION['UserMktimes'] = mktime();
             // 身份确认 = 用户名+识别字符+密码
             $_SESSION['login_sf_list_u'] = md5($authInfo['user_id'] . 'wodetp_new_1012!@#' . $authInfo['password'] . $_SERVER['HTTP_USER_AGENT']);

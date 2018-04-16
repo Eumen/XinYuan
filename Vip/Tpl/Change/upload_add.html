@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base target="_self"> 
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/jquery.Jcrop.min.css" media="all">
 <script type="text/javascript" src="__PUBLIC__/Js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="__PUBLIC__/Js/jquery.Jcrop.min.js"></script>
@@ -10,33 +11,47 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Js/ThinkBox/css/ThinkBox.css" media="all">
 <script type="text/javascript" src="__PUBLIC__/Js/ThinkBox/jquery.ThinkBox.js"></script>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/uploadimage.css" media="all">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/Css/bootstrap.min.css" title="default">
 
-<title>Upload</title>
+<title>上传头像</title>
 </head>
-
 <body>
-<div class="main">
+<div class="container">
 <!-- 修改头像 -->
-<form action="__URL__/cropImg" method="post" id="pic" class="update-pic cf">
-	<div class="preview-area">
-		<input type="hidden" id="x" name="x" />
-		<input type="hidden" id="y" name="y" />
-		<input type="hidden" id="w" name="w" />
-		<input type="hidden" id="h" name="h" />
-		<input type="hidden" id='img_src' name='src'/>
-		<div class="tcrop">图片预览</div>
-		<div class="crop crop220_150"><img id="crop-preview-100" src="" alt="" style="width:200px;height:200px"></div>
-		<!--div class="crop crop60"><img id="crop-preview-60" src="" alt=""></div-->
-		<a class="uppic-btn save-pic" id="saveImg" href="javascript:;">保存</a>
-		<a class="uppic-btn" id="cancelImg" href="javascript:$('#user-pic').uploadify('cancel','*');">重选图片</a>
-	</div>
-	<div class="upload-area" id="selectImg">
-		<input type="file" id="user-pic">
-		<div class="file-tips">支持JPG,PNG,GIF，图片小于1MB，尺寸不小于100*100,真实高清图片更受欢迎！</div>
-		<div class="preview hidden" id="preview-hidden"></div>
-	</div>
-</form>
-<!-- /修改头像 -->
+		<div class="row">
+			<div class="col-xs-12">
+				<form action="__APP__/Change/cropImg" method="post" id="pic"
+					class="update-pic cf">
+					<div class="form-group">
+						<div class="col-sm-3 col-xs-6">
+							<div class="preview-area">
+							<input type="hidden" id="x" name="x" /> <input type="hidden"
+								id="y" name="y" /> <input type="hidden" id="w" name="w" /> <input
+								type="hidden" id="h" name="h" /> <input type="hidden"
+								id='img_src' name='src' />
+							<div class="tcrop">图片预览</div>
+							<div class="crop crop220_150">
+								<img id="crop-preview-100" src="" alt=""
+									style="width: 200px; height: 200px">
+							</div>
+							<a class="uppic-btn save-pic" id="saveImg" href="javascript:;">保存</a>
+							<a class="uppic-btn" id="cancelImg"
+								href="javascript:$('#user-pic').uploadify('cancel','*');">重选图片</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-2  col-xs-6">
+					<div class="upload-area" id="selectImg">
+						<input type="file" id="user-pic">
+							<div class="file-tips">支持JPG,PNG,GIF，图片小于1MB，尺寸不小于100*100,真实高清图片更受欢迎！</div>
+							<div class="preview hidden" id="preview-hidden"></div>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- /修改头像 -->
 </div>
 <script type="text/javascript">
 	$(function(){		
@@ -160,7 +175,7 @@
 		        return false;
 		    }  
 		}
-	})
+	});
 	
 </script>
 

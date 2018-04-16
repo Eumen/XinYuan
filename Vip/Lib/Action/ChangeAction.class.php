@@ -159,6 +159,8 @@ class ChangeAction extends CommonAction {
 			if($rs){
 				$bUrl = __URL__.'/profile';
 				$this->_box(1,'资料修改成功！',$bUrl,1);
+			} else {
+			    $this->_box(1,'资料修改成功！',$bUrl,1);
 			}
 		}else{
 			$this->error('操作错误!');

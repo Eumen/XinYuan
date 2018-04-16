@@ -170,7 +170,7 @@ class NewsAction extends CommonAction{
 		$data['content'] = $content;
 		$data['user_id'] = $_POST['user_id'];
 		$data['create_time'] = $ttime;
-		$data['status'] = 1;
+		$data['status'] = 0;
 		$data['news_type'] = $_POST['type'];
 
 		$rs = $User->add($data);
@@ -188,7 +188,7 @@ class NewsAction extends CommonAction{
 	private function News_Open($PTid=0){
 		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
-		$User->where($where)->setField('status',1);
+		$User->where($where)->setField('status',0);
 		$bUrl = __URL__.'/adminnews';
 		$this->_box(1,'启用成功！',$bUrl,1);
 		exit;
@@ -197,7 +197,7 @@ class NewsAction extends CommonAction{
 	private function News_Stop($PTid=0){
 		$User = M ('news');
 		$where['id'] = array ('in',$PTid);
-		$User->where($where)->setField('status',0);
+		$User->where($where)->setField('status',1);
 		$bUrl = __URL__.'/adminnews';
 		$this->_box(1,'禁用成功！',$bUrl,1);
 		exit;
@@ -305,7 +305,7 @@ class NewsAction extends CommonAction{
 	//前台新闻
 	public function News() {
 		$map = array();
-		$map['status'] = 1;
+		$map['status'] = 0;
 		$form = M ('news');
         $field  = '*';
         //=====================分页开始==============================================
@@ -329,7 +329,7 @@ class NewsAction extends CommonAction{
 		$id = (int) $_GET['NewID'];
 		$where = array();
 		$where['id'] = $id;
-		$where['status'] = 1;
+		$where['status'] = 0;
 		$vo = $model->where($where)->find();
 		$vo['content'] = stripslashes($vo['content']);//去掉反斜杠
 		$this->assign ( 'vo', $vo );

@@ -28,7 +28,7 @@
        <!-- <td>{$vo['e_title']|mysubstr=###,20}</td>-->
         <td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
         <td><eq name="vo['baile']" value="1"><span class="STYLE3">置顶</span></eq><eq name="vo['baile']" value="0">未置顶</eq></td>
-        <td><eq name="vo['status']" value="1">启用</eq><eq name="vo['status']" value="0"><span class="STYLE1">禁用</span></eq></td>
+        <td><eq name="vo['status']" value="0">启用<else /><span class="STYLE1">禁用</span></eq></td>
         <td><a href="__URL__/News_edit/EDid/{$vo['id']}">编辑</a></td>
     </tr>
     </volist>

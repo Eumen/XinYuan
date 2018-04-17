@@ -1,160 +1,44 @@
-﻿<html style="font-size: 32px;">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>车壹号尾气净化剂管理系统</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=2.0, user-scalable=1"> -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="layoutmode" content="standard">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="renderer" content="webkit">
-
-<meta name="wap-font-scale" content="no">
-<meta content="telephone=no" name="format-detection">
-<meta http-equiv="Pragma" content="no-cache">
-
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/normalize.css" />
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/default.css">
-<link href="__PUBLIC__/Css/site.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/bootstrap.min.css" title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/bootstrap.css" title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/bootstrap-theme.css" title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/bootstrap-theme.min.css" title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/animate.min.css" title="">
-<link rel="stylesheet" id="mobiStyleTemplateCss" type="text/css"
-	href="__PUBLIC__/Css/common.css">
-<link rel="stylesheet" id="mobiCubeNavigationCss" type="text/css"
-	href="__PUBLIC__/Css/style.css">
-<link rel="stylesheet" id="mobiCubeNavigationCss" type="text/css"
-	href="__PUBLIC__/Css/style.min.css">
-<link rel="stylesheet" id="mobiCubeNavigationCss" type="text/css"
-	href="__PUBLIC__/Css/login0.css">
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/ace.css"
-	title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/ace-fonts.css" title="default">
-<link rel="stylesheet" type="text/css"
-	href="__PUBLIC__/Css/fonts-awesome.css" title="default">
-<!-- <style>
-body {background-color:#cccccc;}
-</style>
- -->
-<style>
-/* Sticky footer styles
--------------------------------------------------- */
-html, body {
-	height: 100%;
-	/* The html and body elements cannot have any padding or margin. */
-}
-
-/* Wrapper for page content to push down footer */
-#wrap {
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	/* Negative indent footer by its height */
-	margin: 0 auto -60px;
-	/* Pad bottom by footer height */
-	padding: 0 0 60px;
-}
-
-/* Set the fixed height of the footer here */
-#footer {
-	height: 60px;
-	background-color: #f5f5f5;
-}
-
-#wrap>.container {
-	padding: 60px 15px 0;
-}
-
-.container .credit {
-	margin: 20px 0;
-}
-
-.footer {
-	padding-top: 15px;
-	padding-bottom: 30px;
-	margin-top: 50px;
-	width: 100%;
-	height: 40px;
-	border-top: 4px solid #269abc;
-}
-
-code {
-	font-size: 80%;
-}
-</style>
-<script src="__PUBLIC__/Js/Jquery/jquery-1.11.3.min.js"></script>
-<script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
-</head>
-<!-- Wrap all page content here -->
-<body>
-		<div class="col-xs-12" style="background-color: #269abc;">
-			<div
-				style="color: #ffffff; font-weight: bold; padding-top: 2px; font-size: 20px; height: inherit; float: left">
-				车壹号管理系统</div>
-			<div class="pull-right">
-				<img src="__PUBLIC__/resource/image/escape.png"
-					class="img-responsive" style="cursor:pointer;"
-					onclick="javascript:window.location.href='__APP__/Index/index'" />
+﻿<include file="Public:xyHead" />
+<div id="wrap">
+	<!-- Fixed navbar -->
+	<div class="container">
+		<div class="row center">
+			<div class="col-xs-12">
+				<button class="btn-lg btn-primary" type="button"
+					onclick="location.href='__APP__/Agent/agencyApply'">申请服务中心</button>
 			</div>
 		</div>
-	<div id="wrap">
-		<!-- Fixed navbar -->
-		<div class="container">
-			<div class="row center">
-				<div class="col-xs-12">
-					<button class="btn-lg btn-primary" type="button"
-						onclick="location.href='__APP__/Agent/agencyApply'">申请服务中心</button>
-				</div>
+		<br />
+		<div class="row center">
+			<div class="col-xs-12">
+				<button class="btn-lg btn-info" type="button"
+					onclick="location.href='__APP__/Reg/reg?rid={$_SESSION['loginUseracc']}'">&nbsp;&nbsp;&nbsp;&nbsp;注册会员&nbsp;&nbsp;&nbsp;&nbsp;</button>
 			</div>
-			<br />
-			<div class="row center">
-				<div class="col-xs-12">
-					<button class="btn-lg btn-info" type="button"
-						onclick="location.href='__APP__/Reg/reg?rid={$_SESSION['loginUseracc']}'">&nbsp;&nbsp;&nbsp;&nbsp;注册会员&nbsp;&nbsp;&nbsp;&nbsp;</button>
-				</div>
-			</div>
-			<br />
-			<div class="row center">
-				<div class="col-xs-12">
-					<button class="btn-lg btn-danger" type="button"
-						onclick="location.href='__APP__/Agent/menberok'">&nbsp;&nbsp;已开通会员&nbsp;&nbsp;</button>
-				</div>
-			</div>
-			<br />
-			<div class="row center">
-				<div class="col-xs-12">
-					<button class="btn-lg btn-warning" type="button"
-						onclick="location.href='__APP__/Agent/cody/c_id/2'">&nbsp;&nbsp;未开通会员&nbsp;&nbsp;</button>
-				</div>
-			</div>
-			<br />
-			<div class="row center">
-				<div class="col-xs-12">
-					<button class="btn-lg btn-inverse" type="button"
-						onclick="location.href='__APP__/Gouwu/cody/c_id/2'">&nbsp;&nbsp;&nbsp;&nbsp;物流管理&nbsp;&nbsp;&nbsp;&nbsp;</button>
-				</div>
-			</div>
-			<hr>
 		</div>
+		<br />
+		<div class="row center">
+			<div class="col-xs-12">
+				<button class="btn-lg btn-danger" type="button"
+					onclick="location.href='__APP__/Agent/menberok'">&nbsp;&nbsp;已开通会员&nbsp;&nbsp;</button>
+			</div>
+		</div>
+		<br />
+		<div class="row center">
+			<div class="col-xs-12">
+				<button class="btn-lg btn-warning" type="button"
+					onclick="location.href='__APP__/Agent/cody/c_id/2'">&nbsp;&nbsp;未开通会员&nbsp;&nbsp;</button>
+			</div>
+		</div>
+		<br />
+		<div class="row center">
+			<div class="col-xs-12">
+				<button class="btn-lg btn-inverse" type="button"
+					onclick="location.href='__APP__/Gouwu/cody/c_id/2'">&nbsp;&nbsp;&nbsp;&nbsp;物流管理&nbsp;&nbsp;&nbsp;&nbsp;</button>
+			</div>
+		</div>
+		<hr>
 	</div>
-
-	<footer class="footer navbar-fixed-bottom">
-		<div class="container">
-			<p style="font-size: 90%">Copyright © 2018 cheyihao.com. All
-				Rights Reserved.</p>
-		</div>
-	</footer>
+</div>
+<include file="Public:xyFoot" />
 </body>
 </html>

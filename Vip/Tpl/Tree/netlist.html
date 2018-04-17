@@ -56,6 +56,7 @@
 					<td>用户名</td>
 					<td>电话</td>
 					<td>推荐人姓名</td>
+					<td>详细信息</td>
 				</tr>
 			</thead>
 			<?php foreach ($dataTab as $key => $value){ ?>
@@ -64,6 +65,7 @@
 				<td><?php printf($value[user_name]) ?></td>
 				<td><?php printf($value[tel]) ?></td>
 				<td><?php printf($value[re_name]) ?></td>
+				<td><a href="__APP__/Tree/detail/userId=<?php printf($value[user_id]) ?>">详细信息</a></td>
 			</tr>
 			<?php }; ?>
 		</table>

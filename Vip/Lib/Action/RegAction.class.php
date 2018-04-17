@@ -42,6 +42,16 @@ class RegAction extends CommonAction{
 	    $this->error('请填写电话号码！');
 	    exit;
 		}
+		// 验证电话号码
+		if(strlen($_POST['tel']) != 11){
+		    $this->error('电话号码必须是11位！');
+		    exit;
+		}
+		// 节点关系
+	    if(empty($_POST['father_id'])){
+	    $this->error('请填写电你的朋友帐号！');
+	    exit;
+		}
 		unset($authInfoo,$mappp);
 		$fwhere = array();//检测帐号是否存在
 		$fwhere['user_id'] = trim($_POST['user_id']);
@@ -78,24 +88,26 @@ class RegAction extends CommonAction{
 		}
 		unset($authInfoo,$mapp);
 		//检测上节点人
-// 		$FID = trim($_POST['FID']);  //上节点帐号
-// 		$mappp  = array();
-// 		$mappp['user_id'] = $FID;
-// 		$authInfoo = $member->where($mappp)->field('id,p_path,bk2,user_id')->find();
-// 		if ($authInfoo){
-// 			$data['p_path'] = $authInfoo['p_path'].$authInfoo['id'].',';  //绝对路径
-// 			$data['father_id'] = $authInfoo['id']; //上节点ID
-// 			$data['father_name'] = $authInfoo['user_id'];   //上节点帐号
-// 			$data['bk2'] = $authInfoo['bk2'] + 1;   //路径绝对层数
+		$FID = trim($_POST['father_id']);  //上节点帐号
+		$mappp  = array();
+		$mappp['user_id'] = $FID;
+		$authInfoo = $member->where($mappp)->field('id,p_path,bk2,user_id')->find();
+		if ($authInfoo){
+			$data['p_path'] = $authInfoo['p_path'].$authInfoo['id'].',';  //绝对路径
+			$data['father_id'] = $authInfoo['id']; //上节点ID
+			$data['father_name'] = $authInfoo['user_id'];   //上节点帐号
+			$data['bk2'] = $authInfoo['bk2'] + 1;   //路径绝对层数
 			
-// 		} else {
-// 			$this->error('上级会员不存在！');
-// 			exit;
-// 		}
+		} else {
+			$this->error('上级会员不存在！');
+			exit;
+		}
 		// 查询参数表
 		$fee  = M ('fee') -> find();
 		// 投资金额
 		$s1 = $fee['s1'];
+		// 注册成功提示消息
+		$s11 = $fee['s11'];
 		// 当前日期
 		$data['user_id']   = $_POST['user_id'];
 		$data['status'] = 0;  //状态：0:正常 1：禁止登录
@@ -113,7 +125,7 @@ class RegAction extends CommonAction{
 		unset($data,$member);
 		if($result) {
 			echo "<script>";
-			echo "alert('恭喜您注册成功，您的用户名：".$_POST['user_id']."，请及时开通正式会员！');";
+			echo "alert('您的用户名：".$_POST['user_id'].'\r\n'.$s11."');";
 			echo "window.location='".__APP__."/Public/login/';";
 			echo "</script>";
 			exit;

@@ -87,28 +87,64 @@ class TreeAction extends CommonAction {
 		}
 	}
 	// start by panc
+	function netlist() {
+		$uid = $_SESSION [C ( 'USER_AUTH_KEY' )];
+		if (! $uid) {
+			$this->error ( '页面过期!' );
+		}
+		$member = M ( 'member' );
+		$where = "re_path like '%," . $uid . "%'";
+		$memberlist = $member->where ( $where )->field ( "user_id, user_name, tel, re_name" )->select ();
+		
+		$this->assign ( "dataTab", $memberlist );
+		$this->display ();
+		
+		unset ( $memberlist );
+	}
 	function orglist() {
 		$uid = $_SESSION ['loginUseracc'];
 		if (! $uid) {
 			$this->error ( '页面过期!' );
 		}
-	
+		
 		$member = M ( 'member' );
 		$fwhere = array ();
-		$fwhere ['re_name'] = $uid;
-	
+		$fwhere ['father_name'] = $uid;
+		
 		$rt = new RecTree ();
 		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->count ();
-	
+		
 		if ($memberlist > 0) {
-			$this->push_children ( $uid, $rt );
+			$this->push_childrenorg ( $uid, $rt );
 		} else {
 			$rt->name = $uid;
 		}
 		$this->assign ( "data", json_encode ( $rt ) );
 		$this->display ();
+		unset ( $rt );
 	}
-	
+	function push_childrenorg($uid, $rt) {
+		$rt->name = $uid;
+		$member = M ( 'member' );
+		$fwhere = array ();
+		$fwhere ['father_name'] = $uid;
+		
+		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->select ();
+		foreach ( $memberlist as $value ) {
+			$fwhere ['father_name'] = $value ['user_id'];
+			$mem = $member->where ( $fwhere )->field ( "user_id" )->select ();
+			if (count ( $mem ) > 0) {
+				$sub_rt = new RecTree ();
+				$sub_rt->name = $value ['user_id'];
+				array_push ( $rt->children, $sub_rt );
+				$this->push_childrenorg ( $value ['user_id'], $sub_rt );
+			} else {
+				$sub_rt = new RecTree ();
+				$sub_rt->name = $value ['user_id'];
+				array_push ( $rt->children, $sub_rt );
+			}
+		}
+	}
 	function reclist() {
 		$uid = $_SESSION ['loginUseracc'];
 		if (! $uid) {
@@ -123,14 +159,15 @@ class TreeAction extends CommonAction {
 		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->count ();
 		
 		if ($memberlist > 0) {
-			$this->push_children ( $uid, $rt );
+			$this->push_childrenrec ( $uid, $rt );
 		} else {
 			$rt->name = $uid;
 		}
 		$this->assign ( "data", json_encode ( $rt ) );
 		$this->display ();
+		unset ( $rt );
 	}
-	function push_children($uid, $rt) {
+	function push_childrenrec($uid, $rt) {
 		$rt->name = $uid;
 		$member = M ( 'member' );
 		$fwhere = array ();
@@ -140,11 +177,11 @@ class TreeAction extends CommonAction {
 		foreach ( $memberlist as $value ) {
 			$fwhere ['re_name'] = $value ['user_id'];
 			$mem = $member->where ( $fwhere )->field ( "user_id" )->select ();
-			if (count ( $mem ) >= 0) {
+			if (count ( $mem ) > 0) {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];
 				array_push ( $rt->children, $sub_rt );
-				$this->push_children($value ['user_id'], $sub_rt);
+				$this->push_childrenrec ( $value ['user_id'], $sub_rt );
 			} else {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];

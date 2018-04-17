@@ -3,44 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <title>网络拓扑图</title>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/style.css" title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/style.css" title="default">
 <style>
-
 .node {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1.5px;
 }
 
 .node text {
-  font: 16px sans-serif;
+	font: 16px sans-serif;
 }
 
 .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
 }
-
 </style>
 </head>
 <script src="__PUBLIC__/resource/js/d3.v3.min.js"></script>
 <script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
 <body class="container-fluid">
-<div class="row">
-    <header class="navbar-fixed-up" style="background-color: #41b9e7;">
-	<div class="container" style="color: #ffffff;padding: 10px; margin-bottom:0;font-size: 20px; height: inherit;">
-		<a class="glyphicon glyphicon-home" href="__APP__/"
-			style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统</div>
+	<div class="row">
+		<header class="navbar-fixed-up" style="background-color: #41b9e7;">
+			<div class="container"
+				style="color: #ffffff; padding: 10px; margin-bottom: 0; font-size: 20px; height: inherit;">
+				<a class="glyphicon glyphicon-home" href="__APP__/Tree/treeIndex/"
+					style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统
+			</div>
 	</div>
 	</header>
 	<include file="Public:xyFoot" />
-</div>
+	</div>
 </body>
 <script>
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
@@ -103,7 +105,13 @@ function update(source) {
 
   nodeEnter.append("circle")
       .attr("r", 1e-6)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", function(d) { 
+    	  if(d._children == undefined){
+    		  return "#fff";
+    	  }else{
+    		  return d._children.length > 0 ? "lightsteelblue" : "#fff"; 
+    	  }
+    	  });
 
   nodeEnter.append("text")
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -115,11 +123,19 @@ function update(source) {
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
       .duration(duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+      .attr("transform", function(d) {
+    	  console.log(d._children + "aa");
+    	  return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
       .attr("r", 4.5)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", function(d) {  
+    	  if(d._children == undefined){
+		  	return "#fff";
+	  	}else{
+		  	return d._children.length > 0 ? "lightsteelblue" : "#fff";
+		}
+    	});
 
   nodeUpdate.select("text")
       .style("fill-opacity", 1);

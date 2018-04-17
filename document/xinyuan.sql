@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-04-16 23:50:05
+# Date: 2018-04-17 20:43:42
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -259,14 +259,14 @@ CREATE TABLE `xy_gouwu` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='购物表';
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物表';
 
 #
 # Data for table "xy_gouwu"
 #
 
 /*!40000 ALTER TABLE `xy_gouwu` DISABLE KEYS */;
-INSERT INTO `xy_gouwu` VALUES (1,'carNo1',NULL,'372','1523646675','0','4','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL),(2,'carNo1',NULL,'372','1523646769','0','4','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL),(3,'carNo1','李雷','186','1523647651','0','2','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'carNo1','tom','93','1523647788','0','1','93','米国白宫','carNo1','tom','15845127845','carNo1','tom',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `xy_gouwu` VALUES (1,'carNo1',NULL,'372','1523646675','0','4','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL),(2,'carNo1',NULL,'372','1523646769','0','4','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL),(3,'carNo1','李雷','186','1523647651','0','2','93','大连','carNo1','李雷','1587845121','carNo1','李雷',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'carNo1','tom','93','1523647788','0','1','93','米国白宫','carNo1','tom','15845127845','carNo1','tom',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL,NULL),(5,'carNo1','123123','30','1523928498','0','6','5','123123','carNo1','123123','123123','carNo1','123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'4',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `xy_gouwu` ENABLE KEYS */;
 
 #
@@ -321,20 +321,20 @@ CREATE TABLE `xy_member` (
   `bk6` varchar(255) DEFAULT '' COMMENT '服务中心姓名',
   `bk7` varchar(255) DEFAULT '' COMMENT '开通时间',
   `bk8` varchar(255) DEFAULT '0' COMMENT '众筹基金',
-  `bk9` varchar(255) DEFAULT NULL COMMENT '备用字段9',
+  `bk9` varchar(255) DEFAULT '' COMMENT '开通用户ID',
   `bk10` varchar(255) DEFAULT NULL COMMENT '备用字段10',
   `user_code` varchar(255) DEFAULT '' COMMENT '身份证号',
   `us_img` varchar(255) DEFAULT '' COMMENT '用户头像',
   `is_fenh` varchar(255) DEFAULT '0' COMMENT '是否开启奖金',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 #
 # Data for table "xy_member"
 #
 
 /*!40000 ALTER TABLE `xy_member` DISABLE KEYS */;
-INSERT INTO `xy_member` VALUES (1,'carNo1','公司','15677145136','1523893783','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','工商银行','6222023400003222805','广西','南宁','民族大道支行','1523608131','0','0','0','0','2','3000','5000','4000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','e60b3c256ae2061a465e17f3eafb250c','1','carNo1',NULL,'1523699005','1000',NULL,NULL,'211224198901267212','/Public/Uploads/1avatar_200_200.jpg','0'),(2,'aaa','啊三','15678455446','1523801698','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'18fcf6c53bdb24f60c261a2bec465624','1','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(4,'123123',NULL,'15678450412',NULL,NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523775753','1','carNo1',NULL,NULL,'0','0','0','0',NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'ccc',NULL,'15878450415','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523800672','1','carNo1','','','0','0','0','0','0','0','',',1,','','0','0','0','','0','','0','1','','','0','','','','0',NULL,NULL,'','','0');
+INSERT INTO `xy_member` VALUES (1,'carNo1','公司','15677145136','1523966864','::1','0','4297f44b13955235245b2497399d7a93','4297f44b13955235245b2497399d7a93','123123','123123','1','工商银行','6222023400003222805','广西','南宁','民族大道支行','1523608131','0','0','0','0','2','3000','4970','4000','0','0','0',',',',','1','1','0',NULL,'0',NULL,'0','0','0','27df0ac97e7bba653cda1664a7a22bbc','1','carNo1',NULL,'1523699005','1000',NULL,NULL,'211224198901267212','/Public/Uploads/1avatar_150_150.jpg','0'),(2,'aaa','啊三','15678455446','1523801698','::1','0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608131','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'18fcf6c53bdb24f60c261a2bec465624','1','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(3,'bbb','啊B','15874586666','1523646257',NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523608260','1','carNo1',NULL,NULL,'0','3000',NULL,NULL,NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,'6f53877dff62fc19d5371043172405a6','0','carNo1',NULL,'1523699005','100',NULL,NULL,NULL,NULL,'1'),(4,'123123',NULL,'15678450412',NULL,NULL,'0','4297f44b13955235245b2497399d7a93',NULL,'123123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1523775753','1','carNo1',NULL,NULL,'0','0','0','0',NULL,NULL,NULL,',1,',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'ccc',NULL,'15878450415','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523800672','1','carNo1','','','0','0','0','0','0','0','',',1,','','0','0','0','','0','','0','1','','','0','','','','0',NULL,NULL,'','','0'),(6,'test',NULL,'15677145136','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523961963','1','carNo1','2','aaa','0','0','0','0','0','0','',',1,','2,','0','0','0','','0','','0','1','1','','0','','','','0',NULL,NULL,'','','0'),(7,'test1',NULL,'15677145268','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962059','1','carNo1','2','aaa','0','0','0','0','0','0','',',1,','2,','0','0','0','','0','','0','1','1','','0','','','','0',NULL,NULL,'','','0'),(8,'test2',NULL,'15677145268','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962129','1','carNo1','2','aaa','0','0','0','0','0','0','',',1,','2,','0','0','0','','0','','0','1','1','','0','','','','0',NULL,NULL,'','','0'),(9,'test3',NULL,'15677145136','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962250','1','carNo1','7','test1','0','0','0','0','0','0','',',1,','2,7,','0','0','0','','0','','0','1','2','','0','','','','0',NULL,NULL,'','','0'),(10,'test4',NULL,'1584564','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962299','1','carNo1','7','test1','0','0','0','0','0','0','',',1,','2,7,','0','0','0','','0','','0','1','2','','0','','','','0',NULL,NULL,'','','0'),(11,'test5',NULL,'15677005136','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962472','1','carNo1','2','aaa','0','0','0','0','0','0','',',1,','2,','0','0','0','','0','','0','1','1','','0','','','','0',NULL,NULL,'','','0'),(12,'test7',NULL,'15878451222','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962610','1','carNo1','11','test5','0','0','0','0','0','0','',',1,','2,11,','0','0','0','','0','','0','1','2','','0','','','','0',NULL,NULL,'','','0'),(13,'test8',NULL,'15688464564','','','0','4297f44b13955235245b2497399d7a93','','123123','','','','','','','','1523962686','1','carNo1','11','test5','0','0','0','0','0','0','',',1,','2,11,','0','0','0','','0','','0','1','2','','0','','','','0',NULL,NULL,'','','0');
 /*!40000 ALTER TABLE `xy_member` ENABLE KEYS */;
 
 #
@@ -400,7 +400,7 @@ CREATE TABLE `xy_news` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `baile` varchar(255) DEFAULT NULL COMMENT '是否置顶',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='新闻公告表';
 
 #
 # Data for table "xy_news"

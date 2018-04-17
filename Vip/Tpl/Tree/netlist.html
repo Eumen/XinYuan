@@ -3,43 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <title>网络拓扑图</title>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/style.css" title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/dataTables.bootstrap.min.css"
+	title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/style.css" title="default">
 <style>
-
 .node {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1.5px;
 }
 
 .node text {
-  font: 16px sans-serif;
+	font: 16px sans-serif;
 }
 
 .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
 }
-
 </style>
 </head>
-<script src="__PUBLIC__/resource/js/d3.v3.min.js"></script>
 <script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
+<script src="__PUBLIC__/resource/js/d3.v3.min.js"></script>
+<script src="__PUBLIC__/resource/js/jquery.dataTables.min.js"></script>
+<script src="__PUBLIC__/resource/js/dataTables.bootstrap.min.js"></script>
 <body class="container-fluid">
-<div class="row">
-    <header class="navbar-fixed-up" style="background-color: #41b9e7;">
-	<div class="container" style="color: #ffffff;padding: 10px; margin-bottom:0;font-size: 20px; height: inherit;">
-		<a class="glyphicon glyphicon-home" href="__APP__/Tree/treeIndex/"
-			style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统</div>
+	<div class="row">
+		<header class="navbar-fixed-up" style="background-color: #41b9e7;">
+			<div class="container"
+				style="color: #ffffff; padding: 10px; margin-bottom: 0; font-size: 20px; height: inherit;">
+				<a class="glyphicon glyphicon-home" href="__APP__/Tree/treeIndex/"
+					style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统
+			</div>
 	</div>
 	</header>
+
+	<div class="row center-vertical-y-1">
+		<table id="example" class="table table-striped table-bordered"
+			style="width: 100%">
+			<thead>
+				<tr>
+					<td>用户账号</td>
+					<td>用户名</td>
+					<td>电话</td>
+					<td>推荐人姓名</td>
+				</tr>
+			</thead>
+			<?php foreach ($dataTab as $key => $value){ ?>
+			<tr>
+				<td><?php printf($value[user_id]) ?></td>
+				<td><?php printf($value[user_name]) ?></td>
+				<td><?php printf($value[tel]) ?></td>
+				<td><?php printf($value[re_name]) ?></td>
+			</tr>
+			<?php }; ?>
+		</table>
+	</div>
+
 	<include file="Public:xyFoot" />
-</div>
+	</div>
 </body>
+<script>
+$(document).ready(function() {
+	$(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+} );
+</script>
 </html>

@@ -8,35 +8,39 @@
 				商家备注说明&nbsp;&nbsp;[<a href='javascript:history.back()'>返回列表</a>]
 			</h4>
 		</div>
-		<div class="about_connent">
+		<div class="about_connent container">
 			<div class="wrap clearfix mt">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0"
-					class="0">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="0">
 					<tr>
-						<td width="36%">
+						<td>
 							<div id=preview>
 								<div class="jqzoom" id="spec-n1"
 									onClick="window.open('{$prs['img1']}')" title="查看原图"
 									style="cursor: hand;">
-									<img src="{$prs['img1']}" height="300" width="300" />
+									<img src="{$prs['img1']}" height="300" width="340" />
 								</div>
 							</div> <SCRIPT src="__PUBLIC__/wz/js/lib.js" type=text/javascript></SCRIPT>
 							<SCRIPT src="__PUBLIC__/wz/js/163css.js" type=text/javascript></SCRIPT>
 						</td>
-						<td width="64%" valign="top">
-
-							<div style="width: 450px; float: left">
+					</tr>
+					<tr><td valign="top">
+							<div>
 								<div class="pro_title">
-									<h2>{$rs.n_title}</h2>
+									<h4>{$prs.name}</h4>
 									<font style="padding-right: 20px; float: left"></font><span></span>
 								</div>
 								<div class="pro_1">
-									<font style="padding-right: 20px;"></font><br /> <font
-										style="padding-right: 20px; font-size: 16px;">会员价 :</font> <font
-										color="#CC0000" size="5">¥</font> <span id="lblmember"
-										style="color: #CC0000; font-size: 27px; font-weight: 700;">{$prs.vip_price|default=0}</span>
-									<br /> <font style="padding-right: 20px;"></font> <span
-										id="Label2"></span><br /> <font style="padding-right: 20px;">商家名称：</font>{$prs.shopName}<br />
+									<font style="padding-right: 20px;"></font><br />
+									<font style="padding-right: 20px; font-size: 12px;">会员价 :</font> 
+									<font color="#CC0000" size="4">¥</font>
+									<span id="lblmember" style="color: #CC0000; font-size: 20px; font-weight: 700;">{$prs.vip_price|default=0}</span><br />
+									<font style="padding-right: 20px;"></font><br />
+									<font style="padding-right: 20px; font-size: 12px;">市场价 :</font> 
+									<font color="#CC0000" size="4">¥</font>
+									<span id="lblmember" style="color: #CC0000; font-size: 20px; font-weight: 700;">{$prs.sale_price|default=0}</span><br />
+									<font style="padding-right: 20px;"></font>
+									<span id="Label2"></span><br />
+									<font style="padding-right: 20px;">商家名称：</font>{$prs.shopName}<br />
 									<UL id=ulproductproperty>
 									</UL>
 									<br />
@@ -106,9 +110,7 @@
 									</div>
 								</div>
 							</div>
-						</td>
-					</tr>
-					<tr></tr>
+						</td></tr>
 				</table>
 			</div>
 			<div class="xianqxixn">

@@ -1,7 +1,7 @@
 <body style="background-color: #f0f3ef;">
 	<include file="Public:xyHead" />
 <div class="ncenter_box">
-<div class="accounttitle"><h1>产品添加&nbsp;[ <a href="javascript:history.go(-1);">返回列表</a> ] </h1></div>
+<div class="accounttitle"><h5>产品添加&nbsp;[ <a href="javascript:history.go(-1);">返回列表</a> ] </h5></div>
 <table cellpadding=3 cellspacing=0 width=100% >
 <form method='post' id="form1" name="form1" action="__URL__/pro_inserts">
 <tr>
@@ -30,10 +30,6 @@
     </select></td>
 </tr>
 <tr>
-	<td height="22" align="right">成本价：</td>
-	<td><input type="text" name="price" id="price" value="{$rs.price}" size="10" maxlength="10"></td>
-</tr>
-<tr>
 	<td height="22" align="right">零售价：</td>
 	<td><input type="text" name="sale_price" id="sale_price" value="{$rs.sale_price}" size="10" maxlength="10"></td>
 </tr>
@@ -47,20 +43,19 @@
 </tr>
 <tr>
 	<td align="right">产品图片：</td>
-	<td class="center"><input name="img1" type="text" id="img1" value="" size="50" maxlength="500" /></td>
+	<td><input name="img1" type="text" id="img1" value="" size="50" maxlength="500" /></td>
 </tr>
 <tr>
 	<td align="right">本地上传：</td>
-	<td class="center"><iframe src="__URL__/upload_add" width="350" height="30" scrolling="no" frameborder="0"></iframe>上传格式：jpg, gif, png, jpeg</td>
+	<td><iframe src="__URL__/upload_add" width="350" height="30" scrolling="no" frameborder="0"></iframe>上传格式：jpg, gif, png, jpeg</td>
 </tr>
 <tr> 
 	<td align="right">内容：</td>
-	<td>
-    {$html}</td>
+	<td>{$html}</td>
 </tr>
 <tr>
 	<td></td>
-	<td class="center">
+	<td>
 	<input type="hidden" name="status" value="1">
 	<input type="submit" value="保存" class="btn1">
 	<input type="reset" name="button" id="button" value="重置" class="btn1" />

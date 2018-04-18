@@ -328,7 +328,11 @@ class GouwuAction extends CommonAction{
 		$where['id'] = array('in','0'. $path .'0');
 		$list = $product -> where($where) ->select();
 		foreach ($list as $lvo){
-			$w_money = $lvo['sale_price'];
+		    if ($f_rs['grade'] > 0) {
+		        $w_money = $lvo['vip_price'];
+		    } else {
+		        $w_money = $lvo['sale_price'];
+		    }
 			//物品总价
 			$ep[$lvo['id']] = $ids[$lvo['id']] * $w_money;
 			$num[$lvo['id']] = $ids[$lvo['id']];
@@ -684,23 +688,35 @@ public function dizhiAdd(){
 		// 1为现金币支付 2为现金币+积分币支付
 		if($_POST['sel']==1){
 			$rs = $member->query("update __TABLE__ set cash=cash-".$prices." where id=".$id);
+			// 添加历史记录
+			$bonushistory = M('bonushistory');
+			$data = array();
+			$data['user_id'] = $member_rs['user_id'];
+			$data['user_name'] = $member_rs['user_name'];
+			$data['produce_userid'] = $member_rs['user_id'];
+			$data['produce_username'] = $member_rs['user_name'];
+			$data['action_type'] = 4;
+			$data['time'] = mktime();
+			$data['money'] = -$prices;
+			$data['bz'] = '商城购物';
+			$bonushistory->add($data);
 		}
 		if($_POST['sel']==2){
 			$rs = $member->query("update __TABLE__ set cash=cash-".$cash_tmp.",point=point-".$point_tmp." where id=".$id);
+			// 添加历史记录
+			$bonushistory = M('bonushistory');
+			$data = array();
+			$data['user_id'] = $member_rs['user_id'];
+			$data['user_name'] = $member_rs['user_name'];
+			$data['produce_userid'] = $member_rs['user_id'];
+			$data['produce_username'] = $member_rs['user_name'];
+			$data['action_type'] = 4;
+			$data['time'] = mktime();
+			$data['money'] = -$cash_tmp;
+			$data['in_money'] = -$point_tmp;
+			$data['bz'] = '商城购物';
+			$bonushistory->add($data);
 		}
-		// 添加历史记录
-		$bonushistory = M('bonushistory');
-		$data = array();
-		$data['user_id'] = $member_rs['user_id'];
-		$data['user_name'] = $member_rs['user_name'];
-		$data['produce_userid'] = $member_rs['user_id'];
-		$data['produce_username'] = $member_rs['user_name'];
-		$data['action_type'] = 4;
-		$data['time'] = mktime();
-		$data['money'] = -$prices;
-		$data['in_money'] = -$prices;
-		$data['bz'] = '商城购物';
-		$bonushistory->add($data);
 		if($rs !== false){
 			$_SESSION["shopping"]='';
 			$_SESSION["shopping_bz"]='';
@@ -849,7 +865,7 @@ public function dizhiAdd(){
 			$this->error('库存不能为空!');
 			exit;
 		}
-		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		if (empty($sale_price)||!is_numeric($sale_price)
 		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;
@@ -1000,7 +1016,7 @@ public function dizhiAdd(){
 			$this->error('库存不能为空!');
 			exit;
 		}
-		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		if (empty($sale_price)||!is_numeric($sale_price)
 		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;

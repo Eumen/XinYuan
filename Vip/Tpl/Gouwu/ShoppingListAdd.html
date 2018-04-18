@@ -74,23 +74,22 @@
 						<h4>产品信息：</h4>
 					</td>
 				</tr>
-				<tr class="trtit">
-					<th width="15%">产品编号</th>
-					<th width="20%">产品名称</th>
-					<th width="10%">库存状态</th>
-					<th width="15%">单价</th>
-					<th width="15%">数量</th>
-					<th width="15%">总金额</th>
+				<tr >
+					<th width="15%" >产品编号</th>
+					<th width="20%" >产品名称</th>
+					<th width="10%" >库存状态</th>
+					<th width="15%" >单价</th>
+					<th width="15%" >数量</th>
+					<th width="15%" >总金额</th>
 				</tr>
 				<volist name="list" id="vo">
-				<tr bgcolor="#FFFFFF" id="tr12" align="center">
+				<tr bgcolor="#FFFFFF" id="tr12" >
 					<td><span id="">{$vo['id']}</span></td>
 					<td><span id="">{$vo['name']}</span></td>
-					<td align="center"><span id="">有货</span></td>
-					<td align="center"><span id="">{$cc[$vo['id']]}</span></td>
-
-					<td align="center"><span id="">{$ids[$vo['id']]}</span></td>
-					<td align="center"><span id="">{$ep[$vo['id']]}</span></td>
+					<td ><span id="">有货</span></td>
+					<td ><span id="">{$cc[$vo['id']]}</span></td>
+					<td ><span id="">{$ids[$vo['id']]}</span></td>
+					<td ><span id="">{$ep[$vo['id']]}</span></td>
 				</tr>
 				</volist>
 				<input name="prices" type="hidden" id="prices" value="{$eps}" />

@@ -116,20 +116,23 @@ class BonusAction extends CommonAction{
 		if(!empty($_REQUEST['FanNowDate'])){  //日期查询
 			$time1 = strtotime($_REQUEST['FanNowDate']);                // 这天 00:00:00
 			$time2 = strtotime($_REQUEST['FanNowDate']) + 3600*24 -1;   // 这天 23:59:59
-			$where['e_date'] = array(array('egt',$time1),array('elt',$time2));
+			$where['time'] = array(array('egt',$time1),array('elt',$time2));
 		}
 
-        $field  = '*';
+        $field  = "user_id,from_unixtime(time,'%Y-%m-%d') as create_date,sum(money) as sum_money,
+        case bonus_type when 1 then sum(money) else 0 end as re_money,
+        case bonus_type when 2 then sum(money) else 0 end as shop_money,
+        case bonus_type when 3 then sum(money) else 0 end as point_money";
         //=====================分页开始==============================================
         import ( "@.ORG.ZQPage" );  //导入分页类
-        $count = $bonus->where($where)->count();//总页数
+        $count = $bonus->where($where)->field($field)->count();//总页数
         $listrows = 5;//每页显示的记录数
         $page_where = 'FanNowDate=' . $_REQUEST['FanNowDate'].'&UserID='.$user_id;//分页条件
         $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
         //===============(总页数,每页显示记录数,css样式 0-9)
         $show = $Page->show();//分页变量
         $this->assign('page', $show);//分页变量输出到模板
-        $list = $bonus->where($where)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
+        $list = $bonus->where($where)->field($field)->group('user_id,create_date')->order('id desc')->page($Page->getPage().','.$listrows)->select();
         $this->assign('list',$list);//数据输出到模板
         //各项奖每页汇总
 		$count = array();

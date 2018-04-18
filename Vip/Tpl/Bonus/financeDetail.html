@@ -27,11 +27,11 @@
 					</thead>
 					<volist name='list' id='vo'>
 					<tr>
-						<td>{$vo['time']|date='Y-m-d H:i:s',###}</td>
-						<td><eq name="$vo['bonus_type']" value="1">{$vo['money']}</eq></td>
-						<td><eq name="$vo['bonus_type']" value="2">{$vo['money']}</eq></td>
-						<td><eq name="$vo['bonus_type']" value="3">{$vo['money']}</eq></td>
-						<td>{$vo['b1']+$vo['b2']+$vo['b3']}</td>
+						<td>{$vo['create_date']}</td>
+						<td>{$vo['re_money']}</td>
+						<td>{$vo['shop_money']}</td>
+						<td>{$vo['point_money']}</td>
+						<td>{$vo['sum_money']}</td>
 						<td><a href="__URL__/financeShow/RDT/{$vo['s_date']}/PDT/{$vo['e_date']}/UserID/{$user_id}" title="这一期明细">明细</a></td>
 					</tr>
 					</volist>

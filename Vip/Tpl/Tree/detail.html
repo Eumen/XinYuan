@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>网络拓扑图</title>
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/dataTables.bootstrap.min.css"
+	title="default">
+<link rel="stylesheet" type="text/css"
+	href="__PUBLIC__/resource/css/style.css" title="default">
+<style>
+.node {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+.node text {
+	font: 16px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
+}
+</style>
+</head>
+<script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
+<script src="__PUBLIC__/resource/js/d3.v3.min.js"></script>
+<script src="__PUBLIC__/resource/js/jquery.dataTables.min.js"></script>
+<script src="__PUBLIC__/resource/js/dataTables.bootstrap.min.js"></script>
+<body class="container-fluid">
+	<div class="row">
+		<header class="navbar-fixed-up" style="background-color: #41b9e7;">
+			<div class="container"
+				style="color: #ffffff; padding: 10px; margin-bottom: 0; font-size: 20px; height: inherit;">
+				<a class="glyphicon glyphicon-home" href="__APP__/Tree/treeIndex/netlist"
+					style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统
+			</div>
+	</div>
+	</header>
+
+	<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<form class="form-horizontal" action="__URL__/changedataSave"
+						id="form1" name="form1" method="post">
+						<!-- #section:elements.form -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">用户名</label>
+							<div class="col-sm-9">
+								<input name="user_id" type="text" id="user_id"
+									value="{$vo['user_id']}" class="col-xs-12 col-sm-5"
+									disabled="disabled" readonly="readonly" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">姓名</label>
+							<div class="col-sm-9">
+								<input name="user_name" type="text" id="user_name"
+									value="{$vo['user_name']}" class="col-xs-12 col-sm-5"
+									disabled="disabled" readonly="readonly" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">推荐人</label>
+							<div class="col-sm-9">
+								<input name="re_name" type="text" id="user_code"
+									value="{$vo['re_name']}" class="col-xs-12 col-sm-5"
+									disabled="disabled" readonly="readonly" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">父节点</label>
+							<div class="col-sm-9">
+								<input name="father_name" type="text" id="father_name"
+									value="{$vo['father_name']}" class="col-xs-12 col-sm-5"
+									disabled="disabled" readonly="readonly" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">手机号</label>
+							<div class="col-sm-9">
+								<input name="tel" type="text" id="tel" value="{$vo['tel']}"
+									class="col-xs-12 col-sm-5" disabled="disabled" readonly="readonly"  />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">开户银行</label>
+							<div class="col-sm-9">
+								<input name="bank" type="text" id="bank" value="{$vo['bank']}"
+									class="col-xs-12 col-sm-5" disabled="disabled" readonly="readonly" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	<include file="Public:xyFoot" />
+	</div>
+</body>
+<script>
+$(document).ready(function() {
+	$(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+} );
+</script>
+</html>

@@ -94,7 +94,7 @@ class TreeAction extends CommonAction {
 		}
 		$member = M ( 'member' );
 		$where = "re_path like '%," . $uid . "%'";
-		$memberlist = $member->where ( $where )->field ( "user_id, user_name, tel, re_name" )->select ();
+		$memberlist = $member->where ( $where )->field ( "id, user_id, user_name, tel, re_name" )->select ();
 		
 		$this->assign ( "dataTab", $memberlist );
 		$this->display ();
@@ -188,6 +188,15 @@ class TreeAction extends CommonAction {
 				array_push ( $rt->children, $sub_rt );
 			}
 		}
+	}
+	
+	function detail(){
+		$member = M ( 'member' );
+		$fwhere = array ();
+		$fwhere ['id'] = $_GET['id'];
+		$user = $member->where ( $fwhere )->field ( "user_id, user_name, re_name, father_name, tel, bank" )->find ();
+		$this->assign("vo", $user);
+		$this->display();
 	}
 	
 	// end by panc

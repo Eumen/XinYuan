@@ -3115,7 +3115,7 @@ class YouZiAction extends CommonAction
         // 货币流向
         if ($_SESSION['UrlPTPass'] == 'MyssMoneyFlows') {
             $member = M('member');
-            $history = M('history');
+            $history = M('bonushistory');
             $sDate = $_REQUEST['S_Date'];
             $eDate = $_REQUEST['E_Date'];
             $UserID = $_REQUEST['UserID'];
@@ -3140,11 +3140,11 @@ class YouZiAction extends CommonAction
                 $e_Date = $temp_d;
             }
             if ($s_Date > 0) {
-                $map['_string'] .= " and pdt>=" . $s_Date;
+                $map['_string'] .= " and time>=" . $s_Date;
             }
             if ($e_Date > 0) {
                 $e_Date = $e_Date + 3600 * 24 - 1;
-                $map['_string'] .= " and pdt<=" . $e_Date;
+                $map['_string'] .= " and time<=" . $e_Date;
             }
             if ($ss_type > 0) {
                 if ($ss_type == 15) {
@@ -3169,9 +3169,9 @@ class YouZiAction extends CommonAction
                     ->field('id,user_id')
                     ->find();
                 if ($usrs) {
-                    $usid = $usrs['id'];
-                    $usuid = $usrs['user_id'];
-                    $map['_string'] .= " and (uid=" . $usid . " or user_id='" . $usuid . "')";
+                    $usid = $usrs['user_id'];
+                    $produce_userid = $usrs['user_id'];
+                    $map['_string'] .= " and (user_id='" . $usid . "' or produce_userid='" . $produce_userid . "')";
                 } else {
                     $map['_string'] .= " and id=0";
                 }
@@ -3187,7 +3187,7 @@ class YouZiAction extends CommonAction
             // =====================分页开始==============================================
             import("@.ORG.ZQPage"); // 导入分页类
             $count = $history->where($map)->count(); // 总页数
-            $listrows = 20; // 每页显示的记录数
+            $listrows = 12; // 每页显示的记录数
             $page_where = 'UserID=' . $UserID . '&S_Date=' . $sDate . '&E_Date=' . $eDate . '&tp=' . $ss_type; // 分页条件
             $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
             // ===============(总页数,每页显示记录数,css样式 0-9)
@@ -3195,13 +3195,11 @@ class YouZiAction extends CommonAction
             $this->assign('page', $show); // 分页变量输出到模板
             $list = $history->where($map)
                 ->field($field)
-                ->order('pdt desc,id desc')
+                ->order('time desc,id desc')
                 ->page($Page->getPage() . ',' . $listrows)
                 ->select();
             
             $this->assign('list', $list); // 数据输出到模板
-                                         // =================================================
-                                         // dump($history);
             
             $fee = M('fee'); // 参数表
             $fee_rs = $fee->field('s18')->find();

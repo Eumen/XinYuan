@@ -123,24 +123,21 @@ class GouwuAction extends CommonAction{
 				$UserID = urlencode($UserID);
 			}
 			if($ss_type==0){
-				$map['ispay'] = array('egt',0);
+				$map['bk3'] = array('egt',0);
 			}elseif($ss_type==1){
-				$map['ispay'] = array('eq',0);
-				$map['isfh'] = array('eq',0);
+				$map['bk3'] = array('eq',0);
 			}elseif($ss_type==2){
-				$map['ispay'] = array('eq',0);
-				$map['isfh'] = array('eq',1);
+				$map['bk3'] = array('eq',1);
 			}elseif($ss_type==3){
-				$map['ispay'] = array('eq',1);
+				$map['bk3'] = array('eq',2);
 			}
-			// $map['lx'] = array('eq',1);
     //查询字段
     $field   = '*';
     //=====================分页开始==============================================
     import ( "@.ORG.ZQPage" );  //导入分页类
     $count = $shopping->where($map)->count();//总页数
     $listrows = C('PAGE_LISTROWS')  ;//每页显示的记录数
-		    $page_where = 'UserID='.$UserID.'&type='.$ss_type;//分页条件
+		    $page_where = 'UserID='.$UserID.'&bk3='.$ss_type;//分页条件
     $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
     //===============(总页数,每页显示记录数,css样式 0-9)
     $show = $Page->show();//分页变量
@@ -154,15 +151,12 @@ class GouwuAction extends CommonAction{
     	$voo[$ttid] = $trs['name'];
     }
     $this->assign('voo',$voo);
-
-
-        $gouwu = M ('gouwu');  //奖金表
-
+        $gouwu = M ('gouwu');  //购物表
         $map = array();
 		$map['id'] = array('gt',0);
-		$map['isfh'] = array('eq',0);
+		$map['bk3'] = array('egt',0);
         $field   = '*';
-		$list = $gouwu->where($map)->field($field)->order('pdt asc')->select();
+		$list = $gouwu->where($map)->field($field)->order('time asc')->select();
 
         $title   =   "会员表 导出时间:".date("Y-m-d   H:i:s");
 
@@ -181,7 +175,9 @@ class GouwuAction extends CommonAction{
         echo   "<td>数量</td>";
         echo   "<td>总价</td>";
         echo   "<td>确认发货人</td>";
+        echo   "<td>确认时间</td>";
         echo   "<td>确认收货人</td>";
+        echo   "<td>确认收货时间</td>";
         echo   "<td>状态</td>";
         echo   '</tr>';
         //   输出内容
@@ -204,21 +200,23 @@ class GouwuAction extends CommonAction{
     echo   '<tr align=center>';
     echo   '<td>'   .  chr(28).$num   .   '</td>';
     echo   "<td>"   .   $row['user_id'].  "</td>";
-     echo   "<td>"   .   date("Y-m-d H:i:s",$row['pdt']).  "</td>";
-    echo   "<td>"   .   $row['us_name'].  "</td>";
-    echo   "<td>"   .   $row['us_address'].  "</td>";
-    echo   "<td>"   .   $row['us_tel']. "</td>";
+     echo   "<td>"   .   date("Y-m-d H:i:s",$row['time']).  "</td>";
+    echo   "<td>"   .   $row['user_name'].  "</td>";
+    echo   "<td>"   .   $row['address'].  "</td>";
+    echo   "<td>"   .   $row['tel']. "</td>";
     echo   "<td>"   .   $voo[$row['did']].  "</td>";
-    echo   "<td>"   .   $row['shu'].  "</td>";
-    echo   "<td>"   .   $row['cprice'].  "</td>";
-    echo   "<td>"   .   $row['guquan'].  "</td>";
-    echo   "<td>"   .   $row['ccxhbz'].  "</td>";
-    if ($row['ispay'] == 1) {
-        echo   "<td>"   .   "已确认收货".  "</td>";
-    } else if ($row['isfh'] == 0){
-        echo   "<td>"   .   "未发货".  "</td>";
-    } else if ($row['isfh'] == 1){
+    echo   "<td>"   .   $row['count'].  "</td>";
+    echo   "<td>"   .   $row['money'].  "</td>";
+    echo   "<td>"   .   $row['confirm_send_id'].  "</td>";
+    echo   "<td>"   .   $row['confirm_send_time'].  "</td>";
+    echo   "<td>"   .   $row['confirm_receive_id'].  "</td>";
+    echo   "<td>"   .   $row['confirm_receive_time'].  "</td>";
+    if ($row['bk3'] == 1) {
         echo   "<td>"   .   "已发货".  "</td>";
+    } else if ($row['bk3'] == 0){
+        echo   "<td>"   .   "未发货".  "</td>";
+    } else if ($row['bk3'] == 2){
+        echo   "<td>"   .   "已收货".  "</td>";
     }
 
     echo   '</tr>';
@@ -1180,18 +1178,16 @@ public function dizhiAdd(){
 			$product = M('product');
 			$member = M('member');
 			$sessionID = $_SESSION[C('USER_AUTH_KEY')];
-    $ss_type = (int) $_REQUEST['type'];
-    $map = array();
-			if($ss_type==0){
-				$map['ispay'] = array('egt',0);
+            $ss_type = (int) $_REQUEST['type'];
+            $map = array();
+		  if($ss_type==0){
+				$map['bk3'] = array('egt',0);
 			}elseif($ss_type==1){
-				$map['ispay'] = array('eq',0);
-				$map['isfh'] = array('eq',0);
+				$map['bk3'] = array('eq',0);
 			}elseif($ss_type==2){
-				$map['ispay'] = array('eq',0);
-				$map['isfh'] = array('eq',1);
+				$map['bk3'] = array('eq',1);
 			}elseif($ss_type==3){
-				$map['ispay'] = array('eq',1);
+				$map['bk3'] = array('eq',2);
 			}
 			// 根据p_path 查询下面会员ID
 			$where = array();
@@ -1203,7 +1199,7 @@ public function dizhiAdd(){
 			}
 			// 物流管理员和后台可以查看所有物流信息
 			$member_rs2 = $member->where('id ='.$sessionID)->find();
-			if ($member_rs2['user_id'] != '100000' && $member_rs2['user_id'] != 'cc') {
+			if ($member_rs2['id'] != '1' && $member_rs2['user_id'] != 'cc') {
 			    $map['user_id'] = array('in',$idArray);
 			}
     //查询字段
@@ -1221,7 +1217,7 @@ public function dizhiAdd(){
     $this->assign('list',$list);//数据输出到模板
     //=================================================
     foreach($list as $vv){
-    	$ttid = $vv['did'];
+    	$ttid = $vv['bk1'];
     	$trs = $product->where('id='.$ttid)->find();
     	$voo[$ttid] = $trs['name'];
     }
@@ -1268,14 +1264,15 @@ public function dizhiAdd(){
     $shopping = M ('gouwu');
     $where = array();
     $where['id'] = array ('in',$XGid);
-    $where['isfh'] = array ('eq',0);
+    $where['bk3'] = array ('eq',0);
     $sessionID = $_SESSION[C('USER_AUTH_KEY')];
     $member = M ('member');
     $member_rs2 = $member->where('id ='.$sessionID)->find();
     $valuearray = array(
-    	'isfh' => '1',
-    	'fhdt' => mktime(),
-        'guquan'=> $member_rs2['user_id']
+    	'bk3' => '1',
+    	'confirm_send_time' => mktime(),
+        'confirm_send_id'=> $member_rs2['user_id'],
+        'confirm_send_name'=> $member_rs2['user_name']
     );
     $shopping->where($where)->setField($valuearray);
     unset($shopping,$where);
@@ -1292,18 +1289,18 @@ public function dizhiAdd(){
     	//确认收货
         if ($_SESSION['UrlszUserpass'] == 'MyssWuliuList'){
     $shopping = M ('gouwu');
-
     $where = array();
     $where['id'] = array ('in',$XGid);
-    $where['ispay'] = array ('eq',0);
+    $where['bk3'] = array ('egt',0);
     $sessionID = $_SESSION[C('USER_AUTH_KEY')];
     $member = M ('member');
     $member_rs2 = $member->where('id ='.$sessionID)->find();
 
     $valuearray = array(
-    	'ispay' => '1',
-    	'okdt' => mktime(),
-        'ccxhbz'=> $member_rs2['user_id']
+    	'bk3' => '2',
+    	'confirm_receive_time' => mktime(),
+        'confirm_receive_id'=> $member_rs2['user_id'],
+        'confirm_receive_name'=> $member_rs2['user_name']
     );
 
     $shopping->where($where)->setField($valuearray);

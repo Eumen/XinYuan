@@ -134,8 +134,8 @@ class YouZiAction extends CommonAction
             $bonus = M('bonus'); // 奖金表
             $fee = M('fee'); // 参数表
             $times = M('times'); // 结算时间表
-            $fee_rs = $fee->field('s18,s13')->find();
-            $fee_s7 = explode('|', $fee_rs['s13']);
+            $fee_rs = $fee->field('s18')->find();
+            $fee_s7 = explode('|', $fee_rs['s18']);
             $this->assign('fee_s7', $fee_s7); // 输出奖项名称数组
             
             $where = array();

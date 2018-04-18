@@ -1,4 +1,4 @@
-<include file="Public:header" />
+<include file="Public:xyHead" />
 <SCRIPT language=JavaScript>
 function checklogin() {
 	if (document.myform.UserID.value=="") {
@@ -15,7 +15,7 @@ function checklogin() {
 }
 </SCRIPT>
 <div class="ncenter_box">
-<div class="accounttitle"><h1>写邮件 </h1></div>
+<div class="accounttitle"><h5><a href="__APP__/News/newsIndex" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>写邮件 </h5></div>
 <form method='post' id="form1" name="myform" onSubmit="return checklogin()" action="__URL__/writeSave">
 <table width="100%" border="0" cellpadding="5" cellspacing="5">
   <tr>
@@ -48,5 +48,6 @@ function checklogin() {
 </table>
 </form>
 </div>
+<include file="Public:xyFoot" />
 </body>
 </html>

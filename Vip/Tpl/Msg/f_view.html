@@ -1,4 +1,4 @@
-<include file="Public:header" />
+<include file="Public:xyHead" />
 <SCRIPT language=JavaScript>
 function checklogin() {
 	if (document.myform.Msg.value=="") {
@@ -10,8 +10,8 @@ function checklogin() {
 }
 </SCRIPT>
 <div class="ncenter_box">
-<div class="accounttitle"><h1>查看邮件内容&nbsp;&nbsp;[<a href='javascript:history.back()'>返回列表</a>] </h1></div>
-<table width="100%" border="0" cellpadding="3" cellspacing="0" class="tab4">
+<div class="accounttitle"><h5>查看邮件内容&nbsp;&nbsp;[<a href='javascript:history.back()'>返回列表</a>] </h5></div>
+<table width="100%" border="0" cellpadding="3" cellspacing="0" class="table  table-striped">
   <tr>
     <td width="22%" align="right">收件人编号：</td>
     <td width="78%">{$vo['s_user_id']|conname}</td>
@@ -30,6 +30,7 @@ function checklogin() {
   </tr>
 </table>
 </div>
+<include file="Public:xyFoot" />
 </body>
 </html>
 

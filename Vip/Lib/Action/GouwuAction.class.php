@@ -717,31 +717,36 @@ public function dizhiAdd(){
 
 	public function BuycpInfo() {//购买信息
 		$cp = M('product');
-		$member = M('member');
-		$gouwu = M('gouwu');
-		$id = $_SESSION[C('USER_AUTH_KEY')];
-		$user_id = $_SESSION['loginUseracc'];
-		// 根据用户名检索用户地址信息
-		$map['uid'] = $id;
-		 //=====================分页开始==============================================
-    import ( "@.ORG.ZQPage" );  //导入分页类
-    $count = $gouwu->where($map)->count();//总页数
-       		$listrows = C('ONE_PAGE_RE');//每页显示的记录数
-//    $page_where = 'UserID=' . $UserID;//分页条件
-    $Page = new ZQPage($count, $listrows, 1, 0, 3);
-    //===============(总页数,每页显示记录数,css样式 0-9)
-    $show = $Page->show();//分页变量
-    $this->assign('page',$show);//分页变量输出到模板
-		$where = "xy_gouwu.id>0 and  xy_gouwu.count>0 and xy_gouwu.user_id = '".$user_id."'";
-		$field = 'xy_member.user_id,xy_member.user_name,xy_product.name,xy_gouwu.*';
-		$join = 'left join xy_member ON xy_gouwu.user_id=xy_member.user_id'; //连表查询
-		$join1 = 'left join xy_product ON xy_gouwu.bk1=xy_product.id'; //连表查询
-		$list = $gouwu->where($where)->field($field)->join($join)->join($join1)->order('time desc')->page($Page->getPage().','.$listrows)->select();
-		$rs1 = $gouwu->where($map)->sum('money');
-		$this->assign('count', $rs1);
-		// print_r($list);die;
-		$this->assign('list', $list);
-		$this->display('BuycpInfo');
+        $member = M('member');
+        $gouwu = M('gouwu');
+        $id = $_SESSION[C('USER_AUTH_KEY')];
+        $user_id = $_SESSION['loginUseracc'];
+        // 根据用户名检索用户地址信息
+        $map['user_id'] = $user_id;
+        // =====================分页开始==============================================
+        import("@.ORG.ZQPage"); // 导入分页类
+        $count = $gouwu->where($map)->count(); // 总页数
+        $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
+//         $page_where = 'UserID=' . $user_id; // 分页条件
+        $Page = new ZQPage($count, $listrows, 1, 0, 3);
+        // ===============(总页数,每页显示记录数,css样式 0-9)
+        $show = $Page->show(); // 分页变量
+        $this->assign('page', $show); // 分页变量输出到模板
+        $where = "xy_gouwu.id>0 and xy_gouwu.user_id = '" . $user_id . "'";
+        $field = 'xy_member.user_id,xy_member.user_name,xy_product.name,xy_gouwu.*';
+        $join = 'left join xy_member ON xy_gouwu.user_id=xy_member.user_id'; // 连表查询
+        $join1 = 'left join xy_product ON xy_gouwu.bk1=xy_product.id'; // 连表查询
+        $list = $gouwu->where($where)
+            ->field($field)
+            ->join($join)
+            ->join($join1)
+            ->order('time desc')
+            ->page($Page->getPage() . ',' . $listrows)
+            ->select();
+        $rs1 = $gouwu->where($map)->sum('money');
+        $this->assign('count', $rs1);
+        $this->assign('list', $list);
+        $this->display('BuycpInfo');
 	}
 	
 	//产品表查询

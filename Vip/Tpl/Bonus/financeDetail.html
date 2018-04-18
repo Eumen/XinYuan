@@ -1,0 +1,68 @@
+<include file="Public:xyHead" />
+<!-- Wrap all page content here -->
+<div id="wrap">
+	<!-- Begin page content -->
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<h5>
+					<a href="__APP__/" class="glyphicon glyphicon-chevron-left bg-info"
+						style="font-size: 16px;"></a>资产明细
+				</h5>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<table width="100%" class="table  table-striped table-bordered" border="0" cellpadding="3"
+					cellspacing="1" id="tb1">
+					<thead>
+						<tr>
+							<th><span>结算时间</span></th>
+							<th><span>直推奖</span></th>
+							<th><span>报单奖</span></th>
+							<th><span>见点奖</span></th>
+							<th><span>合计</span></th>
+							<th><span>详细</span></th>
+						</tr>
+					</thead>
+					<volist name='list' id='vo'>
+					<tr>
+						<td>{$vo['time']|date='Y-m-d H:i:s',###}</td>
+						<td><eq name="$vo['bonus_type']" value="1">{$vo['money']}</eq></td>
+						<td><eq name="$vo['bonus_type']" value="2">{$vo['money']}</eq></td>
+						<td><eq name="$vo['bonus_type']" value="3">{$vo['money']}</eq></td>
+						<td>{$vo['b1']+$vo['b2']+$vo['b3']}</td>
+						<td><a href="__URL__/financeShow/RDT/{$vo['s_date']}/PDT/{$vo['e_date']}/UserID/{$user_id}" title="这一期明细">明细</a></td>
+					</tr>
+					</volist>
+					<tr>
+						<td>总计：</td>
+						<td>{$count[1]}</td>
+						<td>{$count[2]}</td>
+						<td>{$count[3]}</td>
+						<td>{$count[1]+$count[2]+$count[3]}</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<table width="100%" class="table" border="0" cellpadding="0"
+					cellspacing="1">
+					<tr>
+						<td width="50%" nowrap="nowrap"><form id="form1" name="form1"
+								method="post" action="__URL__/financeTable">
+								日期：<input name="FanNowDate" type="text" id="FanNowDate"
+									onFocus="showCalendar(this)" readonly /> <input type="submit"
+									name="Submit" value="查询" class="button_text" /> <input
+									name="UserID" type="hidden" value="{$user_id}" />
+							</form></td>
+						<td width="50%">{$page}</td>
+					</tr>
+				</table>
+				</form>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script>new TableSorter("tb1");</script>
+<include file="Public:xyFoot" />
+</body>

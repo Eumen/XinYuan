@@ -37,8 +37,8 @@ class BonusAction extends CommonAction{
 		$Urlsz = (int) $_POST['Urlsz'];
 		if(empty($_SESSION['user_pwd2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('fck');
-			if (!$fck->autoCheckToken($_POST)){
+			$member   =  M ('member');
+			if (!$member->autoCheckToken($_POST)){
 				$this->error('页面过期请刷新页面!');
 				exit();
 			}
@@ -50,7 +50,7 @@ class BonusAction extends CommonAction{
 			$where = array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
 			$where['passopen'] = md5($pass);
-			$list = $fck->where($where)->field('id,is_agent')->find();
+			$list = $member->where($where)->field('id,is_agent')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
 				exit();
@@ -62,7 +62,7 @@ class BonusAction extends CommonAction{
 		switch ($Urlsz){
 			case 1;
 			$_SESSION['Urlszpass'] = 'MyssfinanceTable';
-			$bUrl = __URL__.'/financeTable';//
+			$bUrl = __URL__.'/financeDetail';// 资产明细
 			$this->_boxx($bUrl);
 			break;
 
@@ -94,32 +94,29 @@ class BonusAction extends CommonAction{
 	}
 	
 	//会员资金查询(显示会员每一期的各奖奖金)
-	public function financeTable($cs=0){
-		$fck = M('fck');
-		$bonus = M ('bonus');  //奖金表
+	public function financeDetail($cs=0){
+		$member = M('member');
+		$bonus = M ('personbonusdetail');  //个人奖金详细表
 		$where = array();
 		$ID = $_SESSION[C('USER_AUTH_KEY')];
-		
+		$login_user_id = $_SESSION['loginUseracc'];
 		$user_id = trim($_REQUEST['UserID']);
 		if(!empty($user_id) && $ID==1){
-			$fck_rs = $fck->where("user_id='$user_id'")->field('id')->find();
-			if(!$fck_rs){
+			$member_rs = $member->where("user_id='$user_id'")->field('id')->find();
+			if(!$member_rs){
 				$this->error("该会员不存在");
 				exit;
 			}else{
 				$this->assign('user_id',$user_id);
-				$where['uid'] = $fck_rs['id'];
+				$where['user_id'] = $member_rs['user_id'];
 			}
 		}else{
-			$where['uid'] = $ID; //登录AutoId
+			$where['user_id'] = $login_user_id;
 		}
-	
-		
 		if(!empty($_REQUEST['FanNowDate'])){  //日期查询
 			$time1 = strtotime($_REQUEST['FanNowDate']);                // 这天 00:00:00
 			$time2 = strtotime($_REQUEST['FanNowDate']) + 3600*24 -1;   // 这天 23:59:59
 			$where['e_date'] = array(array('egt',$time1),array('elt',$time2));
-			//$where['e_date'] = array('eq',$time1);
 		}
 
         $field  = '*';
@@ -134,66 +131,19 @@ class BonusAction extends CommonAction{
         $this->assign('page', $show);//分页变量输出到模板
         $list = $bonus->where($where)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
         $this->assign('list',$list);//数据输出到模板
-        //=================================================
-
         //各项奖每页汇总
 		$count = array();
-		foreach($list as $vo){
-			for($b=0;$b<=100;$b++){
-				$count[$b] += $vo['b'.$b];
-				$count[$b] = $this->_2Mal($count[$b],2);
-			}
-		}
-
-		//奖项名称与显示
-		$b_b = array();
-		$c_b = array();
-		$b_b[1]  = C('Bonus_B1');
-		$c_b[1]  = C('Bonus_B1c');
-		$b_b[2]  = C('Bonus_B2');
-		$c_b[2]  = C('Bonus_B2c');
-		$b_b[3]  = C('Bonus_B3');
-		$c_b[3]  = C('Bonus_B3c');
-		$b_b[4]  = C('Bonus_B4');
-		$c_b[4]  = C('Bonus_B4c');
-		$b_b[5]  = C('Bonus_B5');
-		$c_b[5]  = C('Bonus_B5c');
-		$b_b[6]  = C('Bonus_B6');
-		$c_b[6]  = C('Bonus_B6c');
-		$b_b[7]  = C('Bonus_B7');
-		$c_b[7]  = C('Bonus_B7c');
-		$b_b[8]  = C('Bonus_B8');
-		$c_b[8]  = C('Bonus_B8c');
-		$b_b[9]  = C('Bonus_B9');
-		$c_b[9]  = C('Bonus_B9c');
-		$b_b[10] = C('Bonus_B10');
-		$c_b[10] = C('Bonus_B10c');
-		$b_b[11] = C('Bonus_HJ');   //合计
-		$c_b[11] = C('Bonus_HJc');
-		$b_b[13] = C('Bonus_Bb0');   //合计
-		$c_b[13] = C('Bonus_Bb0c');
-		$b_b[0]  = C('Bonus_B0');   //实发
-		$c_b[0]  = C('Bonus_B0c');
-		$b_b[12] = C('Bonus_XX');   //详细
-		$c_b[12] = C('Bonus_XXc');
-
 		$fee   = M ('fee');    //参数表
 		$fee_rs = $fee->field('s18')->find();
 		$fee_s7 = explode('|',$fee_rs['s18']);
-		
 		$this->assign('fee_s7',$fee_s7);        //输出奖项名称数组
-
-		$this -> assign('b_b',$b_b);
-		$this -> assign('c_b',$c_b);
-		$this->assign('count',$count);
-		$this->display('financeTable');
+		$this->display('financeDetail');
 	}
-	
 	
 	public function financeShow(){
 		//奖金明细
 		$history = M('history');
-		$fck = M ('fck');
+		$member = M ('member');
 		$fee = M ('fee');
 		$fee_rs = $fee->field('s13')->find();
 		$date = $fee_rs['s13'];
@@ -211,12 +161,12 @@ class BonusAction extends CommonAction{
 		
 		$user_id = trim($_REQUEST['UserID']);
 		if(!empty($user_id) && $UID==1){
-			$fck_rs = $fck->where("user_id='$user_id'")->field('id')->find();
-			if(!$fck_rs){
+			$member_rs = $member->where("user_id='$user_id'")->field('id')->find();
+			if(!$member_rs){
 				$this->error("该会员不存在");
 				exit;
 			}else{
-				$UID = $fck_rs['id'];
+				$UID = $member_rs['id'];
 			}
 		}
 		$map = "pdt >={$RDT} and pdt <={$PDT} and uid={$UID} ";
@@ -248,20 +198,20 @@ class BonusAction extends CommonAction{
 
 //会员资金查询(显示会员每一期的各奖奖金)
 	public function financeTable1($cs=0){
-		$fck = M('fck');
+		$member = M('member');
 		$bonus = M ('bonus');  //奖金表
 		$where = array();
 		$ID = $_SESSION[C('USER_AUTH_KEY')];
 		
 		$user_id = trim($_REQUEST['UserID']);
 		if(!empty($user_id) && $ID==1){
-			$fck_rs = $fck->where("user_id='$user_id'")->field('id')->find();
-			if(!$fck_rs){
+			$member_rs = $member->where("user_id='$user_id'")->field('id')->find();
+			if(!$member_rs){
 				$this->error("该会员不存在");
 				exit;
 			}else{
 				$this->assign('user_id',$user_id);
-				$where['uid'] = $fck_rs['id'];
+				$where['uid'] = $member_rs['id'];
 			}
 		}else{
 			$where['uid'] = $ID; //登录AutoId
@@ -346,7 +296,7 @@ class BonusAction extends CommonAction{
 	public function financeShow1(){
 		//奖金明细
 		$history = M('history');
-		$fck = M ('fck');
+		$member = M ('member');
 		$fee = M ('fee');
 		$fee_rs = $fee->field('s13')->find();
 		$date = $fee_rs['s13'];
@@ -362,12 +312,12 @@ class BonusAction extends CommonAction{
 		
 		$user_id = trim($_REQUEST['UserID']);
 		if(!empty($user_id) && $UID==1){
-			$fck_rs = $fck->where("user_id='$user_id'")->field('id')->find();
-			if(!$fck_rs){
+			$member_rs = $member->where("user_id='$user_id'")->field('id')->find();
+			if(!$member_rs){
 				$this->error("该会员不存在");
 				exit;
 			}else{
-				$UID = $fck_rs['id'];
+				$UID = $member_rs['id'];
 			}
 		}
 		$map = "pdt >={$RDT} and pdt <={$PDT} and uid={$UID} and action_type+0>0 and action_type+0<7 and action_type+0>1";
@@ -394,11 +344,6 @@ class BonusAction extends CommonAction{
 
 		$this->display ('financeShow1');
 	}
-	
-
-
-
-
 	
 	//出纳管理
 	public function adminFinance(){
@@ -1082,9 +1027,9 @@ class BonusAction extends CommonAction{
 		 //查询字段
 		$field   = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
 		$field  .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-		$field  .= ',xt_fck.user_id,xt_fck.user_tel,xt_fck.bank_card';
-		$field  .= ',xt_fck.user_name,xt_fck.user_address,xt_fck.nickname,xt_fck.user_phone,xt_fck.bank_province,xt_fck.user_tel';
-		$field  .= ',xt_fck.user_code,xt_fck.bank_city,xt_fck.bank_name,xt_fck.bank_address';
+		$field  .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+		$field  .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
+		$field  .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
 		import ( "@.ORG.ZQPage" );  //导入分页类
 		$count = $bonus->where($map)->count();//总页数
 		$listrows = 1000000  ;//每页显示的记录数
@@ -1093,7 +1038,7 @@ class BonusAction extends CommonAction{
 		//===============(总页数,每页显示记录数,css样式 0-9)
 		$show = $Page->show();//分页变量
 		$this->assign('page',$show);//分页变量输出到模板
-		$join = 'left join xt_fck ON xt_bonus.uid=xt_fck.id';//连表查询
+		$join = 'left join xt_member ON xt_bonus.uid=xt_member.id';//连表查询
 		$list = $bonus ->where($map)->field($field)->join($join)->Distinct(true)->order('id asc')->page($Page->getPage().','.$listrows)->select();
 		$i = 0;
 		foreach($list as $row)   {
@@ -1149,9 +1094,9 @@ class BonusAction extends CommonAction{
 		 //查询字段
 		$field   = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
 		$field  .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-		$field  .= ',xt_fck.user_id,xt_fck.user_tel,xt_fck.bank_card';
-		$field  .= ',xt_fck.user_name,xt_fck.user_address,xt_fck.nickname,xt_fck.user_phone,xt_fck.bank_province,xt_fck.user_tel';
-		$field  .= ',xt_fck.user_code,xt_fck.bank_city,xt_fck.bank_name,xt_fck.bank_address';
+		$field  .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+		$field  .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
+		$field  .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
 		import ( "@.ORG.ZQPage" );  //导入分页类
 		$count = $bonus->where($map)->count();//总页数
 		$listrows = 1000000  ;//每页显示的记录数
@@ -1160,7 +1105,7 @@ class BonusAction extends CommonAction{
 		//===============(总页数,每页显示记录数,css样式 0-9)
 		$show = $Page->show();//分页变量
 		$this->assign('page',$show);//分页变量输出到模板
-		$join = 'left join xt_fck ON xt_bonus.uid=xt_fck.id';//连表查询
+		$join = 'left join xt_member ON xt_bonus.uid=xt_member.id';//连表查询
 		$list = $bonus ->where($map)->field($field)->join($join)->Distinct(true)->order('id asc')->page($Page->getPage().','.$listrows)->select();
 		$i = 0;
 		foreach($list as $row)   {
@@ -1198,9 +1143,9 @@ class BonusAction extends CommonAction{
              //查询字段
             $field   = 'xt_bonus.id,xt_bonus.uid,xt_bonus.did,s_date,e_date,xt_bonus.b0,xt_bonus.b1,xt_bonus.b2,xt_bonus.b3';
             $field  .= ',xt_bonus.b4,xt_bonus.b5,xt_bonus.b6,xt_bonus.b7,xt_bonus.b8,xt_bonus.b9,xt_bonus.b10';
-            $field  .= ',xt_fck.user_id,xt_fck.user_tel,xt_fck.bank_card';
-            $field  .= ',xt_fck.user_name,xt_fck.user_address,xt_fck.nickname,xt_fck.user_phone,xt_fck.bank_province,xt_fck.user_tel';
-            $field  .= ',xt_fck.user_code,xt_fck.bank_city,xt_fck.bank_name,xt_fck.bank_address';
+            $field  .= ',xt_member.user_id,xt_member.user_tel,xt_member.bank_card';
+            $field  .= ',xt_member.user_name,xt_member.user_address,xt_member.nickname,xt_member.user_phone,xt_member.bank_province,xt_member.user_tel';
+            $field  .= ',xt_member.user_code,xt_member.bank_city,xt_member.bank_name,xt_member.bank_address';
             import ( "@.ORG.ZQPage" );  //导入分页类
             $count = $bonus->where($map)->count();//总页数
             $listrows = 1000000  ;//每页显示的记录数
@@ -1209,7 +1154,7 @@ class BonusAction extends CommonAction{
             //===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show();//分页变量
             $this->assign('page',$show);//分页变量输出到模板
-            $join = 'left join xt_fck ON xt_bonus.uid=xt_fck.id';//连表查询
+            $join = 'left join xt_member ON xt_bonus.uid=xt_member.id';//连表查询
             $list = $bonus ->where($map)->field($field)->join($join)->Distinct(true)->order('id asc')->page($Page->getPage().','.$listrows)->select();
             $i = 0;
 			$ko = "";

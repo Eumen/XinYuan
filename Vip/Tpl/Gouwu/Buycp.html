@@ -1,7 +1,7 @@
 <include file="Public:xyHead" />
 <div class="ncenter_box">
 	<div class="accounttitle">
-		<h5>商品列表</h5>
+		<h4><a href="__APP__/Gouwu/mallIndex/" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>商品列表</h4>
 	</div>
 	<style>
 .pri_a {
@@ -48,19 +48,19 @@
 					onclick="window.location='__URL__/Buycp/tp/{$tt.id}/'"> </eq> </volist></td>
 		</tr>
 	</table>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-responsive">
 		<tr>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0" align="left">
 					<tr>
 						<volist name="list" id="vo" key="kk"> <?php if($kk%5==1&&$kk!=1) echo "</tr><tr>";?>
 						<td>
-							<table align="left" cellpadding="0" cellspacing="0" width="150" class="ss">
+							<table align="left" cellpadding="0" cellspacing="0" width="150">
 								<tbody>
 									<tr>
 										<td align="center" style="font-weight: bold">
 											<a href="__URL__/Cpcontent/id/{$vo.id}" style="cursor: hand;">
-												<img src="{$vo.img1}" style="width: 220px; height: 150px; border: solid 2px #f8f8f8">
+												<img src="{$vo.img1}" style="width: 150px; height: 150px; border: solid 2px #f8f8f8">
 										</a></td>
 									</tr>
 									<tr>

@@ -645,35 +645,21 @@ public function dizhiAdd(){
 		$gwd['receive_name'] = $ars['user_name'];
 		// 收货人联系电话
 		$gwd['tel'] = $ars['tel'];
-		// 发货人用户名============待修改部分
-		$gwd['send_id'] = $ars['user_id'];
-		// 发货人姓名============待修改部分
-		$gwd['send_name'] = $ars['user_name'];
-		// 发货人联系电话============待修改部分
-		$gwd['tel'] = $ars['tel'];
-// 		// 确认发货人用户名============待修改部分
-// 		$gwd['confirm_send_id'] = $ars['user_id'];
-// 		// 确认发货人姓名============待修改部分
-// 		$gwd['confirm_send_name'] = $ars['user_name'];
-// 		// 确认发货时间============待修改部分
-// 		$gwd['confirm_send_time'] = $ars['tel'];
-		
-// 		// 确认收货人用户名============待修改部分
-// 		$gwd['confirm_receive_id'] = $ars['user_id'];
-// 		// 确认收货人姓名============待修改部分
-// 		$gwd['confirm_receive_name'] = $ars['user_name'];
-// 		// 确认收货时间============待修改部分
-// 		$gwd['confirm_receive_time'] = $ars['tel'];
-		
         if($_POST['sel']==1){
     		if($member_rs['cash'] < $prices){
     			$this->error("您的现金币余额不足！");
     			exit;
     		}
         }
-        // 1 :3.8 积分：现金比例 =========待修改部分
+        // 1 :3.8 积分：现金比例
+        $cash_tmp = bcdiv($prices*3.8, 4.8,2);
+        $point_tmp = bcdiv($prices, 4.8,2);
 		if($_POST['sel']==2){
-    		if($member_rs['point'] < $prices){
+		    if($member_rs['cash'] < $cash_tmp){
+		        $this->error("您的现金币余额不足！");
+		        exit;
+		    }
+    		if($member_rs['point'] < $point_tmp){
     			$this->error("您的积分币余额不足！");
     			exit;
     		}
@@ -699,10 +685,22 @@ public function dizhiAdd(){
 		if($_POST['sel']==1){
 			$rs = $member->query("update __TABLE__ set cash=cash-".$prices." where id=".$id);
 		}
-		if($_POST['sel']==2){//=========待修改部分
-			$rs = $member->query("update __TABLE__ set cash=cash-".$prices." where id=".$id);
+		if($_POST['sel']==2){
+			$rs = $member->query("update __TABLE__ set cash=cash-".$cash_tmp.",point=point-".$point_tmp." where id=".$id);
 		}
-// 		$member->addencAdd($member_rs['id'],$member_rs['user_id'], -$prices,22);=====待修改部分
+		// 添加历史记录
+		$bonushistory = M('bonushistory');
+		$data = array();
+		$data['user_id'] = $member_rs['user_id'];
+		$data['user_name'] = $member_rs['user_name'];
+		$data['produce_userid'] = $member_rs['user_id'];
+		$data['produce_username'] = $member_rs['user_name'];
+		$data['action_type'] = 4;
+		$data['time'] = mktime();
+		$data['money'] = -$prices;
+		$data['in_money'] = -$prices;
+		$data['bz'] = '商城购物';
+		$bonushistory->add($data);
 		if($rs !== false){
 			$_SESSION["shopping"]='';
 			$_SESSION["shopping_bz"]='';

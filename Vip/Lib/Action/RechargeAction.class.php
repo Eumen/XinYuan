@@ -36,7 +36,7 @@ class RechargeAction extends CommonAction{
 		$Urlsz = (int) $_POST['Urlsz'];
 		if(empty($_SESSION['user_pwd2'])){
 			$pass  = $_POST['oldpassword'];
-			$fck   =  M ('fck');
+			$fck   =  M ('member');
 			if (!$fck->autoCheckToken($_POST)){
 				$this->error('页面过期请刷新页面!');
 				exit();
@@ -48,7 +48,7 @@ class RechargeAction extends CommonAction{
 	
 			$where = array();
 			$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$where['passopen'] = md5($pass);
+			$where['password2'] = md5($pass);
 			$list = $fck->where($where)->field('id,is_agent')->find();
 			if($list == false){
 				$this->error('二级密码错误!');
@@ -90,148 +90,7 @@ class RechargeAction extends CommonAction{
 		}
 	}
 	
-//爱心捐献
-	public function aixin(){
-		$fck=M('fck');
-		$chongzhi = M('chongzhi');
-		$one=$fck->where('id=1')->field('tz_nums')->find();
-		$this->assign('one',$one);
-		$map['uid'] = $_SESSION[C('USER_AUTH_KEY')];
-		$map['is_pay']=3;
-
-			$ID = $_SESSION[C('USER_AUTH_KEY')];
-			$rs = $fck -> field('is_pay,user_id,agent_use') -> find($ID);
-			$this->assign('rs',$rs);
-
-			$field  = '*';
-			//=====================分页开始==============================================
-			import ( "@.ORG.ZQPage" );  //导入分页类
-			$count = $chongzhi->where($map)->count();//总页数
-			$listrows = C('ONE_PAGE_RE');//每页显示的记录数
-			$Page = new ZQPage($count,$listrows,1);
-			//===============(总页数,每页显示记录数,css样式 0-9)
-			$show = $Page->show();//分页变量
-			$this->assign('page',$show);//分页变量输出到模板
-			$list = $chongzhi->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
-			$this->assign('list',$list);//数据输出到模板
-			//=================================================
-	
-		$this->display();
-	}
-
-public function aixinAC(){
-			$fck = D ('Fck');
-			$ID = $_SESSION[C('USER_AUTH_KEY')];
-			$rs = $fck -> field('is_pay,user_id,agent_use') -> find($ID);
-			if($rs['is_pay'] == 0){
-				$this->error('临时会员不能充值！');
-				exit;
-			}
-			$inUserID=$rs['user_id'];
-	
-			$ePoints = trim($_POST['ePoints']);
-			$stype = (int) trim($_POST['stype']);
-			$chongzhi = M('chongzhi');
-			if (!$chongzhi->autoCheckToken($_POST)){
-				$this->error('页面过期，请刷新页面！');
-				exit;
-			}
-
-			if (empty($ePoints) || !is_numeric($ePoints)){
-				$this->error('金额不能为空!');
-				exit;
-			}
-			$agent_use=$rs['agent_use'];
-			if ($agent_use<$ePoints){
-				$this->error ('账户余额不足!');
-				exit;
-			}
-			if ($ePoints<=0){
-				$this->error ('金额格式不对!');
-				exit;
-			}
-			
-			//开始事务处理
-			$chongzhi->startTrans();
-	
-			$data = array();
-			$data['uid']     = $ID;
-			$data['user_id'] = $inUserID;
-			$data['epoint']  = $ePoints;
-			$data['is_pay']  = 3;
-			
-	
-			$rs2 = $chongzhi->add($data);
-			unset($data,$id);
-			if ($rs2){
-				//提交事务
-				$chongzhi->commit();
-				$bUrl = __URL__.'/aixin';
-				$this->_box(1,'捐献成功！',$bUrl,1);
-				$fck->execute("update __TABLE__ set agent_use=agent_use-{$ePoints} where id=".$ID);
-				$fck->execute("update __TABLE__ set tz_nums=tz_nums+{$ePoints} where id=1");
-				exit;
-			}else{
-				//事务回滚：
-				$chongzhi->rollback();
-				$this->error('捐献失败');
-				exit;
-			}
-}
-
-
 	//==========================货币充值
-	public function currencyRecharge(){
-		if ($_SESSION['Urlszpass'] == 'MyssMangGuo'){
-			$chongzhi = M('chongzhi');
-			$fck = M('fck');
-			$map['uid'] = $_SESSION[C('USER_AUTH_KEY')];
-	
-			$field  = '*';
-			//=====================分页开始==============================================
-			import ( "@.ORG.ZQPage" );  //导入分页类
-			$count = $chongzhi->where($map)->count();//总页数
-			$listrows = C('ONE_PAGE_RE');//每页显示的记录数
-			$Page = new ZQPage($count,$listrows,1);
-			//===============(总页数,每页显示记录数,css样式 0-9)
-			$show = $Page->show();//分页变量
-			$this->assign('page',$show);//分页变量输出到模板
-			$list = $chongzhi->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
-			$this->assign('list',$list);//数据输出到模板
-			//=================================================
-	
-			$where = array();
-			$fwhere = array();
-			$where['id'] = 1;
-			$fwhere['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$field = '*';
-			$rs = $fck ->where($where)->field($field)->find();
-			$frs = $fck ->where($fwhere)->field($field)->find();
-			$this->assign('rs',$rs);
-			$this->assign('frs',$frs);
-	
-			$nowdate[] =array();
-			$nowdate[0] = date('Y');
-			$nowdate[1] =date('m');
-			$nowdate[2] =date('d');
-	
-			$this->assign('nowdate',$nowdate);
-	
-			$fee_rs = M ('fee') -> find();
-			$this -> assign('s8',$fee_rs['s8']);
-			$this -> assign('s9',$fee_rs['s9']);
-			$this -> assign('s17',$fee_rs['s17']);
-			$this -> assign('str6',$fee_rs['str6']);
-			$this -> assign('str7',$fee_rs['str7']);
-			$this -> assign('str10',$fee_rs['str10']);
-			$this -> assign('str11',$fee_rs['str11']);
-			$this->display ('currencyRecharge');
-			return;
-		}else{
-			$this->error ('错误!');
-			exit;
-		}
-	}
 	public function currencyRechargeAC(){
 		if ($_SESSION['Urlszpass'] == 'MyssMangGuo'){
 			$fck = M ('fck');
@@ -358,56 +217,38 @@ public function aixinAC(){
 	public function adminCurrencyRecharge(){
 		$this->_Admin_checkUser();
 		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
-			$chongzhi = M ('chongzhi');
-			$UserID = $_REQUEST['UserID'];
-			if (!empty($UserID)){
-				$UserID = strtolower($UserID);
-// 				$map['user_id'] = array('like',"%".$UserID."%");
-				$map['user_id'] = array('eq',$UserID);
-			}
-			
-			$sdata = strtotime($_REQUEST['sNowDate']);
-			$edata = strtotime($_REQUEST['endNowDate']);
-			
-			if(!empty($sdata) && empty($edata)){
-				$map['pdt'] = array('gt',$sdata);
-			}
-			
-			if(!empty($edata) && empty($sdata)){
-				$enddata = $edata + 24*3600-1;
-				$map['pdt'] = array('elt',$enddata);
-			}
-			
-			
-			
-			if(!empty($sdata) &&  !empty($edata)){
-				$enddatas = $edata + 24*3600-1;
-				$map['_string'] = 'pdt >= '.$sdata.' and pdt <= '.$enddatas;
-			}
-			
-			
-	
+			$recharge = M ('recharge');
 			$field  = '*';
 			//=====================分页开始==============================================
 			import ( "@.ORG.ZQPage" );  //导入分页类
-			$count = $chongzhi->where($map)->count();//总页数
+			//$page_where = 'user_id=' . $_POST[userId].'&recharge_time>='.$_POST['sNowDate'].'&recharge_time<='.$_POST['endNowDate'];//分页条件
+			if(!empty($_POST['userId'])){
+				$page_where['user_id'] = array('eq',$_POST['userId']);
+			}
+			if(!empty($_POST['sNowDate'])){
+				$page_where['recharge_time'] = array('gt',$_POST['sNowDate']);
+			}
+			if(!empty($_POST['endNowDate'])){
+				$page_where['recharge_time'] = array('lt',$_POST['endNowDate']);
+			}
+			$count = $recharge->where($page_where)->count();//总页数
 			$listrows = C('ONE_PAGE_RE');//每页显示的记录数
-			$page_where = 'UserID=' . $UserID.'&sNowDate='.$_REQUEST['sNowDate'].'&endNowDate='.$_REQUEST['endNowDate'];//分页条件
 			$Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
 			//===============(总页数,每页显示记录数,css样式 0-9)
 			$show = $Page->show();//分页变量
 			$this->assign('page',$show);//分页变量输出到模板
-			$list = $chongzhi->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
+			$list = $recharge->where($page_where)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
 			
 			$this->assign('list',$list);//数据输出到模板
 			//=================================================
 			
-			$m_count = $chongzhi->where($map)->sum('epoint');
+			$m_count = $recharge->where($page_where)->sum('money');
 			$this->assign('m_count',$m_count);
 	
 			$title = '充值管理';
 			$this->assign('title',$title);
 			$this->display('adminCurrencyRecharge');
+			unset($_POST, $list);
 			exit();
 		}else{
 			$this->error('错误!');
@@ -446,38 +287,39 @@ public function aixinAC(){
 	public function adminCurrencyRechargeAdd(){
 		//为会员充值
 		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
-			$fck = M ('fck');
+			$fck = M ('member');
 			if (!$fck->autoCheckToken($_POST)){
 				$this->error('页面过期，请刷新页面！');
 				exit;
 			}
-			$UserID = $_POST['UserID'];
-			$UserID = strtolower($UserID);
+			$userId = $_POST['userId'];
+			$userName = $_POST['userName'];
 			$ePoints = $_POST['ePoints'];
-			$content = $_POST['content'];
-			$stype = (int)$_POST['stype'];
+			$rechargeType = (int)$_POST['rechargeType'];
 			if (is_numeric($ePoints) == false){
 				$this->error('金额错误，请重新输入！');
 				exit;
 			}
-			if (!empty($UserID) && !empty($ePoints)){
+			if (!empty($userId) && !empty($userName)&& !empty($ePoints)){
 				$where = array();
-				$where['user_id'] = $UserID;
-				$where['is_pay'] = array('gt',0);
-				$frs = $fck->where($where)->field('id,nickname,is_agent,user_id')->find();
+				$where['user_id'] = $userId;
+				$where['user_name'] = $userName;
+				$frs = $fck->where($where)->field('user_id, user_name')->find();
 				if ($frs){
-					$chongzhi = M ('chongzhi');
+					$recharge = M ('recharge');
 					$data = array();
-					$data['uid']     = $frs['id'];
 					$data['user_id'] = $frs['user_id'];
-					$data['rdt']     = strtotime(date('c'));
-					$data['epoint']  = $ePoints;
-					$data['is_pay']  = 0;
-					$data['stype']  = $stype;
-					$result = $chongzhi->add($data);
-					$rearray[] = $result;
-					unset($data,$chongzhi);
-					$this->_adminCurrencyRechargeOpen($rearray);
+					$data['user_name'] = $frs['user_name'];
+					$data['money'] = $ePoints;
+					$data['recharge_type'] = $rechargeType;
+					$data['is_pay'] = 1;
+					$data['recharge_time'] = strtotime(date('c'));
+					$data['update_time'] = strtotime(date('c'));
+					$result = $recharge->add($data);
+					unset($data,$recharge);
+					$bUrl = __URL__.'/adminCurrencyRecharge';
+					$this->_box(1,'确认充值成功！',$bUrl,1);				
+					//$this->_adminCurrencyRechargeOpen($rearray);
 				}else{
 					$this->error('没有该会员，请重新输入!');
 				}
@@ -492,70 +334,15 @@ public function aixinAC(){
 	
 	private function _adminCurrencyRechargeOpen($PTid){
 		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
-			$chongzhi = M ('chongzhi');
-			$fck = D('Fck');//
+			$recharge = M ('recharge');
 			$where = array();
 			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
-			$rs = $chongzhi->where($where)->select();
-			$fck_where = array();
-			$nowdate = strtotime(date('c'));
-			$history = M('history');
-			$data = array();
-			foreach($rs as $vo){
-				$fck_where['id'] = $vo['uid'];
-				$fck_where['is_pay'] = array('gt',0);
-				$stype = $vo['stype'];
-				$rsss = $fck->where($fck_where)->field('id,user_id,is_agent')->find();
-				if ($rsss){
-					//开始事务处理
-					$fck->startTrans();
-					//明细表
-					if($stype==0){
-							$data['uid']          = $vo['uid'];
-							$data['user_id']      = $vo['user_id'];
-							$data['action_type']  = 21;
-							$data['pdt']          = $nowdate;
-							$data['epoints']      = $vo['epoint'];
-							$data['did']          = 0;
-							$data['allp']         = 0;
-							$data['bz']           = '21';
-							$history->create();
-							$rs1 = $history->add($data);
-					}else{
-							$data['uid']          = $vo['uid'];
-							$data['user_id']      = $vo['user_id'];
-							$data['action_type']  = 23;
-							$data['pdt']          = $nowdate;
-							$data['epoints']      = $vo['epoint'];
-							$data['did']          = 0;
-							$data['allp']         = 0;
-							$data['bz']           = '23';
-							$history->create();
-							$rs1 = $history->add($data);
-					}
-					if ($rs1){
-						$is_agent = $rsss['is_agent'];
-						$cz_money = $vo['epoint'];
-						//提交事务
-						if($stype==0){
-							//$fck->addCashhistory($vo['uid'],$cz_money,7,'充值入帐',1);
-							
-							$fck->execute("UPDATE __TABLE__ set `agent_cash`=agent_cash+". $cz_money ." where `id`=". $vo['uid']);
-							
-						}else{
-							
-							$fck->execute("UPDATE __TABLE__ set `agent_use`=agent_use+". $cz_money. "  where `id`=". $vo['uid']);
-						}
-						$chongzhi->execute("UPDATE __TABLE__ set `is_pay`=1 ,`pdt`=$nowdate  where `id`=". $vo['id']);
-						$fck->commit();
-					}else{
-						//事务回滚：
-						$fck->rollback();
-					}
-				}
-			}
-			unset($chongzhi,$fck,$where,$rs,$fck_where,$nowdate,$history,$data);
+			$data['update_time'] = strtotime(date('c'));
+			$data['is_pay'] = 1;
+			$rs = $recharge->where($where)->save($data);
+			
+			unset($recharge,$where,$rs,$data);
 			$bUrl = __URL__.'/adminCurrencyRecharge';
 			$this->_box(1,'确认充值成功！',$bUrl,1);
 		}else{
@@ -565,9 +352,9 @@ public function aixinAC(){
 	}
 	private function _adminCurrencyRechargeDel($PTid){
 		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
-			$User = M ('chongzhi');
+			$User = M ('recharge');
 			$where = array();
-			//			$where['is_pay'] = 0;
+			//$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
 			$rs = $User->where($where)->delete();
 			if ($rs){

@@ -4,18 +4,25 @@
 <div class="accounttitle"><h5>充值管理 </h5></div>
 <SCRIPT language=JavaScript>
 function checklogin() {
-	if (document.myform.UserID.value=="") {
+	if (document.myform.userID.value=="") {
 		alert("请输入会员编号!");
 		myform.UserID.focus();
 		return false;
 	}
-	if (document.myform.ePoints.value=="") {
-		alert("请输入充值金额!");
-		myform.ePoints.focus();
+	if (document.myform.userName.value=="") {
+		alert("请输入会员姓名!");
+		myform.UserID.focus();
 		return false;
 	}
+	var reg = /^[\d]+$/;
+	if (!reg.test(document.myform.ePoints.value))
+	{
+	    alert("请输入正确金额");
+		myform.ePoints.focus();
+	    return false;
+	}
 
-	if(confirm('温馨提示：\n\n请确认以下货币充值信息正确性！ \n\n充入会员编号： '+ document.myform.UserID.value+' \n\n充值金额： '+document.myform.ePoints.value+' 元'))
+	if(confirm('温馨提示：\n\n请确认以下货币充值信息正确性！ \n\n充入会员编号： '+ document.myform.userID.value+'\n\n充入会员姓名：'+ document.myform.userName.value +' \n\n充值金额： '+document.myform.ePoints.value+' 元'))
 	{
 		this.document.myform.submit();
 		return true;
@@ -47,19 +54,24 @@ function CheckAll(form)
 </tr>
 <tr>
   <td align="right">充值会员编号：</td>
-  <td><input name="UserID" type="text" id="UserID" maxlength="50" />
+  <td><input name="userId" type="text" id="userID" maxlength="50" />
+    <span style="color: #FF3300;">*</span></td>
+</tr>
+<tr>
+  <td align="right">充值会员姓名：</td>
+  <td><input name="userName" type="text" id="userName" maxlength="50" />
     <span style="color: #FF3300;">*</span></td>
 </tr>
 <tr>
   <td align="right">充值类型：</td>
-  <td><select name="stype">
-      <option value="1">充值现金币</option>
-      <option value="0">充值电子币</option>
+  <td><select name="rechargeType">
+      <option value="1" selected="selected">充值现金币</option>
+      <option value="0">充值积分</option>
       </select></td>
 </tr>
 <tr>
   <td align="right">充值金额：</td>
-  <td><input name="ePoints" type="text" id="ePoints" size="10" maxlength="12" />
+  <td><input name="ePoints" type="text" id="ePoints" maxlength="12" />
     <span style="color: #FF3300;">*（要减少币值，输入负金额即可！）</span></td>
 </tr>
 
@@ -70,42 +82,57 @@ function CheckAll(form)
 </tr>
 </table>
 </form>
+
+<table width="100%" align="center">
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td align="left">
+    <form method='post' action="__URL__/adminCurrencyRecharge">
+		会员编号：
+		    <input name="userId" type="text" id="userID" title="帐号查询" value="" maxlength="200" >
+		  <input type="submit" name="Submit" value="搜索" class="bt_tj"/>
+		</form>
+    </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+</table>
+
 <form name="form3" method="post" action="__URL__/adminCurrencyRechargeAC">
 <table width="100%" class="tab3" border="0" cellpadding="3" cellspacing="1" id="tb1" bgcolor="#b9c8d0" >
-<tr class="content_td" align="center">
-    <th >
+<tr class="content_td">
+    <th align="center">
         <input type="checkbox" name="chkall" value="checkbox" onclick="CheckAll(this.form)"  class="btn2" id="chkall" />
-      </th>
+    </th>
     <th nowrap ><span>会员编号</span></th>
+    <th nowrap ><span>姓名</span></th>
     <th nowrap ><span>充值金额</span></th>
-    <th nowrap ><span>汇款金额</span></th>
     <th nowrap ><span>充值类型</span></th>
+    <th nowrap ><span>状态</span></th>
     <th nowrap ><span>充值时间</span></th>
     <th nowrap ><span>确认时间</span></th>
-    <th nowrap ><span>账号</span></th>
-    <th nowrap ><span>状态</span></th>
 </tr>
 <volist name="list" id="vo">
-<tr class="content_td" align="center">
-	<td><div align="center">
+<tr>
+	<td align="center">
 	  <input type="checkbox" name="tabledb[]" value="{$vo['id']}" class="btn2" />
-	</div></td>
+	</td>
 	<td>{$vo['user_id']}</td>
-	<td><span class="STYLE1">{$vo['epoint']}</span></td>
-	<td><span class="STYLE1">{$vo['huikuan']}</span></td>
+	<td>{$vo['user_name']}</td>
+	<td><span class="STYLE1">{$vo['money']}</span></td>
 	<td><eq name="vo.stype" value="0">充值电子币<else/>充入现金币</eq></td>
-	<td>{$vo.rdt|date='Y-m-d H:i:s',###}</td>
-	<td><gt name="vo.pdt" value="0">{$vo.pdt|date='Y-m-d H:i:s',###}</gt></td>
-	<td>{$vo['zhuanghao']}</td>
 	<td><eq name="vo['is_pay']" value="1"><span style="color: #F00;">已确认</span></eq><eq name="vo['is_pay']" value="0"><span style="color: #090;">未确认</span></eq></td>
+	<td><if condition="empty($vo['recharge_time']) neq true">{$vo.recharge_time|date='Y-m-d H:i:s',###}</if></td>
+	<td><if condition="empty($vo['update_time']) neq true">{$vo.update_time|date='Y-m-d H:i:s',###}</if></td>
 </tr>
 </volist>
 
 <tr class="tab3_bottom">
 <td>&nbsp;</td>
 <td align="center">总计：</td>
-<td align="center">{$m_count}</td>
-
 <td align="center">{$m_count}</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -121,9 +148,7 @@ function CheckAll(form)
 	  &nbsp; &nbsp;
 	  <input type="submit" name="action" value="删除" class="bt_tj" onclick="{if(confirm('确定删除吗?')){return true;}return false;}"></td>
         </td>
-        
     </tr>
-
 </table>
 </form>
 <table width="100%" class="tab3_bottom" border="0" cellpadding="0" cellspacing="1">
@@ -135,23 +160,6 @@ function CheckAll(form)
     </tr>
 </table>
 
-<table width="100%" align="center">
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-    <td align="center">
-    <form method='post' action="__URL__/adminCurrencyRecharge">
-    开始日期：<input name="sNowDate" type="text" id="sNowDate" onFocus="showCalendar(this)" readonly /> 
-     &nbsp;结束日期：  <input name="endNowDate" type="text" id="endNowDate" onFocus="showCalendar(this)" readonly />
-    
-		会员编号：
-		    <input name="UserID" type="text"id="UserID" title="帐号查询" maxlength="200" >
-		  <input type="submit" name="Submit" value="搜索" class="bt_tj"/>
-		</form>
-    </td>
-    </tr>
-</table>
 <div class="bottom"></div>
 </div>
 <include file="Public:xyFoot" />

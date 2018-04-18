@@ -74,6 +74,18 @@ code {
 </style>
 <script src="__PUBLIC__/Js/Jquery/jquery-1.11.3.min.js"></script>
 <script src="__PUBLIC__/Js/Jquery/bootstrap.min.js"></script>
+<script language="JavaScript">
+ifcheck = true;
+function CheckAll(form)
+{
+	for (var i=0;i<form.elements.length-2;i++)
+	{
+		var e = form.elements[i];
+		e.checked = ifcheck;
+	}
+	ifcheck = ifcheck == true ? false : true;
+}
+</script>
 
 </head>
 <body style="background-color: #f0f3ef;">

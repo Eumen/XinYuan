@@ -3064,7 +3064,7 @@ class YouZiAction extends CommonAction
             $model8->where('id > 0')->delete();
             $model9->where('id > 0')->delete();
             $model10->where('id > 0')->delete();
-            $model11->where('id > 0')->delete();
+            $model11->where('id != 9')->delete();
             $model12->where('id > 0')->delete();
             $model13->where('id > 0')->delete();
             $model14->where('id > 0')->delete();

@@ -328,7 +328,11 @@ class GouwuAction extends CommonAction{
 		$where['id'] = array('in','0'. $path .'0');
 		$list = $product -> where($where) ->select();
 		foreach ($list as $lvo){
-			$w_money = $lvo['sale_price'];
+		    if ($f_rs['grade'] > 0) {
+		        $w_money = $lvo['vip_price'];
+		    } else {
+		        $w_money = $lvo['sale_price'];
+		    }
 			//物品总价
 			$ep[$lvo['id']] = $ids[$lvo['id']] * $w_money;
 			$num[$lvo['id']] = $ids[$lvo['id']];
@@ -645,35 +649,21 @@ public function dizhiAdd(){
 		$gwd['receive_name'] = $ars['user_name'];
 		// 收货人联系电话
 		$gwd['tel'] = $ars['tel'];
-		// 发货人用户名============待修改部分
-		$gwd['send_id'] = $ars['user_id'];
-		// 发货人姓名============待修改部分
-		$gwd['send_name'] = $ars['user_name'];
-		// 发货人联系电话============待修改部分
-		$gwd['tel'] = $ars['tel'];
-// 		// 确认发货人用户名============待修改部分
-// 		$gwd['confirm_send_id'] = $ars['user_id'];
-// 		// 确认发货人姓名============待修改部分
-// 		$gwd['confirm_send_name'] = $ars['user_name'];
-// 		// 确认发货时间============待修改部分
-// 		$gwd['confirm_send_time'] = $ars['tel'];
-		
-// 		// 确认收货人用户名============待修改部分
-// 		$gwd['confirm_receive_id'] = $ars['user_id'];
-// 		// 确认收货人姓名============待修改部分
-// 		$gwd['confirm_receive_name'] = $ars['user_name'];
-// 		// 确认收货时间============待修改部分
-// 		$gwd['confirm_receive_time'] = $ars['tel'];
-		
         if($_POST['sel']==1){
     		if($member_rs['cash'] < $prices){
     			$this->error("您的现金币余额不足！");
     			exit;
     		}
         }
-        // 1 :3.8 积分：现金比例 =========待修改部分
+        // 1 :3.8 积分：现金比例
+        $cash_tmp = bcdiv($prices*3.8, 4.8,2);
+        $point_tmp = bcdiv($prices, 4.8,2);
 		if($_POST['sel']==2){
-    		if($member_rs['point'] < $prices){
+		    if($member_rs['cash'] < $cash_tmp){
+		        $this->error("您的现金币余额不足！");
+		        exit;
+		    }
+    		if($member_rs['point'] < $point_tmp){
     			$this->error("您的积分币余额不足！");
     			exit;
     		}
@@ -698,11 +688,35 @@ public function dizhiAdd(){
 		// 1为现金币支付 2为现金币+积分币支付
 		if($_POST['sel']==1){
 			$rs = $member->query("update __TABLE__ set cash=cash-".$prices." where id=".$id);
+			// 添加历史记录
+			$bonushistory = M('bonushistory');
+			$data = array();
+			$data['user_id'] = $member_rs['user_id'];
+			$data['user_name'] = $member_rs['user_name'];
+			$data['produce_userid'] = $member_rs['user_id'];
+			$data['produce_username'] = $member_rs['user_name'];
+			$data['action_type'] = 4;
+			$data['time'] = mktime();
+			$data['money'] = -$prices;
+			$data['bz'] = '商城购物';
+			$bonushistory->add($data);
 		}
-		if($_POST['sel']==2){//=========待修改部分
-			$rs = $member->query("update __TABLE__ set cash=cash-".$prices." where id=".$id);
+		if($_POST['sel']==2){
+			$rs = $member->query("update __TABLE__ set cash=cash-".$cash_tmp.",point=point-".$point_tmp." where id=".$id);
+			// 添加历史记录
+			$bonushistory = M('bonushistory');
+			$data = array();
+			$data['user_id'] = $member_rs['user_id'];
+			$data['user_name'] = $member_rs['user_name'];
+			$data['produce_userid'] = $member_rs['user_id'];
+			$data['produce_username'] = $member_rs['user_name'];
+			$data['action_type'] = 4;
+			$data['time'] = mktime();
+			$data['money'] = -$cash_tmp;
+			$data['in_money'] = -$point_tmp;
+			$data['bz'] = '商城购物';
+			$bonushistory->add($data);
 		}
-// 		$member->addencAdd($member_rs['id'],$member_rs['user_id'], -$prices,22);=====待修改部分
 		if($rs !== false){
 			$_SESSION["shopping"]='';
 			$_SESSION["shopping_bz"]='';
@@ -717,31 +731,36 @@ public function dizhiAdd(){
 
 	public function BuycpInfo() {//购买信息
 		$cp = M('product');
-		$member = M('member');
-		$gouwu = M('gouwu');
-		$id = $_SESSION[C('USER_AUTH_KEY')];
-		$user_id = $_SESSION['loginUseracc'];
-		// 根据用户名检索用户地址信息
-		$map['uid'] = $id;
-		 //=====================分页开始==============================================
-    import ( "@.ORG.ZQPage" );  //导入分页类
-    $count = $gouwu->where($map)->count();//总页数
-       		$listrows = C('ONE_PAGE_RE');//每页显示的记录数
-//    $page_where = 'UserID=' . $UserID;//分页条件
-    $Page = new ZQPage($count, $listrows, 1, 0, 3);
-    //===============(总页数,每页显示记录数,css样式 0-9)
-    $show = $Page->show();//分页变量
-    $this->assign('page',$show);//分页变量输出到模板
-		$where = "xy_gouwu.id>0 and  xy_gouwu.count>0 and xy_gouwu.user_id = '".$user_id."'";
-		$field = 'xy_member.user_id,xy_member.user_name,xy_product.name,xy_gouwu.*';
-		$join = 'left join xy_member ON xy_gouwu.user_id=xy_member.user_id'; //连表查询
-		$join1 = 'left join xy_product ON xy_gouwu.bk1=xy_product.id'; //连表查询
-		$list = $gouwu->where($where)->field($field)->join($join)->join($join1)->order('time desc')->page($Page->getPage().','.$listrows)->select();
-		$rs1 = $gouwu->where($map)->sum('money');
-		$this->assign('count', $rs1);
-		// print_r($list);die;
-		$this->assign('list', $list);
-		$this->display('BuycpInfo');
+        $member = M('member');
+        $gouwu = M('gouwu');
+        $id = $_SESSION[C('USER_AUTH_KEY')];
+        $user_id = $_SESSION['loginUseracc'];
+        // 根据用户名检索用户地址信息
+        $map['user_id'] = $user_id;
+        // =====================分页开始==============================================
+        import("@.ORG.ZQPage"); // 导入分页类
+        $count = $gouwu->where($map)->count(); // 总页数
+        $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
+//         $page_where = 'UserID=' . $user_id; // 分页条件
+        $Page = new ZQPage($count, $listrows, 1, 0, 3);
+        // ===============(总页数,每页显示记录数,css样式 0-9)
+        $show = $Page->show(); // 分页变量
+        $this->assign('page', $show); // 分页变量输出到模板
+        $where = "xy_gouwu.id>0 and xy_gouwu.user_id = '" . $user_id . "'";
+        $field = 'xy_member.user_id,xy_member.user_name,xy_product.name,xy_gouwu.*';
+        $join = 'left join xy_member ON xy_gouwu.user_id=xy_member.user_id'; // 连表查询
+        $join1 = 'left join xy_product ON xy_gouwu.bk1=xy_product.id'; // 连表查询
+        $list = $gouwu->where($where)
+            ->field($field)
+            ->join($join)
+            ->join($join1)
+            ->order('time desc')
+            ->page($Page->getPage() . ',' . $listrows)
+            ->select();
+        $rs1 = $gouwu->where($map)->sum('money');
+        $this->assign('count', $rs1);
+        $this->assign('list', $list);
+        $this->display('BuycpInfo');
 	}
 	
 	//产品表查询
@@ -846,7 +865,7 @@ public function dizhiAdd(){
 			$this->error('库存不能为空!');
 			exit;
 		}
-		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		if (empty($sale_price)||!is_numeric($sale_price)
 		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;
@@ -997,7 +1016,7 @@ public function dizhiAdd(){
 			$this->error('库存不能为空!');
 			exit;
 		}
-		if (empty($price)||!is_numeric($price)||empty($sale_price)||!is_numeric($sale_price)
+		if (empty($sale_price)||!is_numeric($sale_price)
 		    ||empty($vip_price)||!is_numeric($vip_price) ||empty($whole_sale_price)||!is_numeric($whole_sale_price)){
 			$this->error('价格不能为空!');
 			exit;

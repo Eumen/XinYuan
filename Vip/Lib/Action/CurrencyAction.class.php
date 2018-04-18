@@ -17,7 +17,7 @@ class CurrencyAction extends CommonAction {
 			$this->error('二级密码错误!');
 			exit;
 		}
-		if(!empty($_SESSION['user_pwd2'])){
+		if(!empty($_SESSION['password2'])){
 			$url = __URL__."/codys/Urlsz/$UrlID";
 			$this->_boxx($url);
 			exit;
@@ -38,10 +38,10 @@ class CurrencyAction extends CommonAction {
 		public function codys(){
 				//=============================二级验证后调转页面
 				$Urlsz = (int) $_POST['Urlsz'];
-				if(empty($_SESSION['user_pwd2'])){
+				if(empty($_SESSION['password2'])){
 					$pass  = $_POST['oldpassword'];
-					$fck   =  M ('fck');
-					if (!$fck->autoCheckToken($_POST)){
+					$member   =  M ('member');
+					if (!$member->autoCheckToken($_POST)){
 						$this->error('页面过期请刷新页面!');
 			            exit();
 					}
@@ -52,23 +52,22 @@ class CurrencyAction extends CommonAction {
 		
 					$where = array();
 					$where['id'] = $_SESSION[C('USER_AUTH_KEY')];
-					$where['passopen'] = md5($pass);
-					$list = $fck->where($where)->field('id,is_agent')->find();
+					$where['password2'] = md5($pass);
+					$list = $member->where($where)->field('id,is_agent')->find();
 					if($list == false){
 						$this->error('二级密码错误!');
 						exit();
 					}
-					$_SESSION['user_pwd2'] = 1;
+					$_SESSION['password2'] = 1;
 				}else{
 					$Urlsz = $_GET['Urlsz'];
 				}
 				switch ($Urlsz){
 					case 1;
 						$_SESSION['Urlszpass'] = 'MyssPaoYingTao';
-						$bUrl = __URL__.'/frontCurrency';//
+						$bUrl = __URL__.'/withdraw';//
 						$this->_boxx($bUrl);
 						break;
-				
 					case 2;
 						$_SESSION['Urlszpass'] = 'MyssGuanPaoYingTao';
 						$bUrl = __URL__.'/adminCurrency';//
@@ -82,40 +81,42 @@ class CurrencyAction extends CommonAction {
 			}
 
 	//===================================================货币提现
-	public function frontCurrency($Urlsz=0){
+	public function withdraw($Urlsz=0){
 		if ($_SESSION['Urlszpass'] == 'MyssPaoYingTao'){
-			$tiqu = M('tiqu');
-			$fck = M('fck');
+			$withdraw = M('withdraw');
+			$member = M('member');
 			$fee_rs = M ('fee')-> find(1);
-			$str4=$fee_rs['str11'];
-			$map['uid'] = $_SESSION[C('USER_AUTH_KEY')];
-
-			$field  = "*,money*{$str4} as chmoney,money_two*{$str4} as chmoney_two";
+			// 提现手续费
+			$s3=$fee_rs['s3'];
+			// 最低提现额度
+			$s9=$fee_rs['s9'];
+			$map['user_id'] = $_SESSION['loginUseracc'];
+			$field  = "*,money*{$s3} as chmoney,epoint*{$s9} as chmoney_two";
             //=====================分页开始==============================================
             import ( "@.ORG.ZQPage" );  //导入分页类
-            $count = $tiqu->where($map)->count();//总页数
+            $count = $withdraw->where($map)->count();//总页数
     	    $listrows = C('ONE_PAGE_RE');//每页显示的记录数
             $Page = new ZQPage($count,$listrows,1);
             //===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show();//分页变量
             $this->assign('page',$show);//分页变量输出到模板
-            $list = $tiqu->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
+            $list = $withdraw->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
             $this->assign('list',$list);//数据输出到模板
             //=================================================
-
 			$where = array();
 			$ID = $_SESSION[C('USER_AUTH_KEY')];
 			$where['id'] = $ID;
 			$field = '*';
-			$rs = $fck ->where($where)->field($field)->find();
-
+			$rs = $member ->where($where)->field($field)->find();
 			$fee_rs = M ('fee') -> find();
-			$this -> assign('menber',$fee_rs['s8']);
-			$this -> assign('minn',$fee_rs['s16']);
+			// 提现手续费
+			$this -> assign('menber',$fee_rs['s3']);
+			// 最低提现额度
+			$this -> assign('minn',$fee_rs['s9']);
 			$this->assign('type',$ID);
 			$this->assign('rs',$rs);
-			unset($tiqu,$fck,$where,$ID,$field,$rs);
-			$this->display ('frontCurrency');
+			unset($withdraw,$member,$where,$ID,$field,$rs);
+			$this->display ('withdraw');
 			return;
 		}else{
 			$this->error ('错误!');
@@ -126,166 +127,108 @@ class CurrencyAction extends CommonAction {
 	//=================================================提现提交
 	public function frontCurrencyConfirm(){
 		if ($_SESSION['Urlszpass'] == 'MyssPaoYingTao'){  //提现权限session认证
-			$ePoints = (int) trim($_POST['ePoints']);
+			$money = (int) trim($_POST['money']);
 			$ttype = (int) trim($_POST['ttype']);
-			$type = (int) trim($_POST['type']);
-			$fck = M ('fck');
-			if (empty($ePoints) || !is_numeric($ePoints)){
+			$member = M ('member');
+			if (empty($money) || !is_numeric($money)){
 				$this->error('金额不能为空!');
 				exit;
 			}
-			if ($ePoints < 100){
+			if ($money < 100){
 			    $this->error ('金额不能小于100!');
 			    exit;
 			}
-			if (strlen($ePoints) > 12){
+			if (strlen($money) > 12){
 				$this->error ('金额太大!');
 				exit;
 			}
-			if ($ePoints <= 0){
+			if ($money <= 0){
 				$this->error ('金额输入不正确!');
 				exit;
 			}
-//			$newWeek = date(w);
-//			if($newWeek!=0||$newWeek!=6){
-//				$this->error('只能星期六、星期日才能提现！');
-//				exit;
-//			}
 			$where = array();
 			$ID = $_SESSION[C('USER_AUTH_KEY')];
 
 			if($ID == 1){
-				$inUserID =  $_POST['UserID'];           //要提现的会员帐号 800000登录时可以帮其它会员申请提现
+				$inUserID =  $_POST['UserID'];           //要提现的会员帐号
 			}else{
 				$inUserID =  $_SESSION['loginUseracc'];  //登录的会员帐号 user_id
 			}
-			$tiqu = M ('tiqu');
+			$withdraw = M ('withdraw');
 			$where['user_id'] = $inUserID;
 			$field ='*';
-			$fck_rs = $fck ->where($where)->field($field)->find();
-			if (!$fck_rs){
+			$member_rs = $member ->where($where)->field($field)->find();
+			if (!$member_rs){
 				$this->error('没有该会员!');
 				exit;
 			}
-//			$is_agent = $fck_rs['is_agent'];
-//			if($fck_rs['id']==1){
-//				$is_agent = 0;
-//			}
-//			if($is_agent==2){
-//				$this->error('报单中心不能申请提现！');
-//				exit;
-//			}
-			if($ttype==1){
-				$AgentUse = $fck_rs['agent_cf'];
-			}else{
-				$AgentUse = $fck_rs['agent_use'];
-			}
-			if ($AgentUse < $ePoints){
+			$AgentUse = $member_rs['cash'];
+			if ($AgentUse < $money){
 				$this->error('账户金额不足!');
 				exit;
 			}
-
 			$s_nowd = strtotime(date("Y-m-d"));
 			$e_nowd = $s_nowd+3600*24;
 
 			$where2 = array();
-			$where2['uid'] = $fck_rs['id'];   //申请提现会员ID
-			$where2['rdt'] = array(array('egt',$s_nowd),array('lt',$e_nowd));
+			$where2['user_id'] = $member_rs['user_id'];   //申请提现会员ID
+			$where2['withdraw_time'] = array(array('egt',$s_nowd),array('lt',$e_nowd));
 			$field1 = 'id';
-			$vo5 = $tiqu ->where($where2)->sum("money");
+			$vo5 = $withdraw ->where($where2)->sum("money");
 			if ($vo5>10000){
-				$this->error('每天每个账户最高提现 10000 美元!');
+				$this->error('每天每个账户最高提现 10000 元!');
 				exit;
 			}
-
 			$where1 = array();
-			$where1['uid'] = $fck_rs['id'];   //申请提现会员ID
+			$where1['user_id'] = $member_rs['user_id'];   //申请提现会员ID
 			$where1['is_pay'] = 0;            //申请提现是否通过
-			$where1['t_type'] = $ttype;
+			$where1['withdraw_type'] = $ttype;
 			$field1 = 'id';
-			$vo3 = $tiqu ->where($where1)->field($field1)->find();
+			$vo3 = $withdraw ->where($where1)->field($field1)->find();
 			if ($vo3){
 				$this->error('上次提现还没通过审核!');
 				exit;
 			}
-
 			$fee_rs = M ('fee') -> find();
+			$s9 = $fee_rs['s9'];
+			$ks_m = $fee_rs['s3'];
+			$hB = $s9;//最低提现额
 
-			$s16 = $fee_rs['s16'];
-			$ks_m = $fee_rs['s8'];
-
-			$hB = $s16;//最低提现额
-			// $bs = 20;//倍数
-			// if ($ePoints < $hB){
-			// 	$this->error ('提现金额最低额度为 '.$hB.' ');
-			// 	exit;
-			// }
-//			if($ks_m>$s16){
-//				$this->error ('提现失败，提现手续费大于最低提现额度，请联系管理员！');
-//				exit;
-//			}
-
-			if ($ePoints % $bs){
-				$this->error ('提现金额必须为 '.$bs.' 的倍数!');
-				exit;
-			}
-
-			$bank_name = $fck_rs['bank_name'];  //开户银行
-			$bank_card = $fck_rs['bank_card'];  //银行卡号
-			$user_name = $fck_rs['user_name'];   //开户姓名
-			$bank_address = $fck_rs['bank_address'];   //开户姓名
-			$user_tel = $fck_rs['user_tel'];   //开户姓名
-			$qq        = $fck_rs['qq'];   //财富通QQ
-			$email        = $fck_rs['email'];
-//			if(empty($user_name) or empty($bank_card) or empty($bank_name)){
-//				$this->error ('请输入完整的开户信息!');
-//				exit;
-//			}
-
-
-
-			$ePoints_two = $ePoints - ($ePoints * $ks_m / 100);  //提现扣税
-//			$ePoints_two = $ePoints - $fee_rs['s8'];  //提现扣税
-
+			$bank_name = $member_rs['bank'];  //开户银行
+			$bank_card = $member_rs['bankcard_number'];  //银行卡号
+			$user_name = $member_rs['user_name'];   //开户姓名
+			$bank_address = $member_rs['bank_address'];   //开户地址
+			$tel = $member_rs['tel'];   //电话
+			$ePoints_two = $money - ($money * $ks_m / 100);  //提现扣税
 			$nowdate = strtotime(date('c'));
 			//开始事务处理
-			$tiqu->startTrans();
-
+			$withdraw->startTrans();
 			//插入提现表
 			$data                 = array();
-			$data['uid']          = $fck_rs['id'];
+			$data['uid']          = $member_rs['id'];
 			$data['user_id']      = $inUserID;
-			$data['rdt']          = $nowdate;
-			$data['money']        = $ePoints;
-			$data['money_two']    = $ePoints_two;
-			$data['epoint']       = $ePoints;
+			$data['withdraw_time'] = $nowdate;
+			$data['money']        = $money;
+			$data['epoint']       = $ePoints_two;
 			$data['is_pay']       = 0;
-			$data['bank_name']    = $bank_name;  //银行名称
-			$data['bank_card']    = $bank_card;  //银行地址
+			$data['bank']    = $bank_name;  //银行名称
+			$data['bankid']    = $bank_card;  //银行地址
 			$data['user_name']    = $user_name;  //开户名称
 			$data['bank_address'] = $bank_address;
-			$data['user_tel']	  = $user_tel;
-			$data['qq']	  = $qq;
-			$data['email']	  = $email;
-			$data['t_type']		  = $ttype;
-			$data['type']		  = $type;
-			$data['x1']		  = $ks_m;
-			$rs2 = $tiqu->add($data);
+			$data['tel'] = $tel;
+			$data['withdraw_type'] = $ttype;
+			$rs2 = $withdraw->add($data);
 			unset($data,$vo3,$where1);
 			if ($rs2){
 				//提交事务
-				if($ttype==1){
-					$fck->execute("UPDATE __TABLE__ SET agent_cf=agent_cf-{$ePoints} WHERE id={$fck_rs['id']}");
-				}else{
-					$fck->execute("UPDATE __TABLE__ SET agent_use=agent_use-{$ePoints} WHERE id={$fck_rs['id']}");
-				}
-				$tiqu->commit();
+				$member->execute("UPDATE __TABLE__ SET cash=cash-{$money} WHERE id={$member_rs['id']}");
+				$withdraw->commit();
 				$bUrl = __URL__.'/frontCurrency';
 				$this->_box(1,'提现申请已提交，24小时之内到账！',$bUrl,1);
 				exit;
 			}else{
 				//事务回滚：
-				$tiqu->rollback();
+				$withdraw->rollback();
 				$this->error('货币提现失败！');
 				exit;
 			}
@@ -298,7 +241,7 @@ class CurrencyAction extends CommonAction {
 	//=============撤销提现
 	public function frontCurrencyDel(){
 	    if ($_SESSION['Urlszpass'] == 'MyssPaoYingTao'){
-			$tiqu = M ('tiqu');
+			$withdraw = M ('withdraw');
 			$uid = $_SESSION[C('USER_AUTH_KEY')];
 			$id = (int) $_GET['id'];
 	    	$where = array();
@@ -306,16 +249,16 @@ class CurrencyAction extends CommonAction {
 	        $where['uid'] = $uid;   //申请提现会员ID
 	        $where['is_pay'] = 0;            //申请提现是否通过
 	        $field = 'id,money,uid';
-	        $trs = $tiqu ->where($where)->field($field)->find();
+	        $trs = $withdraw ->where($where)->field($field)->find();
 	        if ($trs){
 	        	$ttype = $trs['t_type'];
-	            $fck = M ('fck');
+	            $member = M ('member');
 	            if($ttype==1){
-	            	$fck->execute("UPDATE __TABLE__ SET agent_cf=agent_cf+{$trs['money']} WHERE id={$trs['uid']}");
+	            	$member->execute("UPDATE __TABLE__ SET agent_cf=agent_cf+{$trs['money']} WHERE id={$trs['uid']}");
 	            }else{
-	            	$fck->execute("UPDATE __TABLE__ SET agent_use=agent_use+{$trs['money']} WHERE id={$trs['uid']}");
+	            	$member->execute("UPDATE __TABLE__ SET agent_use=agent_use+{$trs['money']} WHERE id={$trs['uid']}");
 	            }
-	            $tiqu->where($where)->delete();
+	            $withdraw->where($where)->delete();
 	            $bUrl = __URL__.'/frontCurrency';
                 $this->_box(1,'撤销提现！',$bUrl,1);
                 exit;
@@ -328,13 +271,12 @@ class CurrencyAction extends CommonAction {
             exit;
         }
 	}
-
 	//===============================================提现管理
 	public function adminCurrency(){
 		$this->_Admin_checkUser();//后台权限检测
 		if ($_SESSION['Urlszpass'] == 'MyssGuanPaoYingTao'){
-			$tiqu = M ('tiqu');
-			$fck = M('fck');
+			$withdraw = M ('withdraw');
+			$member = M('member');
 			$fee_rs = M ('fee')->field('str11') -> find();
 			$str4 = $fee_rs['str11'];
 			$UserID = $_POST['UserID'];
@@ -344,7 +286,7 @@ class CurrencyAction extends CommonAction {
             $field  = "*,money*{$str4} as chmoney,money_two*{$str4} as chmoney_two";
             //=====================分页开始==============================================
             import ( "@.ORG.ZQPage" );  //导入分页类
-            $count = $tiqu->where($map)->count();//总页数
+            $count = $withdraw->where($map)->count();//总页数
 //       		$listrows = C('ONE_PAGE_RE');//每页显示的记录数
        		$listrows = 20;	//每页显示的记录数
             $page_where = 'UserID=' . $UserID;//分页条件
@@ -352,11 +294,11 @@ class CurrencyAction extends CommonAction {
             //===============(总页数,每页显示记录数,css样式 0-9)
             $show = $Page->show();//分页变量
             $this->assign('page',$show);//分页变量输出到模板
-            $list = $tiqu->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
+            $list = $withdraw->where($map)->field($field)->order('id desc')->page($Page->getPage().','.$listrows)->select();
             $i=0;
             foreach($list as $vvv){
             	$uuid = $vvv['uid'];
-            	$urs = $fck->where('id='.$uuid)->field('bank_address')->find();
+            	$urs = $member->where('id='.$uuid)->field('bank_address')->find();
             	if($urs){
             		$list[$i]['bank_address'] = $urs['bank_address'];
             	}
@@ -364,9 +306,9 @@ class CurrencyAction extends CommonAction {
             }
 			$this->assign('list',$list);//数据输出到模板
 			
-			$alltiqumoney = $tiqu->where('is_pay=0')->sum('money');
-			if(empty($alltiqumoney)){$alltiqumoney=0;}
-			$this->assign('alltiqumoney',$alltiqumoney);
+			$allwithdrawmoney = $withdraw->where('is_pay=0')->sum('money');
+			if(empty($allwithdrawmoney)){$allwithdrawmoney=0;}
+			$this->assign('allwithdrawmoney',$allwithdrawmoney);
 			//=================================================
 			$this->display('adminCurrency');
 		}else{
@@ -381,7 +323,7 @@ class CurrencyAction extends CommonAction {
 		$action = $_POST['action'];
 		//获取复选框的值
 		$PTid = $_POST['tabledb'];
-		$fck = M ('fck');
+		$member = M ('member');
 		if (empty($PTid)){
 			$bUrl = __URL__.'/adminCurrency';
 			$this->_box(0,'请选择！',$bUrl,1);
@@ -405,22 +347,22 @@ class CurrencyAction extends CommonAction {
 	private function _adminCurrencyConfirm($PTid){
 		$this->_Admin_checkUser();//后台权限检测
 		if ($_SESSION['Urlszpass'] == 'MyssGuanPaoYingTao'){
-			$tiqu = M ('tiqu');
-			$fck = M('fck');//
+			$withdraw = M ('withdraw');
+			$member = M('member');//
 			$history = M('history');
 			$where = array();
 			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
-			$rs = $tiqu->where($where)->select();
+			$rs = $withdraw->where($where)->select();
 			
 			$data = array();
-			$fck_where = array();
+			$member_where = array();
 			$nowdate = strtotime(date('c'));
 			foreach($rs as $rss){
-				$fck_where['id'] = $rss['uid'];
-				$rsss = $fck->where($fck_where)->field('id,user_id,agent_use')->find();
+				$member_where['id'] = $rss['uid'];
+				$rsss = $member->where($member_where)->field('id,user_id,agent_use')->find();
 				if ($rsss){
-					$result = $tiqu->execute("UPDATE __TABLE__ set `is_pay`=1 where `id`=".$rss['id']);
+					$result = $withdraw->execute("UPDATE __TABLE__ set `is_pay`=1 where `user_id`='".$rss['user_id']."'");
 					if($result){
 						//插入历史表
 						$data = array();
@@ -435,13 +377,13 @@ class CurrencyAction extends CommonAction {
 						$history->add($data);
 						unset($data);
 						
-						$fck->execute("UPDATE __TABLE__ set shang_ach=shang_ach+".$rss['money']." where `id`=".$rss['uid']);
+						$member->execute("UPDATE __TABLE__ set shang_ach=shang_ach+".$rss['money']." where `id`=".$rss['uid']);
 					}
 				}else{
-					$tiqu->execute("UPDATE __TABLE__ set `is_pay`=1 where `id`=".$rss['id']);
+					$withdraw->execute("UPDATE __TABLE__ set `is_pay`=1 where `id`=".$rss['id']);
 				}
 			}
-			unset($tiqu,$fck,$where,$rs,$history,$data,$nowdate,$fck_where);
+			unset($withdraw,$member,$where,$rs,$history,$data,$nowdate,$member_where);
 			$bUrl = __URL__.'/adminCurrency';
 			$this->_box(1,'确认提现！',$bUrl,1);
 		}else{
@@ -453,25 +395,20 @@ class CurrencyAction extends CommonAction {
 	private function _adminCurrencyDel($PTid){
 		$this->_Admin_checkUser();//后台权限检测
 		if ($_SESSION['Urlszpass'] == 'MyssGuanPaoYingTao'){
-			$tiqu = M ('tiqu');
+			$withdraw = M ('withdraw');
 			$where = array();
-//			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
-			$trs = $tiqu->where($where)->select();
-			$fck = M ('fck');
+			$trs = $withdraw->where($where)->select();
+			$member = M ('member');
 			foreach ($trs as $vo){
 				$isok = $vo['is_pay'];
 				$money=$vo['money'];
 				if($isok==0){
-					$t_type = $vo['t_type'];
-					if($t_type==1){
-						$fck->execute("UPDATE __TABLE__ SET agent_cf=agent_cf+{$money} WHERE id={$vo['uid']}");
-					}else{
-						$fck->execute("UPDATE __TABLE__ SET agent_use=agent_use+{$money} WHERE id={$vo['uid']}");
-					}
+					$t_type = $vo['withdraw_type'];
+					$member->execute("UPDATE __TABLE__ SET cash=cash+{$money} WHERE user_id='{$vo['user_id']}'");
 				}
 			}
-			$rs = $tiqu->where($where)->delete();
+			$rs = $withdraw->where($where)->delete();
 			if ($rs){
 				$bUrl = __URL__.'/adminCurrency';
 				$this->_box(1,'删除成功！',$bUrl,1);
@@ -486,7 +423,7 @@ class CurrencyAction extends CommonAction {
 			exit;
 		}
 	}
-//导出excel
+    //导出excel
 	public function DaoChu(){
 		$this->_Admin_checkUser();//后台权限检测
 		if ($_SESSION['Urlszpass'] == 'MyssGuanPaoYingTao'){
@@ -511,8 +448,8 @@ class CurrencyAction extends CommonAction {
 			echo   "<td>状态</td>";
 			echo   '</tr>';
 			//   输出内容
-			$tiqu = M ('tiqu');
-			$trs = $tiqu->select();
+			$withdraw = M ('withdraw');
+			$trs = $withdraw->select();
 			foreach($trs as $row)   {
 
 			if ($row['is_pay']==0){
@@ -562,8 +499,8 @@ class CurrencyAction extends CommonAction {
 			echo   "<td>状态</td>";
 			echo   '</tr>';
 			//   输出内容
-			$tiqu = M ('tiqu');
-			$trs = $tiqu->select();
+			$withdraw = M ('withdraw');
+			$trs = $withdraw->select();
 			foreach($trs as $row)   {
 				if ($row['is_pay']==0){
 				    $isPay = '未确认';

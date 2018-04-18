@@ -3040,141 +3040,38 @@ class YouZiAction extends CommonAction
     {
         if ($_SESSION['UrlPTPass'] == 'MyssQingKong') {
             // 删除指定记录
-            // $name=$this->getActionName();
-            $model = M('member');
-            $model2 = M('bonus');
-            $model41 = M('bonus1');
-            $model3 = M('history');
-            $model4 = M('msg');
-            $model5 = M('times');
-            $model40 = M('times1');
-            $model6 = M('tiqu');
-            $model7 = M('zhuanj');
-            $model8 = M('shop');
-            $model9 = M('jiadan');
-            $model10 = M('chongzhi');
-            
-            $model12 = M('orders');
-            $model13 = M('huikui');
-            // $model14 = M ('product');
-            $model15 = M('gouwu');
-            $model16 = M('xiaof');
-            $model17 = M('promo');
-            $model18 = M('fenhong');
-            $model19 = M('peng');
-            $model20 = M('ulevel');
-            $model21 = M('address');
-            $model22 = M('shouru');
-            $model23 = M('remit');
-            $model24 = M('cash');
-            $model25 = M('xfhistory');
-            $model26 = M('game');
-            $model27 = M('gupiao');
-            $model28 = M('hgupiao');
-            $model29 = M('gp_sell');
-            
-            $model30 = M('gp');
-            $model31 = M('blist');
-            $model32 = M('cashhistory');
-            $model33 = M('bonushistory');
-            $model34 = M('cashpp');
-            
-            $model->where('id > 1')->delete();
+            $model1 = M('member');
+            $model2 = M('address');
+            $model3 = M('bonushistory');
+            $model4 = M('bonussummary');
+            $model5 = M('gouwu');
+            $model7 = M('message');
+            $model8 = M('news');
+            $model9 = M('personbonusdetail');
+            $model10 = M('personbonussum');
+            $model11 = M('product');
+            $model12 = M('recharge');
+            $model13 = M('selectdetail');
+            $model14 = M('transfer');
+            $model15 = M('withdraw');
+           
+            $model1->where('id > 1')->delete();
             $model2->where('id > 0')->delete();
             $model3->where('id > 0')->delete();
             $model4->where('id > 0')->delete();
             $model5->where('id > 0')->delete();
-            $model6->where('id > 0')->delete();
             $model7->where('id > 0')->delete();
             $model8->where('id > 0')->delete();
             $model9->where('id > 0')->delete();
             $model10->where('id > 0')->delete();
-            
+            $model11->where('id > 0')->delete();
             $model12->where('id > 0')->delete();
             $model13->where('id > 0')->delete();
-            // $model14->where('id > 0')->delete();
-            $model15->where('ID > 0')->delete();
-            $model16->where('ID > 0')->delete();
-            $model17->where('ID > 0')->delete();
-            $model18->where('id > 0')->delete();
-            $model19->where('id > 0')->delete();
-            $model20->where('id > 0')->delete();
-            $model21->where('id > 1')->delete();
-            $model22->where('id > 0')->delete();
-            $model23->where('id > 0')->delete();
-            $model24->where('id > 0')->delete();
-            $model25->where('id > 0')->delete();
-            $model26->where('id > 0')->delete();
-            $model27->where('id > 0')->delete();
-            $model28->where('id > 0')->delete();
-            $model29->where('id > 0')->delete();
-            $model31->where('id > 0')->delete();
-            $model32->where('id > 0')->delete();
-            $model33->where('id > 0')->delete();
-            $model34->where('id > 0')->delete();
-            $model40->where('id > 0')->delete();
-            $model41->where('id > 0')->delete();
-            
-            $nowdate = time();
-            // 数据清0
-            
-            $nowday = strtotime(date('Y-m-d'));
-            // $nowday=strtotime(date('Y-m-d H:i:s')); //测试 使用
-            $have_gp = 100000;
-            $fh_gp = 10000;
-            $fx_numb = $fh_gp / 10;
-            $open_pri = 1;
-            
-            $model30->execute("UPDATE __TABLE__ SET opening=" . $open_pri . ",buy_num=0,sell_num=0,turnover=0,yt_sellnum=0,gp_quantity=0");
-            
-            $sql .= "`l`=0,`r`=0,`shangqi_l`=0,`shangqi_r`=0,`idt`=0,";
-            $sql .= "`benqi_l`=0,`benqi_r`=0,`lr`=0,`shangqi_lr`=0,`benqi_lr`=0,";
-            $sql .= "`agent_max`=0,`lssq`=0,`agent_use`=0,`is_agent`=2,`agent_cash`=0,";
-            $sql .= "`u_level`=1,`zjj`=0,`wlf`=0,`zsq`=0,`re_money`=0,";
-            $sql .= "`cz_epoint`=0,b0=0,b1=0,b2=0,b3=0,b4=0,";
-            $sql .= "`b5`=0,b6=0,b7=0,b8=0,b9=0,b10=0,b11=0,b12=0,re_nums=0,man_ceng=0,";
-            $sql .= "re_peat_money=0,cpzj=0,duipeng=0,_times=0,fanli=0,fanli_time=$nowday,fanli_num=0,day_feng=0,get_date=$nowday,get_numb=0,";
-            $sql .= "get_level=0,is_xf=0,xf_money=0,is_zy=0,zyi_date=0,zyq_date=0,down_num=0,agent_xf=0,agent_kt=0,agent_gp=0,gp_num=0,xy_money=0,";
-            $sql .= "peng_num=0,re_f4=0,agent_cf=0,is_aa=0,is_bb=0,is_cc=0,is_fh=0,ach=0,tz_nums=0,shangqi_use=0,shangqi_tz=0,gdt=0,re_pathb=0,kt_id=0,pg_nums=0,fh_nums=0,is_cha=0,tx_num=0,xx_money=0,x_pai=1,is_pp=0,is_p=0,x_out=1,x_num=0,agent_sfw=0,agent_sf=1000,agent_sfo=2000,fanli_money=0,wlf_money=0,";
-            $sql .= "re_nums_b=0,vip4=0,vip5=0,vip6=0,zdt=0,shang_l=0,shang_r=0,shang_nums=0,shang_ach=0,z_date=0,c_date=0,jia_nums=0,re_nums_l=0,re_nums_r=0,";
-            $sql .= "buy_gupiao=0,ls=0,rs=0,l_nums=0,r_nums=0,email=456,p_nums=0,sh_level=1,agent_zc=0,in_gupiao=0,out_gupiao=0,flat_gupiao=0,give_gupiao=0";
-            
-            $model->execute("UPDATE __TABLE__ SET " . $sql);
-            
-            for ($i = 1; $i <= 2; $i ++) { // member1 ~ member5 表 (清空只留800000)
-                $member_other = M('member' . $i);
-                $member_other->where('id > 1')->delete();
-            }
-            $nowweek = date("w");
-            if ($nowweek == 0) {
-                $nowweek = 7;
-            }
-            $kou_w = $nowweek - 1;
-            $weekday = $nowday - $kou_w * 24 * 3600;
-            
-            // fee表,记载清空操作的时间(时间截)
-            $fee = M('fee');
-            $fee_rs = $fee->field('id')->find();
-            $where = array();
-            $data = array();
-            $data['id'] = $fee_rs['id'];
-            $data['create_time'] = time();
-            $data['f_time'] = $weekday;
-            $data['us_num'] = 1;
-            // $data['a_money'] = 0;
-            // $data['b_money'] = 0;
-            $data['ff_num'] = 1;
-            $data['gp_one'] = $open_pri;
-            $data['gp_fxnum'] = $fx_numb;
-            $data['gp_senum'] = 0;
-            $data['gp_cnum'] = 0;
-            $rs = $fee->save($data);
-            
-            $card = M('card');
-            $card->query("update __TABLE__ set is_sell=0,bid=0,buser_id='',b_time=0");
+            $model14->where('id > 0')->delete();
+            $model15->where('id > 0')->delete();
             
             $bUrl = __URL__ . '/delTable';
-            $this->_box(1, '清空数据！', $bUrl, 1);
+            $this->_box(1, '清空数据成功！', $bUrl, 1);
             exit();
         } else {
             $bUrl = __URL__ . '/delTable';

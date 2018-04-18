@@ -1,53 +1,151 @@
 <include file="Public:xyHead" />
 <script language=javascript src="__PUBLIC__/Js/wpCalendar.js"></script>
-<div class="ncenter_box">
+<SCRIPT language=JavaScript>
+function checklogin() {
+	if (document.myform.userId.value=="") {
+		alert("请输入会员编号!");
+		myform.userId.focus();
+		return false;
+	}
+	if (document.myform.userName.value=="") {
+		alert("请输入会员姓名!");
+		myform.userName.focus();
+		return false;
+	}
+	if (document.myform.bankId.value=="") {
+		alert("请输入银行卡号!");
+		myform.bankId.focus();
+		return false;
+	}
+	if (document.myform.bank.value=="") {
+		alert("请输入提现银行!");
+		myform.bank.focus();
+		return false;
+	}
+	var reg = /^[\d]+$/;
+	if (!reg.test(document.myform.money.value))
+	{
+	    alert("请输入提现金额");
+		myform.money.focus();
+	    return false;
+	}
+
+	if(confirm('温馨提示：\n\n请确认以下货币充值信息正确性！ \n\n会员编号： '+ document.myform.userId.value+'\n\n会员姓名：'+ document.myform.userName.value +'\n\n提现卡号：'+ document.myform.bankId.value +'\n\n提现银行：'+ document.myform.bank.value +' \n\n提现金额： '+document.myform.money.value+' 元'))
+	{
+		this.document.myform.submit();
+		return true;
+	}else{
+		return false;
+	}
+}
+
+ifcheck = true;
+function CheckAll(form)
+{
+	for (var i=0;i<form.elements.length-2;i++)
+	{
+		var e = form.elements[i];
+		e.checked = ifcheck;
+	}
+	ifcheck = ifcheck == true ? false : true;
+}
+</SCRIPT>
+<div class="center_box">
+
+<!-- 列表显示区域  -->
+<form id="myform" name="myform" method="post"  action="__URL__/withdrawAdd">
+	<table width="100%" class="tab4" border="0" cellpadding="3" cellspacing="0">
+	<tr>
+	  <td align="right">提现会员编号：</td>
+	  <td><input name="userId" type="text" id="userId" maxlength="50" />
+	    <span style="color: #FF3300;">*</span></td>
+	</tr>
+	<tr>
+	  <td align="right">提现会员姓名：</td>
+	  <td><input name="userName" type="text" id="userName" maxlength="50" />
+	    <span style="color: #FF3300;">*</span></td>
+	</tr>
+	<tr>
+	  <td align="right">提现卡号：</td>
+	  <td><input name="bankId" type="text" id="bankId" maxlength="50" />
+	  <span style="color: #FF3300;">*</span></td>
+	</tr>
+	<tr>
+	  <td align="right">提现银行：</td>
+	  <td><input name="bank" type="text" id="bank" maxlength="50" />
+	  <span style="color: #FF3300;">*</span></td>
+	</tr>
+	<tr>
+	  <td align="right">提现金额：</td>
+	  <td><input name="money" type="text" id="money" maxlength="12" />
+	    <span style="color: #FF3300;">*</span></td>
+	</tr>
+	<tr>
+	  <td align="right">联系电话：</td>
+	  <td><input name="tel" type="text" id="tel" maxlength="50" /></td>
+	</tr>
+	<tr>
+	  <td align="right">&nbsp;</td>
+	  <td><span class="fLeft">
+	    <input type="button" name="Actions" id="Actions" value="确定提现" class="bt_tj" onclick="checklogin()"/>
+	  </span></td>
+	</tr>
+	
+	</table>
+</form>
+
 <div class="accounttitle"><h5>提现管理 </h5></div>
 <!-- 列表显示区域  -->
+<table width="600" align="left">
+    <tr>
+    <td align="center">
+    <form method='post' action="__URL__/adminCurrency">
+		会员编号：
+		    <input name="userId" type="text"id="userId" title="帐号查询" maxlength="200" >
+		  <input type="submit" name="Submit" value="搜索"  class="button_text"/>
+		</form>
+    </td>
+    </tr>
+</table>
 <form name="form3" method="post" action="__URL__/adminCurrencyAC">
 <table width="100%" cellpadding=3 border=0 cellspacing="1" id="tb1" bgcolor="#b9c8d0" class="tab3">
 <thead>
-    <tr class="content_td" align="center">
+    <tr class="content_td">
         <th >
             <input type="checkbox" name="chkall" value="checkbox" onclick="CheckAll(this.form)"  class="btn2" id="chkall" />
           </th>
         <th nowrap ><span>会员编号</span></th>
-        <th nowrap ><span>开户名</span></th>
-        <th nowrap ><span>开户银行</span></th>
-        <th nowrap ><span>银行账号</span></th>
-        <th nowrap ><span>电话号码</span></th>
-        <!-- <th nowrap ><span>微信</span></th> -->
-        <th nowrap ><span>类型</span></th>
+        <th nowrap ><span>姓名</span></th>
         <th nowrap ><span>提现金额</span></th>
-        <th nowrap ><span>实发金额</span></th>
-        <th nowrap ><span>具体开户行地址</span></th>
-        <th nowrap ><span>提现时间</span></th>
+        <th nowrap ><span>到账金额</span></th>
+        <th nowrap ><span>银行账号</span></th>
+        <th nowrap ><span>开户银行</span></th>
         <th nowrap ><span>状态</span></th>
-
+        <th nowrap ><span>提现时间</span></th>
+        <th nowrap ><span>确认时间</span></th>
+        <th nowrap ><span>联系方式</span></th>
     </tr>
 </thead>
+<tbody>
+<if condition="empty($list) eq true"><tr><td align="center" colspan="1"> 暂无数据 </td> </tr></if>
+<if condition="empty($list) neq true">
 <volist name="list" id="vo">
-<tr align="center">
+<tr>
 	<td><input type="checkbox" name="tabledb[]" value="{$vo['id']}" class="btn2" /></td>
 	<td>{$vo['user_id']}</td>
 	<td>{$vo['user_name']}</td>
-	<td>{$vo['bank_name']}</td>
-	<td>{$vo['bank_card']}</td>
-	<td>{$vo['user_tel']}</td>
-    <!-- <td></td>
-    <td>{$vo['qq']}</td> -->
-    <td>
-        <eq name="vo['type']" value="0">银行卡：{$vo['bank_card']}</eq>
-        <eq name="vo['type']" value="1">支付宝：{$vo['qq']}</eq>
-        <eq name="vo['type']" value="2">微信：{$vo['email']}</eq>
-    </td>
-	<td><span style="color: #F00;">{$vo['money']}</span></td>
-	<td><span style="color: #F00;">{$vo['money_two']}</span></td>
-	<td>{$vo['bank_address']}</td>
-	<!--<td><eq name="vo['t_type']" value="0">提取K币账户<else/>提取分红帐户</eq></td>-->
-	<td>{$vo.rdt|date='Y-m-d H:i:s',###}</td>
+	<td>{$vo['money']}</td>
+	<td>{$vo['epoint']}</td>
+	<td>{$vo['bankid']}</td>
+	<td>{$vo['bank']}</td>
 	<td><eq name="vo['is_pay']" value="1"><span style="color: #F00;">已确认</span></eq><eq name="vo['is_pay']" value="0"><span style="color: #090;">未确认</span></eq></td>
+	<td>{$vo.withdraw_time|date='Y-m-d H:i:s',###}</td>
+	<td><if condition="empty($vo['update_time']) neq true">{$vo.update_time|date='Y-m-d H:i:s',###}</if></td>
+	<td>{$vo['tel']}</td>
 </tr>
 </volist>
+</if>
+</tbody>
 </table>
 <table width="100%" class="tab3_bottom" border="0" cellpadding="0" cellspacing="1">
     <tr>
@@ -57,7 +155,7 @@
 	  <input type="submit" name="action" value="删除" class="button_text" onclick="{if(confirm('确定删除吗?')){return true;}return false;}"> &nbsp; &nbsp;
 	  <input name="button3" type="button" onclick="window.location.href='__URL__/DaoChu'" value="导出Excel" class="button_text" />
     &nbsp;&nbsp;&nbsp;
-    <input name="button4" type="button" onclick="window.location.href='__URL__/DaoChu1'" value="导出WPS" class="button_text" />&nbsp;&nbsp;&nbsp;总提现金额(未确认)：{$alltiqumoney}
+   &nbsp;&nbsp;&nbsp;总提现金额：{$m_count}
     </td>
     </tr>
 </table>
@@ -65,17 +163,6 @@
 <table width="100%" class="tab3_bottom" border="0" cellpadding="0" cellspacing="1">
 	<tr>
 		<td align="center">{$page}</td>
-    </tr>
-</table>
-<table width="600" align="center">
-    <tr>
-    <td align="center">
-    <form method='post' action="__URL__/adminCurrency">
-		会员编号：
-		    <input name="UserID" type="text"id="UserID" title="帐号查询" maxlength="200" >
-		  <input type="submit" name="Submit" value="搜索"  class="button_text"/>
-		</form>
-    </td>
     </tr>
 </table>
 </div>

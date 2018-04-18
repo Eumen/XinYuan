@@ -29,62 +29,6 @@ class FckModel extends CommonModel
         unset($where, $field, $vo);
     }
 
-    public function shangjiaTJ($ppath, $treep = 0)
-    {
-        $where = "id in (0" . $ppath . "0)";
-        $lirs = $this->where($where)
-            ->order('p_level desc')
-            ->field('id,treeplace')
-            ->select();
-        foreach ($lirs as $lrs) {
-            $myid = $lrs['id'];
-            $mytp = $lrs['treeplace'];
-            if ($treep == 0) {
-                $this->execute("update __TABLE__ Set `re_nums_l`=re_nums_l+1,`re_nums_b`=re_nums_b+1 where `id`=" . $myid);
-            } else {
-                $this->execute("update __TABLE__ Set `re_nums_r`=re_nums_r+1,`re_nums_b`=re_nums_b+1 where `id`=" . $myid);
-            }
-            $treep = $mytp;
-        }
-        unset($lirs, $lrs, $where);
-    }
-    
-    // public function xiangJiao($Pid=0,$DanShu=1,$plv=0,$op=1){
-    // //========================================== 往上统计单数【有层碰奖】
-    //
-    // $peng = M ('peng');
-    // $where = array();
-    // $where['id'] = $Pid;
-    // $field = 'treeplace,father_id,p_level';
-    // $vo = $this ->where($where)->field($field)->find();
-    // if ($vo){
-    // $Fid = $vo['father_id'];
-    // $TPe = $vo['treeplace'];
-    // $table = $this->tablePrefix .'fck';
-    // $dt = strtotime(date("Y-m-d"));//现在的时间
-    // if ($TPe == 0 && $Fid > 0){
-    // $p_rs = $peng ->where("uid=$Fid and ceng = $op") ->find();
-    // if($p_rs){
-    // $peng->execute("UPDATE __TABLE__ SET `l`=l+{$DanShu} WHERE uid=$Fid and ceng = $op");
-    // }else{
-    // $peng->execute("INSERT INTO __TABLE__ (uid,ceng,l) VALUES ($Fid ,$op,$DanShu) ");
-    // }
-    //
-    // $this->execute("UPDATE ". $table ." SET `l`=l+{$DanShu}, `benqi_l`=benqi_l+{$DanShu} WHERE `id`=".$Fid);
-    // }elseif($TPe == 1 && $Fid > 0){
-    // $p_rs = $peng ->where("uid=$Fid and ceng = $op") ->find();
-    // if($p_rs){
-    // $peng->execute("UPDATE __TABLE__ SET `r`=r+{$DanShu} WHERE uid=$Fid and ceng = $op");
-    // }else{
-    // $peng->execute("INSERT INTO __TABLE__ (uid,ceng,r) VALUES ($Fid,$op,$DanShu) ");
-    // }
-    // $this->execute("UPDATE ". $table ." SET `r`=r+{$DanShu}, `benqi_r`=benqi_r+{$DanShu} WHERE `id`=".$Fid);
-    // }
-    // $op++;-+*
-    // if ($Fid > 0) $this->xiangJiao($Fid,$DanShu,$plv,$op);
-    // }
-    // unset($where,$field,$vo);
-    // }
     public function addencAdd($ID = 0, $inUserID = 0, $money = 0, $name = null, $UID = 0, $time = 0, $acttime = 0, $bz = "")
     {
         // 添加 到数据表
@@ -1601,172 +1545,24 @@ class FckModel extends CommonModel
      */
     public function rw_bonus($myid, $inUserID = 0, $bnum = 0, $money_count = 0, $corid = 0)
     {
-        $fee = M('fee');
-        $fee_rs = $fee->field('s15,str10,str11,str7,s9')->find();
-        
-        $s15 = $fee_rs['s15'] / 100; // 现金币比例
-        $str10 = $fee_rs['str10'] / 100; // 复投币比例
-        $str11 = $fee_rs['str11'] / 100; // 公益基金比例
-        $str7 = $fee_rs['str7'] / 100; // 平台管理费比例
-        $s9 = $fee_rs['s9']; // 投资基数
-        
-        // 现金币
-        $money_ka = 0;
-        // 复投币
-        $money_kb = 0;
-        // 公益基金
-        $money_kc = 0;
-        // 平台管理费
-        $money_kd = 0;
-        
         // 查询会员表数据
-        $one = $this->where('id=' . $myid)->field('agent_use,is_pp')->find();
+        $one = $this->where("id='" . $myid."'")->field('cash')->find();
         // 账户中现金币余额
-        $agent_use = $one['agent_use'];
-        // 扣除管理费
-        $money_kd = $money_count * $str7;
-        $money_count = $money_count - $money_kd;
-        // 根据奖金类型，判断奖金分配 1为静态分红，234为直推奖，间推奖，隔推奖，5为见点奖，6为领导奖，7为报单奖，8为全国董事分红
-        if ($bnum < 7) {
-            // 如果现金币余额小于投资基础金额
-//             if ($agent_use < $s9) {
-//                 // 待转入现金币账户数据
-//                 $money_ka = $money_count * $s15;
-//                 // 待转入复投币账户数据
-//                 $nums = $money_count * $str10;
-//                 // 待转入公益基金数据
-//                 $money_kc = $nums * $str11;
-//                 // 复投币 - 公益基金
-//                 $money_kb = $nums - $money_kc;
-//             } else {
-//                 // 现金币临时数据
-//                 $nums = $money_count * $s15;
-//                 // 待转入复投币账户数据
-//                 $money_kb = $money_count * $str10;
-//                 // 待转入公益基金数据
-//                 $money_kc = $nums * $str11;
-//                 // 现金币：复投币 - 公益基金
-//                 $money_ka = $nums - $money_kc;
-//             }
-            // 待转入现金币账户数据
-            $money_ka = $money_count * $s15;
-            // 待转入公益基金数据
-            $money_kc = $money_kb * $str11;
-            // 待转入复投币账户数据
-            $money_kb = $money_count * $str10 - $money_kc;
-
-        } else {
-            // 报单费直接进入现金账户
-            $money_ka = $money_count;
-        }
-        
-        $last_m = $money_count; // 剩余，此值写入现金账户
-        
+        $cash = $one['cash'];
         $bonus = M('bonus');
         // $myid为应得到奖金的会员ID
         $bid = $this->_getTimeTableList($myid);
-        $inbb = "b" . $bnum;
         // 待更新到现金账户数据
-        $usqlc = "agent_use=agent_use+" . $money_ka;
         // 加到奖金记录表
         $bonus->execute("UPDATE __TABLE__ SET b0=b0+" . $last_m . "," . $inbb . "=" . $inbb . "+" . $money_count . "  WHERE id={$bid}");
         // 加到会员表
-        $this->execute("update __TABLE__ set " . $usqlc . ",day_feng=day_feng+" . $money_count . ",agent_xf=agent_xf+" . $money_kb . ",agent_cf=agent_cf+" . $money_kc . " where id=" . $myid);
+        $this->execute("update __TABLE__ set " . $usqlc . ",cash=cash+" . $money_count . " where id=" . $myid);
         // 如果金额大于0，更新到货币历史记录表
         if ($money_count > 0) {
             $this->addencAdd($myid, $inUserID, $money_count, $bnum);
         }
-        
-        // 平台管理费大于0更新到会员表以及历史记录表
-        if ($money_kd > 0) {
-            $bonus->execute("UPDATE __TABLE__ SET b0=b0-" . $money_kd . ",b9=b9+" . $money_kd . "  WHERE id={$bid}");
-            $this->addencAdd($myid, $inUserID, $money_kd, 9);
-        }
-        
         unset($bonus);
-        unset($fee, $fee_rs, $s9, $mrs);
-    }
-
-    public function _getTimeTableList1($uid)
-    {
-        $fck = M('fck');
-        $bonus = M('bonus');
-        $times1 = M('times1');
-        $bonus1 = M('bonus1');
-        $boid = 0;
-        $one = $this->where("id={$uid}")
-            ->field('id,user_id,is_cha')
-            ->find();
-        $nowdate = strtotime(date('Y-m-d'));
-        // $nowdate = time();
-        
-        $res = $one['is_cha'];
-        $brs = $bonus1->where("uid={$uid}")->select();
-        
-        foreach ($brs as $key => $value) {
-            $ar[] .= $value['id'];
-        }
-        
-        if ($res > 0) {
-            if ($res == 0) {
-                
-                $arr = $ar;
-                
-                $this->execute("update __TABLE__ set  is_cha=0 where id=" . $uid);
-                return $arr;
-            } else {
-                
-                $frs = $this->where("id={$uid}")
-                    ->field('id,user_id')
-                    ->find();
-                $data = array();
-                $data['did'] = $boid;
-                $data['uid'] = $frs['id'];
-                $data['user_id'] = $frs['user_id'];
-                $data['e_date'] = $nowdate;
-                $data['s_date'] = $nowdate;
-                $data['nums'] = 0;
-                $data['re_nums'] = $res;
-                $bid = $bonus1->add($data);
-                $cc[] .= $bid;
-                
-                if ($ar[0]) {
-                    $arr = array_merge($ar, $cc);
-                } else {
-                    $arr = $cc;
-                }
-                
-                $this->execute("update __TABLE__ set  is_cha=0 where id=" . $uid);
-                return $arr;
-            }
-        }
-        
-        if ($res == 0) {
-            $arr = $ar;
-            $this->execute("update __TABLE__ set  is_cha=0 where id=" . $uid);
-            return $arr;
-        } else {
-            $frs = $this->where("id={$uid}")
-                ->field('id,user_id')
-                ->find();
-            $data = array();
-            $data['did'] = $boid;
-            $data['uid'] = $frs['id'];
-            $data['user_id'] = $frs['user_id'];
-            $data['e_date'] = $benqi;
-            $data['s_date'] = $shangqi;
-            $data['re_nums'] = 1;
-            $bid = $bonus1->add($data);
-            $cc[] = $bid;
-            
-            if ($ar[0]) {
-                $arr = array_merge($ar, $cc);
-            } else {
-                $arr = $cc;
-            }
-            $this->execute("update __TABLE__ set  is_cha=0 where id=" . $uid);
-            return $arr;
-        }
+        unset($mrs);
     }
     /**
      * 每项奖金加到奖金记录表
@@ -1780,7 +1576,6 @@ class FckModel extends CommonModel
         $boid = 0;
         // 现在时间
         $nowdate = strtotime(date('Y-m-d')) + 3600 * 24 - 1;
-        // $nowdate = strtotime(date('Y-m-d'))+3600*12;
         // 本期时间设置为现在时间
         $settime_two['benqi'] = $nowdate;
         $settime_two['type'] = 0;
@@ -1818,7 +1613,7 @@ class FckModel extends CommonModel
             $boid = $trs['id'];
         }
         $_SESSION['BONUSDID'] = $boid;
-        $brs = $bonus->where("uid={$uid} AND did={$boid}")->find();
+        $brs = $bonus->where("user_id='{$uid}' AND son_id='{$boid}'")->find();
         if ($brs) {
             $bid = $brs['id'];
         } else {

@@ -1530,7 +1530,7 @@ class YouZiAction extends CommonAction
             // 当前待开通会员的推荐人
             $recommand_id = $voo['re_id'];
             // 给推荐人加奖金+添加单数
-            $member->query("update __TABLE__ set `recommend_sum`=recommend_sum+1,`team_sum`=team_sum+1,`cash`=cash+" . $money_recommend . " where `id`=" . $recommand_id);
+            $member->query("update __TABLE__ set `recommend_sum`=recommend_sum+1,`cash`=cash+" . $money_recommend . " where `id`=" . $recommand_id);
             // 给推荐人添加个人奖金详细
             $detail_rs = $member->where("user_id='".$voo['re_name']."'")->field('user_name')->find();
             $detail = array();

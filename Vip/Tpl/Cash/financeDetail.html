@@ -50,9 +50,9 @@ html, body {
 .footer {
 	padding-top: 15px;
 	padding-bottom: 30px;
-	margin-top:50px;
+	margin-top: 50px;
 	width: 100%;
-	height:40px;
+	height: 40px;
 	border-top: 4px solid #269abc;
 }
 
@@ -92,58 +92,58 @@ code {
 					</h4>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<table width="100%" class="table" border="0" cellpadding="3"
-						cellspacing="1" id="tb1">
+
+			<div class="center_box">
+				<!-- 列表显示区域  -->
+				<table width="600" align="left">
+					<tr>
+						<td align="center">
+							<form method='post' action="__URL__/adminCurrency">
+								会员编号： <input name="userId" type="text" id="userId" title="帐号查询"
+									maxlength="200"> <input type="submit" name="Submit"
+									value="搜索" class="button_text" />
+							</form>
+						</td>
+					</tr>
+				</table>
+				<form name="form3" method="post" action="__URL__/adminCurrencyAC">
+					<table width="100%" cellpadding=3 border=0 cellspacing="1" id="tb1"
+						bgcolor="#b9c8d0" class="tab3">
 						<thead>
-							<tr>
-								<th><span>结算时间</span></th>
-								<th><span>直推奖</span></th>
-								<th><span>报单奖</span></th>
-								<th><span>见点奖</span></th>
-								<th><span>合计</span></th>
-								<th><span>详细</span></th>
+							<tr class="content_td">
+								<th nowrap><span>会员编号</span></th>
+								<th nowrap><span>姓名</span></th>
+								<th nowrap><span>提现金额</span></th>
 							</tr>
 						</thead>
-						<volist name='list' id='vo'>
-						<tr align="center">
-							<td>11</td>
-							<td>11</td>
-							<td>11</td>
-							<td>11</td>
-							<td>11</td>
-							<td>明细<a href=""></a></td>
-						</tr>
-						</volist>
-						<tr align="center">
-							<td>11</td>
-							<td>11</td>
-							<td>11</td>
-							<td>11</td>
-							<td>55</td>
-							<td><a href="">明细</a></td>
-						</tr>
+						<tbody>
+							<if condition="empty($list) eq true">
+							<tr>
+								<td align="center" colspan="1">暂无数据</td>
+							</tr>
+							</if>
+							<if condition="empty($list) neq true"> <volist name="list"
+								id="vo">
+							<tr>
+								<td>{$vo.withdraw_time|date='Y-m-d H:i:s',###}</td>
+								<td>{$vo['user_id']}</td>
+								<td>{$vo['tel']}</td>
+							</tr>
+							</volist> </if>
+						</tbody>
 					</table>
-					<table width="100%" class="table" border="0" cellpadding="0"
-						cellspacing="1">
-						<tr>
-							<td width="50%" nowrap="nowrap"><form id="form1" name="form1" method="post"
-									action="__URL__/financeTable">
-									日期：<input name="FanNowDate" type="text" id="FanNowDate"
-										onFocus="showCalendar(this)" readonly /> <input type="submit"
-										name="Submit" value="查询" class="button_text" /> <input
-										name="UserID" type="hidden" value="{$user_id}" />
-								</form></td>
-							<td width="50%">{$page}</td>
-						</tr>
-					</table>
-					</form>
-				</div>
+				</form>
+				<table width="100%" class="tab3_bottom" border="0" cellpadding="0"
+					cellspacing="1">
+					<tr>
+						<td align="center">{$page}</td>
+					</tr>
+				</table>
 			</div>
-
 		</div>
 	</div>
-<include file="Public:xyFoot" />
-	<script>new TableSorter("tb1");</script>
+	<include file="Public:xyFoot" />
+	<script>
+		new TableSorter("tb1");
+	</script>
 </body>

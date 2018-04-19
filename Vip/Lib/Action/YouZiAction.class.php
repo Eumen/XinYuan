@@ -1582,65 +1582,66 @@ class YouZiAction extends CommonAction
                 $bonussummary->add($data);
                 unset($data);
             }
-            
-            // 报单奖
-            $money_register = $fee_rs['s8'];
-            // 报单中心ID
-            $shop_id = $voo['shop_id'];
-            // 给报单中心加奖金
-            $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['shop_id']."'");
-            // 给报单中心添加个人奖金详细
-            $detail = array();
-            $data['user_id'] = $voo['shop_id'];
-            $data['user_id'] = $voo['shop_name'];
-            $detail['money'] = $money_register;
-            $detail['son_id'] = $voo['user_id'];
-            $detail['son_name'] = $voo['user_name'];
-            $detail['bonus_type'] = 2;
-            $detail['bz'] = '报单奖';
-            $detail['time'] = $nowdate;
-            $personbonusdetail->add($detail);
-            unset($detail);
-            // 给报单中心添加奖金历史记录
-            $data = array();
-            $data['user_id'] = $voo['shop_id'];
-            $data['user_name'] = $voo['shop_name'];
-            $data['produce_userid'] = $voo['user_id'];
-            $data['produce_username'] = $voo['user_name'];
-            $data['action_type'] = 2;
-            $data['time'] = mktime();
-            $data['money'] = $money_register;
-            $data['in_money'] = $money_register;
-            $data['bz'] = '报单奖';
-            $bonushistory->add($data);
-            unset($data);
-            // 给报单中心添加个人奖金汇总记录
-            $personSum_rs = $personbonussum->where("user_id='".$voo['shop_id']."'")->field('*')->find();
-            if ($personSum_rs) {
-                $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['shop_id']."'");
-            } else {
+            // 报单中心奖项
+            if (!empty($voo['shop_id'])) {
+                // 报单奖
+                $money_register = $fee_rs['s8'];
+                // 报单中心ID
+                $shop_id = $voo['shop_id'];
+                // 给报单中心加奖金
+                $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['shop_id']."'");
+                // 给报单中心添加个人奖金详细
+                $detail = array();
+                $data['user_id'] = $voo['shop_id'];
+                $data['user_id'] = $voo['shop_name'];
+                $detail['money'] = $money_register;
+                $detail['son_id'] = $voo['user_id'];
+                $detail['son_name'] = $voo['user_name'];
+                $detail['bonus_type'] = 2;
+                $detail['bz'] = '报单奖';
+                $detail['time'] = $nowdate;
+                $personbonusdetail->add($detail);
+                unset($detail);
+                // 给报单中心添加奖金历史记录
                 $data = array();
                 $data['user_id'] = $voo['shop_id'];
-                $detail['user_name'] = $voo['shop_name'];
-                $detail['money'] = $money_register;
-                $detail['reg_money'] = $money_register;
-                $data['update_time'] = mktime();
-                $personbonussum->add($data);
+                $data['user_name'] = $voo['shop_name'];
+                $data['produce_userid'] = $voo['user_id'];
+                $data['produce_username'] = $voo['user_name'];
+                $data['action_type'] = 2;
+                $data['time'] = mktime();
+                $data['money'] = $money_register;
+                $data['in_money'] = $money_register;
+                $data['bz'] = '报单奖';
+                $bonushistory->add($data);
                 unset($data);
+                
+                $personSum_rs = $personbonussum->where("user_id='".$voo['shop_id']."'")->field('*')->find();
+                if ($personSum_rs) {
+                    $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['shop_id']."'");
+                } else {
+                    $data = array();
+                    $data['user_id'] = $voo['shop_id'];
+                    $detail['user_name'] = $voo['shop_name'];
+                    $detail['money'] = $money_register;
+                    $detail['reg_money'] = $money_register;
+                    $data['update_time'] = mktime();
+                    $personbonussum->add($data);
+                    unset($data);
+                }
+                // 添加平台汇总记录
+                $sum_rs = $bonussummary->where("id>0")->field('*')->find();
+                if ($sum_rs) {
+                    $bonussummary->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register);
+                } else {
+                    $data = array();
+                    $detail['money'] = $money_register;
+                    $detail['reg_money'] = $money_register;
+                    $data['update_time'] = mktime();
+                    $bonussummary->add($data);
+                    unset($data);
+                }
             }
-            // 添加平台汇总记录
-            $sum_rs = $bonussummary->where("id>0")->field('*')->find();
-            if ($sum_rs) {
-                $bonussummary->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register);
-            } else {
-                $data = array();
-                $detail['money'] = $money_register;
-                $detail['reg_money'] = $money_register;
-                $data['update_time'] = mktime();
-                $bonussummary->add($data);
-                unset($data);
-            }
-            
             // 见点奖
             $money_point = $fee_rs['s7'];
             // 见点层数
@@ -1654,8 +1655,8 @@ class YouZiAction extends CommonAction
                 $myid = $lrs['user_id'];
                 $is_fenh = $lrs['is_fenh'];
                 if ($floors > $i && $is_fenh == 0) {
-                    // 给上面会员加奖金
-                    $member->query("update __TABLE__ set `cash`=cash+" . $money_point . " where `user_id`='" . $myid."'");
+                    // 给上面会员加奖金+团队人数
+                    $member->query("update __TABLE__ set `team_sum`=team_sum+1,`cash`=cash+" . $money_point . " where `user_id`='" . $myid."'");
                     // 给上面会员添加个人奖金详细
                     $detail = array();
                     $detail['user_id'] = $lrs['user_id'];
@@ -2351,7 +2352,6 @@ class YouZiAction extends CommonAction
         echo "<td>开通时间</td>";
         echo "<td>现金币</td>";
         echo "<td>积分</td>";
-        echo "<td>剩余基金</td>";
         echo '</tr>';
         // 输出内容
         $i = 0;
@@ -2379,7 +2379,6 @@ class YouZiAction extends CommonAction
             echo "<td>" . date("Y-m-d H:i:s", $row['bk7']) . "</td>";
             echo "<td>" . $row['cash'] . "</td>";
             echo "<td>" . $row['point'] . "</td>";
-            echo "<td>" . $row['bk8'] . "</td>";
             echo '</tr>';
         }
         echo '</table>';
@@ -3046,7 +3045,6 @@ class YouZiAction extends CommonAction
             $model4 = M('bonussummary');
             $model5 = M('gouwu');
             $model7 = M('message');
-            $model8 = M('news');
             $model9 = M('personbonusdetail');
             $model10 = M('personbonussum');
             $model11 = M('product');
@@ -3061,7 +3059,6 @@ class YouZiAction extends CommonAction
             $model4->where('id > 0')->delete();
             $model5->where('id > 0')->delete();
             $model7->where('id > 0')->delete();
-            $model8->where('id > 0')->delete();
             $model9->where('id > 0')->delete();
             $model10->where('id > 0')->delete();
             $model11->where('id != 9')->delete();

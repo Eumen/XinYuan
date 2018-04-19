@@ -185,7 +185,7 @@
                 <p>股权认购</p>
             </div>
         </div>
-        <div class="col-xs-3 text-center" style="cursor: pointer" onclick="javascript:window.location.href='__APP__/News/newsIndex/c_id/2'">
+        <div class="col-xs-3 text-center" style="cursor: pointer" onclick="javascript:window.location.href='__APP__/News/newsIndex/'">
             <div>
                 <img class="img-responsive center-img" src="__PUBLIC__/resource/image/zxgg.png"/>
             </div>
@@ -193,7 +193,8 @@
                 <p>资讯公告</p>
             </div>
         </div>
-        <div class="col-xs-3 text-center" style="cursor: pointer" onclick="javascript:window.location.href='__APP__/Public/adminIndex/c_id/21'">
+        <?php if(  $_SESSION['grade']  ==  "2"): ?>
+        <div class="col-xs-3 text-center" style="cursor: pointer" onclick="javascript:window.location.href='__APP__/Public/adminIndex/'">
             <div>
                 <img class="img-responsive center-img" src="__PUBLIC__/resource/image/cpsc.png"/>
             </div>
@@ -201,6 +202,7 @@
                 <p>后台管理</p>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 <include file="Public:xyFoot" />
 </div>

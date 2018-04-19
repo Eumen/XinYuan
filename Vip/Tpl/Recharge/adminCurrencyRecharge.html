@@ -1,16 +1,11 @@
 <include file="Public:xyHead" />
 <script language=javascript src="__PUBLIC__/Js/wpCalendar.js"></script>
 <div class="ncenter_box">
-<div class="accounttitle"><h5>充值管理 </h5></div>
+<div class="accounttitle"><h5><a href="__APP__/Public/adminIndex" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>充值管理 </h5></div>
 <SCRIPT language=JavaScript>
-function checklogin() {
+function checkContent() {
 	if (document.myform.userID.value=="") {
 		alert("请输入会员编号!");
-		myform.UserID.focus();
-		return false;
-	}
-	if (document.myform.userName.value=="") {
-		alert("请输入会员姓名!");
 		myform.UserID.focus();
 		return false;
 	}
@@ -22,7 +17,7 @@ function checklogin() {
 	    return false;
 	}
 
-	if(confirm('温馨提示：\n\n请确认以下货币充值信息正确性！ \n\n充入会员编号： '+ document.myform.userID.value+'\n\n充入会员姓名：'+ document.myform.userName.value +' \n\n充值金额： '+document.myform.ePoints.value+' 元'))
+	if(confirm('温馨提示：\n\n请确认以下货币充值信息正确性！ \n\n充入会员编号： '+ document.myform.userID.value +' \n\n充值金额： '+document.myform.ePoints.value+' 元'))
 	{
 		this.document.myform.submit();
 		return true;
@@ -49,16 +44,11 @@ function CheckAll(form)
 <table width="100%" class="tab4" border="0" cellpadding="3" cellspacing="0">
 <tr>
   <td width="37%" align="right">&nbsp;</td>
-  <td width="63%">为商户充值</td>
+  <td width="63%">充值</td>
 </tr>
 <tr>
   <td align="right">充值会员编号：</td>
   <td><input name="userId" type="text" id="userID" maxlength="50" />
-    <span style="color: #FF3300;">*</span></td>
-</tr>
-<tr>
-  <td align="right">充值会员姓名：</td>
-  <td><input name="userName" type="text" id="userName" maxlength="50" />
     <span style="color: #FF3300;">*</span></td>
 </tr>
 <tr>
@@ -76,7 +66,7 @@ function CheckAll(form)
 
   <td align="right">&nbsp;</td>
   <td><span class="fLeft">
-    <input type="button" name="Actions" id="Actions" value="确定充值" class="bt_tj" onclick="checklogin()"/>
+    <input type="button" name="Actions" id="Actions" value="确定充值" class="bt_tj" onclick="checkContent()"/>
   </span></td>
 </tr>
 </table>
@@ -101,7 +91,7 @@ function CheckAll(form)
 </table>
 
 <form name="form3" method="post" action="__URL__/adminCurrencyRechargeAC">
-<table width="100%" class="tab3" border="0" cellpadding="3" cellspacing="1" id="tb1" bgcolor="#b9c8d0" >
+<table width="100%" border="0" cellpadding="3" cellspacing="1" class="table table-borded table-striped" id="tb1" bgcolor="#b9c8d0" >
 <tr class="content_td">
     <th align="center">
         <input type="checkbox" name="chkall" value="checkbox" onclick="CheckAll(this.form)"  class="btn2" id="chkall" />

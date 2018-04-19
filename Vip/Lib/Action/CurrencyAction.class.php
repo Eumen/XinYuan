@@ -68,7 +68,7 @@ class CurrencyAction extends CommonAction {
 					$this->_boxx($bUrl);
 					break;
 				case 2;
-					$_SESSION['Urlszpass'] = 'MyssGuanPaoYingTao';
+					$_SESSION['Urlspass'] = 'MyssGuanPaoYingTao';
 					$bUrl = __URL__.'/adminCurrency';//
 					$this->_boxx($bUrl);
 					break;
@@ -271,9 +271,9 @@ class CurrencyAction extends CommonAction {
         }
 	}
 	//===============================================提现管理
-	public function adminCurrency(){
-	$this->_Admin_checkUser();
-		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
+	public function adminCurrency($Urlsz=0){
+	   $this->_Admin_checkUser();
+		if ($_SESSION['Urlspass'] == 'MyssGuanPaoYingTao'){
 			$withdraw = M ('withdraw');
 			$field  = '*';
 			//=====================分页开始==============================================
@@ -394,7 +394,6 @@ class CurrencyAction extends CommonAction {
 	
 	//====================================================确认提现
 	private function adminCurrencyConfirm($PTid){
-		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
 			$withdraw = M ('withdraw');
 			$where = array();
 			$where['is_pay'] = 0;
@@ -402,14 +401,18 @@ class CurrencyAction extends CommonAction {
 			$data['update_time'] = strtotime(date('c'));
 			$data['is_pay'] = 1;
 			$rs = $withdraw->where($where)->save($data);
-				
-			unset($recharge,$where,$rs,$data);
-			$bUrl = __URL__.'/adminCurrency';
-			$this->_box(1,'确认充值成功！',$bUrl,1);
-		}else{
-			$this->error('错误!');
-			exit;
-		}
+			if ($rs) {
+			    unset($recharge,$where,$rs,$data);
+			    $bUrl = __URL__.'/adminCurrency';
+			    $this->_box(1,'确认提现成功！',$bUrl,1);
+			    
+			} else {
+			    unset($recharge,$where,$rs,$data);
+			    $bUrl = __URL__.'/adminCurrency';
+			    $this->_box(0,'确认提现失败！',$bUrl,1);
+			    exit;
+			}
+			
 	}
 	//删除提现
 	private function adminCurrencyDel($PTid){

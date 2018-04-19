@@ -300,10 +300,9 @@ class RechargeAction extends CommonAction{
 				$this->error('金额错误，请重新输入！');
 				exit;
 			}
-			if (!empty($userId) && !empty($userName)&& !empty($ePoints)){
+			if (!empty($userId) && !empty($ePoints)){
 				$where = array();
 				$where['user_id'] = $userId;
-				$where['user_name'] = $userName;
 				$frs = $fck->where($where)->field('user_id, user_name')->find();
 				if ($frs){
 					$recharge = M ('recharge');
@@ -312,14 +311,12 @@ class RechargeAction extends CommonAction{
 					$data['user_name'] = $frs['user_name'];
 					$data['money'] = $ePoints;
 					$data['recharge_type'] = $rechargeType;
-					$data['is_pay'] = 1;
+					$data['is_pay'] = 0;
 					$data['recharge_time'] = strtotime(date('c'));
-					$data['update_time'] = strtotime(date('c'));
 					$result = $recharge->add($data);
 					unset($data,$recharge);
 					$bUrl = __URL__.'/adminCurrencyRecharge';
-					$this->_box(1,'确认充值成功！',$bUrl,1);				
-					//$this->_adminCurrencyRechargeOpen($rearray);
+					$this->_box(1,'申请充值成功！',$bUrl,1);
 				}else{
 					$this->error('没有该会员，请重新输入!');
 				}
@@ -334,17 +331,48 @@ class RechargeAction extends CommonAction{
 	
 	private function _adminCurrencyRechargeOpen($PTid){
 		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
+		    $length_arr = count($PTid);
+		    if($length_arr > 1){
+		    $this->error('一次只能确认一个！');
+		    exit;
+		    }
 			$recharge = M ('recharge');
+			$member = M ('member');
+			//开始事务处理
+			$recharge->startTrans();
+			//插入充值表
 			$where = array();
 			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
+			$recharge_rs = $recharge ->where($where)->field('money')->find();
 			$data['update_time'] = strtotime(date('c'));
 			$data['is_pay'] = 1;
 			$rs = $recharge->where($where)->save($data);
+			if ($rs){
+			    //提交事务
+			    $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE id = {$PTid[0]}");
+			    if ($rs2) {
+			        $recharge->commit();
+			        $bUrl = __URL__.'/adminCurrencyRecharge';
+			        $this->_box(1,'确认充值成功！',$bUrl,1);
+			        exit;
+			    } else {
+			        //事务回滚：
+			        $recharge->rollback();
+			        $this->error('确认充值失败！');
+			        exit;
+			    }
+			    unset($recharge,$where,$rs,$data,$member);
+			    
+			}else{
+			    //事务回滚：
+			    $recharge->rollback();
+			    $this->error('确认充值失败！');
+			    exit;
+			}
 			
-			unset($recharge,$where,$rs,$data);
-			$bUrl = __URL__.'/adminCurrencyRecharge';
-			$this->_box(1,'确认充值成功！',$bUrl,1);
+			
+			
 		}else{
 			$this->error('错误!');
 			exit;

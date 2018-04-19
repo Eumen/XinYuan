@@ -81,30 +81,25 @@ class ChangeAction extends CommonAction {
 	
 	/* ---------------显示用户修改资料界面---------------- */
 	public function profile(){
-		if ($_SESSION['DLTZURL02'] == 'changedata'){
-			$member	 =	 M('member');
-			$id   = $_SESSION[C('USER_AUTH_KEY')];
-			//输出登录用户资料记录
-			$vo	= $member -> getById($id);  //该登录会员记录
-			if(empty($vo['us_img'])){
-				$vo['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
-			}
-			$this->assign('vo',$vo);
-			$this->assign('img_src',$vo['us_img']);
-			unset($vo);
-			//输出银行
-			$b_bank = $member -> where('id='.$id) -> field("bank,user_name") -> find();
-			$this->assign('b_bank',$b_bank);
-			unset($bank,$b_bank);
-			$fee = M ('fee');
-			$fee_s = $fee->field('*')->find();
-			$bank = explode('|',$fee_s['s10']);
-			$this->assign('bank',$bank);
-			$this->display('profile');
-		}else{
-			$this->error('操作错误!');
-			exit;
+		$member	 =	 M('member');
+		$id   = $_SESSION[C('USER_AUTH_KEY')];
+		//输出登录用户资料记录
+		$vo	= $member -> getById($id);  //该登录会员记录
+		if(empty($vo['us_img'])){
+			$vo['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
 		}
+		$this->assign('vo',$vo);
+		$this->assign('img_src',$vo['us_img']);
+		unset($vo);
+		//输出银行
+		$b_bank = $member -> where('id='.$id) -> field("bank,user_name") -> find();
+		$this->assign('b_bank',$b_bank);
+		unset($bank,$b_bank);
+		$fee = M ('fee');
+		$fee_s = $fee->field('*')->find();
+		$bank = explode('|',$fee_s['s10']);
+		$this->assign('bank',$bank);
+		$this->display('profile');
 	}
 
 	/* --------------- 修改保存会员信息 ---------------- */

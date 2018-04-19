@@ -105,10 +105,9 @@ code {
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h4>
-						<a href="javascript:history.back();" class="btn-xs btn-info"><img
-							src="__PUBLIC__/Images/left.png"></a>提现申请
-					</h4>
+					<h5>
+						<a href="__APP__/" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>提现申请
+					</h5>
 				</div>
 			</div>
 			<div class="row">
@@ -119,21 +118,21 @@ code {
 						method="post">
 						<!-- #section:elements.form -->
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">用户账号</label>
+							<label class="col-sm-3 control-label no-padding-right">用户账号：</label>
 							<div class="col-sm-9">
 								<input name="UserID" type="text" readonly="readonly"
 									class="col-xs-10 col-sm-5" value="{$_SESSION['loginUseracc']}" />
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">现金币余额</label>
+							<label class="col-sm-3 control-label no-padding-right">现金币余额：</label>
 							<div class="col-sm-9">
 								<label class="col-sm-2">{$rs['cash']}</label>
 								<label class="col-sm-5" style="color: red;">提现手续费 {$menber} %，最低提现金额为 {$minn} </label>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">提现金额</label>
+							<label class="col-sm-3 control-label no-padding-right">提现金额：</label>
 							<div class="col-sm-9">
 								<input name="money" type="text" id="money" value=""
 									placeholder="请输入提现金额" class="col-xs-10 col-sm-5" />
@@ -141,7 +140,7 @@ code {
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">二级密码</label>
+							<label class="col-sm-3 control-label no-padding-right">二级密码：</label>
 
 							<div class="col-sm-9">
 								<input type="text" id="password2" name="password2"

@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 <title>{$System_namex}</title>
 <link href="__PUBLIC__/Css/login.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="__PUBLIC__/resource/assets/bootstrap/css/bootstrap.min.css">
@@ -58,74 +61,44 @@ div#bg {
 </head>
 <body>
 	<div id="bg"></div>
-	<div class="header">
-		<div class="container">
-			<div class="span4">
-				<h3 class="blue">车壹号</h3>
-			</div>
-		</div>
-	</div>
 	<div class="register-container container">
-		<div class="iphone span5">
-            <img src="__PUBLIC__/resource/assets/img/iphone.png" alt="">
-        </div>
-		<div class="row" style="margin-left: 20%; max-width: inherit; display: block;">
+		<div class="row">
+			<div class="iphone span5">
+	            <img src="__PUBLIC__/resource/assets/img/iphone.png" alt="">
+	        </div>
 			<div class="register span6">
 				<form method='post' name="login" id="form1" onsubmit="return false">
-					<div id="main">
-						<ul>
-							<li><h2>
-									登陆 <span class="blue">APP</span>
-								</h2> <label for="account">用户名：</label> <input type="text"
-								id="account" name="account" placeholder="请输入登录用户名..."
-								maxlength="10"></li>
-							<li><label for="password">密码：</label> <input type="password"
-								id="password" name="password" placeholder="请输入登录密码..."
-								maxlength="16"></li>
-
-							<li><label for="verify">验证码：</label><input name="verify"
-								id="verify" type="text" onKeyDown="keydown(event)"
-								check="Require" value="" maxlength="4" style="width: 75%" />
-								&nbsp;&nbsp;&nbsp;&nbsp; <img id="verifyImg"
-								src="__URL__/verify/" width="55" onClick="fleshVerify()"
-								border="0" alt="点击刷新验证码" style="cursor: pointer"
-								align="absmiddle" /></li>
-							<li><button name="button" type="submit" id="btn_submit"
-									onClick="ThinkAjax.sendForm('form1','__URL__/checkLogin/',loginHandle,'result')">点击登陆</button>
-								<input type="hidden" name="ajax" value="1"></li>
-							<li><button name="button" type="submit" id="btn_submit"
-									onclick="location.href='__APP__/Reg/find_pw/'">忘记密码</button></li>
-							<li><button name="button" type="submit" id="btn_submit"
-									class="button" onclick="location.href='__APP__/Reg/reg?rid=carNo1'">免费注册</button></li>
-							<li>
-								<div class="error">
-									<span id="result"></span>
-								</div>
-							</li>
-						</ul>
+					<h2>
+						<span class="blue">登陆</span>
+					</h2>
+					<label for="account">用户名：</label>
+					<input type="text" id="account"
+						name="account" placeholder="请输入登录用户名..." maxlength="10">
+					<label for="password">密码：</label>
+					<input type="password" id="password"
+						name="password" placeholder="请输入登录密码..." maxlength="16">
+					<label for="verify">验证码：</label>
+					<input name="verify" id="verify" type="text" onKeyDown="keydown(event)" check="Require" value=""
+						maxlength="4" style="width: 75%" />
+					<img id="verifyImg" src="__URL__/verify/" width="55"
+						onClick="fleshVerify()" border="0" alt="点击刷新验证码"
+						style="cursor: pointer" align="absmiddle" />
+					<button name="button" type="submit" id="btn_submit"
+						onClick="ThinkAjax.sendForm('form1','__URL__/checkLogin/',loginHandle,'result')">点击登陆</button>
+					<input type="hidden" name="ajax" value="1">
+					<button name="button" type="submit" id="btn_submit"
+						onclick="location.href='__APP__/Reg/find_pw/'">忘记密码</button>
+					<button name="button" type="submit" id="btn_submit" class="button"
+						onclick="location.href='__APP__/Reg/reg?rid=carNo1'">免费注册</button>
+					<div class="error">
+						<span id="result"></span>
 					</div>
+
 				</form>
 			</div>
 		</div>
 	</div>
 	<include file="Public:xyFoot" />
-	<script type="text/javascript">
-		jQuery(".focusBox").hover(
-				function() {
-					jQuery(this).find(".prev,.next").stop(true, true).fadeTo(
-							"show", 0.2)
-				}, function() {
-					jQuery(this).find(".prev,.next").fadeOut()
-				});
-		jQuery(".focusBox").slide({
-			mainCell : ".pic",
-			effect : "fold",
-			autoPlay : true,
-			delayTime : 600,
-			trigger : "click"
-		});
-	</script>
-
 </body>
 </html>
 <script language="JavaScript">

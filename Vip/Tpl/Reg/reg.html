@@ -11,15 +11,6 @@
     <link rel="stylesheet" href="__PUBLIC__/resource/assets/css/style.css">
 </head>
 <body>
-
-<div class="header">
-    <div class="container">
-            <div class="logo span4">
-                <h3 class="blue">车壹号</h3>
-            </div>
-    </div>
-</div>
-
 <div class="register-container container">
     <div class="row">
         <div class="iphone span5">
@@ -28,7 +19,7 @@
         <div class="register span6">
             <form action="__URL__/regAC" id="registerForm" method="post">
             	<input name="rid" id="rid" type="hidden" value="{$rid}" class="ipt"/>
-                <h2>注册 <span class="blue"><strong>APP</strong></span></h2>
+                <h2> <span class="blue"><strong>注册</strong></span></h2>
                 <label for="user_id">帐号：</label>
                 <input type="text" id="user_id" name="user_id" placeholder="请输入登录用户名..." maxlength="10">
                 <label for="password">密码：</label>
@@ -39,17 +30,18 @@
                 <label for="tel">手机号：</label>
                 <input type="text" id="tel" name="tel" placeholder="请输入11位手机号码..." maxlength="11">
                 <label for="tel">朋友关系：</label>
-                <input type="text" id="father_id" name="father_id" placeholder="请输入一位已经注册的朋友的用户名..." maxlength="11">
+                <input type="text" id="father_id" name="father_id" placeholder="请输入一位朋友的用户名..." maxlength="11">
                 <button type="submit">注册</button>
                 <button type="button" onclick="javascript:window.location.href='javascript:history.back();'">返回</button>
             </form>
         </div>
     </div>
 </div>
-<footer class="footer navbar-fixed-bottom">
-    <div class="container">
-        <p style="font-size: 90%">Copyright © 2018 cheyihao.com. All Rights Reserved.</p>
-    </div>
+<footer class="footer">
+	<div class="container">
+		<p style="font-size: 90%">Copyright © 2018 yakailongkj.com. All
+			Rights Reserved.</p>
+	</div>
 </footer>
 <!-- Javascript -->
 <script src="__PUBLIC__/resource/assets/js/jquery-1.8.2.min.js"></script>

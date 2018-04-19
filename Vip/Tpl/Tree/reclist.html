@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>网络拓扑图</title>
+<meta charset="utf-8">
+<title>车壹号尾气清洁剂管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/style.css" title="default">
 <style>
@@ -33,17 +36,29 @@
 <script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
 <body class="container-fluid" style="background-color: #f0f3ef;">
 <div class="row">
-    <header class="navbar-fixed-up" style="background-color: #41b9e7;">
-	<div class="container" style="color: #ffffff;padding: 10px; margin-bottom:0;font-size: 20px; height: inherit;">
+	<div class="navbar-fixed-up" style="background-color: #41b9e7;">
+		<div style="color: #ffffff;padding: 10px; margin-bottom:0;font-size: 16px; height: inherit;">
 		<a class="glyphicon glyphicon-home" href="__APP__/"
-			style="color: rgb(255, 255, 255); font-size: 20px;"></a>车壹号汽车尾气净化剂管理系统</div>
+			style="color: rgb(255, 255, 255); font-size: 16px;"></a>车壹号汽车尾气清洁剂管理系统
+		<a href="__APP__/Public/LogOut/" class="glyphicon glyphicon-log-out pull-right"
+		      	style="color: rgb(255, 255, 255); font-size: 16px;">退出</a>
+		</div>
 	</div>
-	</header>
-	<include file="Public:xyFoot" />
+	<div class="col-xs-12">
+		<h5>
+			<a href="__APP__/Tree/treeIndex/" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>推荐关系图
+		</h5>
+	</div>
+	<footer class="footer navbar-fixed-bottom">
+	<div class="container">
+		<p style="font-size: 90%">Copyright © 2018 yakailongkj.com. All
+			Rights Reserved.</p>
+	</div>
+	</footer>
 </div>
 </body>
 <script>
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
+var margin = {top: 20, right: 120, bottom: 20, left: 80},
     width = 1024 - margin.right - margin.left,
     height = 800 - margin.top - margin.bottom;
 

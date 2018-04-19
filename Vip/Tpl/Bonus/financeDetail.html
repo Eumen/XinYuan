@@ -20,6 +20,7 @@
 							<th><span>结算时间</span></th>
 							<th><span>奖金</span></th>
 							<th><span>奖项</span></th>
+							<th><span>奖金来源</span></th>
 						</tr>
 					</thead>
 					<volist name='list' id='vo'>
@@ -27,6 +28,7 @@
 						<td>{$vo['time']|date='Y-m-d H:i:s',###}</td>
 						<td>{$vo['money']}</td>
 						<td>{$vo['bz']}</td>
+						<td>{$vo['son_id']}</td>
 					</tr>
 					</volist>
 <!-- 					<tr> -->

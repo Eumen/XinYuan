@@ -128,6 +128,7 @@ class RegAction extends CommonAction{
 		$data['money']  = 0;  //注册金额
 		$data['cash']  = 0;  //现金币
 		$data['point']  = 0;  //积分
+		$data['us_img']  = "__PUBLIC__/Images/mctxico.jpg";
 		$result = $member->add($data);
 		unset($data,$member);
 		if($result) {

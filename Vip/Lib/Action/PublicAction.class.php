@@ -146,7 +146,11 @@ class PublicAction extends CommonAction
         $_SESSION['cash'] = $authInfo['cash']; // 现金币
         $_SESSION['point'] = $authInfo['point']; // 积分币
         $_SESSION['bk8'] = $authInfo['bk8']; // 基金
-        $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
+        if(empty($authInfo['us_img'])){
+            $_SESSION['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
+        } else {
+            $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
+        }
         $_SESSION['UserMktimes'] = mktime();
         $_SESSION['grade'] = $authInfo['grade']; // 级别
         $_SESSION['is_agent'] = $authInfo['is_agent']; // 服务中心

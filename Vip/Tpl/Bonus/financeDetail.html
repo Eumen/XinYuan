@@ -18,42 +18,28 @@
 					<thead>
 						<tr>
 							<th><span>结算时间</span></th>
-							<th><span>直推奖</span></th>
-							<th><span>报单奖</span></th>
-							<th><span>见点奖</span></th>
-							<th><span>合计</span></th>
-							<th><span>详细</span></th>
+							<th><span>奖金</span></th>
+							<th><span>奖项</span></th>
 						</tr>
 					</thead>
 					<volist name='list' id='vo'>
 					<tr>
-						<td>{$vo['create_date']}</td>
-						<td>{$vo['re_money']}</td>
-						<td>{$vo['shop_money']}</td>
-						<td>{$vo['point_money']}</td>
-						<td>{$vo['sum_money']}</td>
-						<td><a href="__URL__/financeShow/RDT/{$vo['s_date']}/PDT/{$vo['e_date']}/UserID/{$user_id}" title="这一期明细">明细</a></td>
+						<td>{$vo['time']|date='Y-m-d H:i:s',###}</td>
+						<td>{$vo['money']}</td>
+						<td>{$vo['bz']}</td>
 					</tr>
 					</volist>
-					<tr>
-						<td>总计：</td>
-						<td>{$count[1]}</td>
-						<td>{$count[2]}</td>
-						<td>{$count[3]}</td>
-						<td>{$count[1]+$count[2]+$count[3]}</td>
-						<td>&nbsp;</td>
-					</tr>
+<!-- 					<tr> -->
+<!-- 						<td>总计：</td> -->
+<!-- 						<td>{$count[1]}</td> -->
+<!-- 						<td>{$count[2]}</td> -->
+<!-- 						<td>{$count[3]}</td> -->
+<!-- 						<td>&nbsp;</td> -->
+<!-- 					</tr> -->
 				</table>
 				<table width="100%" class="table" border="0" cellpadding="0"
 					cellspacing="1">
 					<tr>
-						<td width="50%" nowrap="nowrap"><form id="form1" name="form1"
-								method="post" action="__URL__/financeTable">
-								日期：<input name="FanNowDate" type="text" id="FanNowDate"
-									onFocus="showCalendar(this)" readonly /> <input type="submit"
-									name="Submit" value="查询" class="button_text" /> <input
-									name="UserID" type="hidden" value="{$user_id}" />
-							</form></td>
 						<td width="50%">{$page}</td>
 					</tr>
 				</table>

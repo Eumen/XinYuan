@@ -95,6 +95,12 @@ class BonusAction extends CommonAction{
 	
 	//会员资金查询(显示会员每一期的各奖奖金)
 	public function financeDetail($cs=0){
+		
+// 		$bonus_v = M('bonus_detail_v');
+// 		$where['user_id'] = array('eq', $login_user_id);
+// 		$bonusresult = $bonus_v->where($where)->select();
+		
+		
 		$member = M('member');
 		$bonus = M ('personbonusdetail');  //个人奖金详细表
 		$where = array();
@@ -119,20 +125,19 @@ class BonusAction extends CommonAction{
 			$where['time'] = array(array('egt',$time1),array('elt',$time2));
 		}
 
-        $field  = "user_id,from_unixtime(time,'%Y-%m-%d') as create_date,sum(money) as sum_money,
-        case bonus_type when 1 then sum(money) else 0 end as re_money,
-        case bonus_type when 2 then sum(money) else 0 end as shop_money,
-        case bonus_type when 3 then sum(money) else 0 end as point_money";
+//         $field  = "user_id,from_unixtime(time,'%Y-%m-%d') as create_date,sum(money) as sum_money,
+//         case bonus_type when 1 then sum(money) else 0 end as re_money,
+//         case bonus_type when 2 then sum(money) else 0 end as shop_money,
+//         case bonus_type when 3 then sum(money) else 0 end as point_money";
         //=====================分页开始==============================================
         import ( "@.ORG.ZQPage" );  //导入分页类
-        $count = $bonus->where($where)->field($field)->count();//总页数
-        $listrows = 5;//每页显示的记录数
-        $page_where = 'FanNowDate=' . $_REQUEST['FanNowDate'].'&UserID='.$user_id;//分页条件
-        $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+        $count = $bonus->where($where)->count();//总页数
+        $listrows = 10;//每页显示的记录数
+        $Page = new ZQPage($count, $listrows, 1, 0, 3, $where);
         //===============(总页数,每页显示记录数,css样式 0-9)
         $show = $Page->show();//分页变量
         $this->assign('page', $show);//分页变量输出到模板
-        $list = $bonus->where($where)->field($field)->group('user_id,create_date')->order('id desc')->page($Page->getPage().','.$listrows)->select();
+        $list = $bonus->where($where)->order('id desc')->page($Page->getPage().','.$listrows)->select();
         $this->assign('list',$list);//数据输出到模板
         //各项奖每页汇总
 		$count = array();

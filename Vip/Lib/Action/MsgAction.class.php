@@ -343,7 +343,7 @@ class MsgAction extends CommonAction {
 		$boxID = $_POST['tabledb'];
 		$msg = M('message');
 		$map = array();
-		$map['id']  = array('in ',$boxID);
+		$map['id']  = array('in',$boxID);
 		$map['user_id']   = $_SESSION['loginUseracc'] ;
 		$lirs = $msg->where($map)->select();
 		foreach($lirs as $rs){

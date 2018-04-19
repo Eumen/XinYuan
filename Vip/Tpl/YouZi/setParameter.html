@@ -1,62 +1,58 @@
 <include file="Public:xyHead" />
 <div class="ncenter_box">
-	<div class="accounttitle">
-		<h5>参数设置</h5>
-	</div>
 	<form method='post' id="myform" action="__URL__/setParameterSave">
 		<table width="100%" cellpadding=3 cellspacing=0 border=0 id="tb1"
-			class="tab4">
-			<tr class="content_td">
-				<td width="15%">&nbsp;</td>
-				<td width="85%">&nbsp;</td>
+			class="table  table-striped">
+			<tr>
+				<td align="right"><h5><a href="__APP__/Public/adminIndex" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>参数设置</h5></td>
 			</tr>
 			<tr>
 				<td align="right">级别：</td>
-				<td class="center"><input name="s5" type="text" id="s5"
+				<td><input name="s5" type="text" id="s5"
 					value="{$fee_s5}" size="50" maxlength="80" /> 用|分割</td>
 			</tr>
 			<tr>
 				<td align="right">投资金额：</td>
-				<td class="center"><input name="s1" type="text" id="s1"
+				<td><input name="s1" type="text" id="s1"
 					value="{$fee_s1}" size="50" maxlength="80" />元</td>
 			</tr>
 			<tr>
 				<td align="right">直推奖：</td>
-				<td class="center">
+				<td>
            			<input name="s6" type="text" id="s6"
 					value="{$fee_s6}" size="20" maxlength="50" />元
 				</td>
 			</tr>
 			<tr>
 				<td align="right">见点奖：</td>
-				<td class="center">
+				<td>
 					<input name="s7" type="text" id="s7" value="{$fee_s7}" size="20" maxlength="80" />元 
 					<br>
 					<input name="s15" type="text" id="s15" value="{$fee_s15}" size="20" maxlength="80" />层数</td>
 			</tr>
 			<tr>
 				<td align="right">报单奖：</td>
-				<td class="center"><input name="s8" type="text" id="s8" value="{$fee_s8}" size="8" maxlength="80" />元</td>
+				<td><input name="s8" type="text" id="s8" value="{$fee_s8}" size="8" maxlength="80" />元</td>
 			</tr>
 			<tr>
 				<td align="right">资金分类：</td>
-				<td class="center"><input name="s18" type="text" id="s18" value="{$fee_s18}" size="100" maxlength="100" />用| 分割</td>
+				<td><input name="s18" type="text" id="s18" value="{$fee_s18}" size="100" maxlength="100" />用| 分割</td>
 			</tr>
 			<tr>
 				<td align="right">充值账户：</td>
-				<td class="center"><input name="s16" type="text" id="s16" value="{$fee_s16}" size="40" maxlength="80" /></td>
+				<td><input name="s16" type="text" id="s16" value="{$fee_s16}" size="40" maxlength="80" /></td>
 			</tr>
 			<tr>
 				<td align="right">众筹基金：</td>
-				<td class="center"><input name="s17" type="text" id="s17" value="{$fee_s17}" size="8" maxlength="80" />百分比</td>
+				<td><input name="s17" type="text" id="s17" value="{$fee_s17}" size="8" maxlength="80" />百分比</td>
 			</tr>
 			<tr>
 				<td align="right">最低提现额度：</td>
-				<td class="center"><input name="s9" type="text" id="s9" value="{$fee_s9}" size="8" maxlength="12" /></td>
+				<td><input name="s9" type="text" id="s9" value="{$fee_s9}" size="8" maxlength="12" /></td>
 			</tr>
 			<tr>
 				<td align="right">提现手续费：</td>
-				<td class="center"><input name="s3" type="text" id="s3" value="{$fee_s3}" size="8" maxlength="12" /> 百分比</td>
+				<td><input name="s3" type="text" id="s3" value="{$fee_s3}" size="8" maxlength="12" /> 百分比</td>
 			</tr>
 			<tr>
 				<td align="right">关闭网站提示：</td>
@@ -88,22 +84,21 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" style="height: 5px;"><hr></td>
-			</tr>
-			<tr>
-				<td align="right">&nbsp;</td>
-				<td class="center">&nbsp;</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td class="center">
+				<td align="right">
 					<input type="submit" value="修改" class="button_text">
+				</td>
+				<td>
 					<input type="reset" value="还原"class="button_text">
 				</td>
 			</tr>
 		</table>
 	</form>
 </div>
-<include file="Public:xyFoot" />
+<footer class="footer">
+	<div class="container">
+		<p style="font-size: 90%">Copyright © 2018 yakailongkj.com. All
+			Rights Reserved.</p>
+	</div>
+</footer>
 </body>
 </html>

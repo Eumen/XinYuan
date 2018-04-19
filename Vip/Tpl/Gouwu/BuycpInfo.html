@@ -1,64 +1,64 @@
-<body style="background-color: #f0f3ef;">
-	<include file="Public:xyHead" />
-	<link href="__PUBLIC__/Css/bootstrap.min.css" rel="stylesheet" />
-	<div class="row">
-		<div class="col-xs-12">
-			<h4>
-				<a href="__APP__/Gouwu/mallIndex/"
-					class="glyphicon glyphicon-chevron-left bg-info"
-					style="font-size: 16px;"></a>我的订单查询
-			</h4>
-		</div>
+<include file="Public:xyHead" />
+<link href="__PUBLIC__/Css/bootstrap.min.css" rel="stylesheet" />
+<div class="row">
+	<div class="col-xs-12">
+		<h5>
+			<a href="__APP__/Gouwu/mallIndex/"
+				class="glyphicon glyphicon-chevron-left bg-info"
+				style="font-size: 16px;"></a>我的订单查询
+		</h5>
 	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<table width="100%" class="table table-bordered table-responsive" id="tb1">
-				<thead>
-					<th>会员编号</th>
-					<th>收货人姓名</th>
-					<th>产品名</th>
-					<th>购买时间</th>
-					<th>总金额</th>
-					<th>状态</th>
-					<th>备注</th>
-				</thead>
-				<form action="" method="post" name="form1">
-					<volist name="list" id="vo">
-					<tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}&nbsp;</td>
-						<td>{$vo.name}&nbsp;</td>
-						<td>{$vo.time|date='Y-m-d H:i:s',###}</td>
-						<td>{$vo.money}</td>
-						<td><eq name="vo.bk3" value="1"> 已发货 <else /> <eq
-								name="vo.bk3" value="2"> 已收货 <else /> <span
-								style="color: #F00">未发货</span> </eq> </eq></td>
-						<td>{$vo.bk2}</td>
-					</tr>
-					</volist>
-					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>合计金额</td>
-						<td>{$count}</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="11">
-							<table width="100%">
-								<tr>
-									<td align="center">{$page}</td>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<table width="100%" class="table table-bordered table-responsive"
+			id="tb1">
+			<thead>
+				<th>会员编号</th>
+				<th>收货人姓名</th>
+				<th>产品名</th>
+				<th>购买时间</th>
+				<th>总金额</th>
+				<th>状态</th>
+				<th>备注</th>
+			</thead>
+			<form action="" method="post" name="form1">
+				<volist name="list" id="vo">
+				<tr>
+					<td>{$vo.user_id}</td>
+					<td>{$vo.user_name}&nbsp;</td>
+					<td>{$vo.name}&nbsp;</td>
+					<td>{$vo.time|date='Y-m-d H:i:s',###}</td>
+					<td>{$vo.money}</td>
+					<td><eq name="vo.bk3" value="1"> 已发货 <else /> <eq
+							name="vo.bk3" value="2"> 已收货 <else /> <span
+							style="color: #F00">未发货</span> </eq> </eq></td>
+					<td>{$vo.bk2}</td>
+				</tr>
+				</volist>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>合计金额</td>
+					<td>{$count}</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="11">
+						<table width="100%">
+							<tr>
+								<td align="center">{$page}</td>
 
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</form>
-			</table>
-		</div>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</form>
+		</table>
 	</div>
-	<include file="Public:xyFoot" />
+</div>
+<include file="Public:xyFoot" />
 </body>
 </html>

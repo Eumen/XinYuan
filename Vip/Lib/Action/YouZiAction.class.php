@@ -1563,9 +1563,9 @@ class YouZiAction extends CommonAction
             } else {
                 $data = array();
                 $data['user_id'] = $voo['re_name'];
-                $detail['user_name'] = $detail_rs['user_name'];
-                $detail['money'] = $money_recommend;
-                $detail['re_money'] = $money_recommend;
+                $data['user_name'] = $detail_rs['user_name'];
+                $data['money'] = $money_recommend;
+                $data['re_money'] = $money_recommend;
                 $data['update_time'] = mktime();
                 $personbonussum->add($data);
                 unset($data);
@@ -1576,24 +1576,22 @@ class YouZiAction extends CommonAction
                 $bonussummary->query("update __TABLE__ set `money`=money+".$money_recommend.",`re_money`=re_money+".$money_recommend);
             } else {
                 $data = array();
-                $detail['money'] = $money_recommend;
-                $detail['re_money'] = $money_recommend;
+                $data['money'] = $money_recommend;
+                $data['re_money'] = $money_recommend;
                 $data['update_time'] = mktime();
                 $bonussummary->add($data);
                 unset($data);
             }
-            // 报单中心奖项
-            if (!empty($voo['shop_id'])) {
+            // 报单中心ID不为空
+            if (!empty($voo['bk5'])) {
                 // 报单奖
                 $money_register = $fee_rs['s8'];
-                // 报单中心ID
-                $shop_id = $voo['shop_id'];
                 // 给报单中心加奖金
-                $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['shop_id']."'");
+                $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['bk5']."'");
                 // 给报单中心添加个人奖金详细
                 $detail = array();
-                $data['user_id'] = $voo['shop_id'];
-                $data['user_id'] = $voo['shop_name'];
+                $detail['user_id'] = $voo['bk5'];
+                $detail['user_name'] = $voo['bk6'];
                 $detail['money'] = $money_register;
                 $detail['son_id'] = $voo['user_id'];
                 $detail['son_name'] = $voo['user_name'];
@@ -1604,8 +1602,8 @@ class YouZiAction extends CommonAction
                 unset($detail);
                 // 给报单中心添加奖金历史记录
                 $data = array();
-                $data['user_id'] = $voo['shop_id'];
-                $data['user_name'] = $voo['shop_name'];
+                $data['user_id'] = $voo['bk5'];
+                $data['user_name'] = $voo['bk6'];
                 $data['produce_userid'] = $voo['user_id'];
                 $data['produce_username'] = $voo['user_name'];
                 $data['action_type'] = 2;
@@ -1616,15 +1614,15 @@ class YouZiAction extends CommonAction
                 $bonushistory->add($data);
                 unset($data);
                 
-                $personSum_rs = $personbonussum->where("user_id='".$voo['shop_id']."'")->field('*')->find();
+                $personSum_rs = $personbonussum->where("user_id='".$voo['bk5']."'")->field('*')->find();
                 if ($personSum_rs) {
-                    $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['shop_id']."'");
+                    $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['bk5']."'");
                 } else {
                     $data = array();
-                    $data['user_id'] = $voo['shop_id'];
-                    $detail['user_name'] = $voo['shop_name'];
-                    $detail['money'] = $money_register;
-                    $detail['reg_money'] = $money_register;
+                    $data['user_id'] = $voo['bk5'];
+                    $data['user_name'] = $voo['bk6'];
+                    $data['money'] = $money_register;
+                    $data['reg_money'] = $money_register;
                     $data['update_time'] = mktime();
                     $personbonussum->add($data);
                     unset($data);
@@ -1635,8 +1633,8 @@ class YouZiAction extends CommonAction
                     $bonussummary->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register);
                 } else {
                     $data = array();
-                    $detail['money'] = $money_register;
-                    $detail['reg_money'] = $money_register;
+                    $data['money'] = $money_register;
+                    $data['reg_money'] = $money_register;
                     $data['update_time'] = mktime();
                     $bonussummary->add($data);
                     unset($data);
@@ -1702,8 +1700,8 @@ class YouZiAction extends CommonAction
                         $bonussummary->query("update __TABLE__ set `money`=money+".$money_point.",`point_money`=point_money+".$money_point);
                     } else {
                         $data = array();
-                        $detail['money'] = $money_point;
-                        $detail['point_money'] = $money_point;
+                        $data['money'] = $money_point;
+                        $data['point_money'] = $money_point;
                         $data['update_time'] = mktime();
                         $bonussummary->add($data);
                         unset($data);

@@ -520,9 +520,9 @@ public function dizhiAdd(){
 		$address = M('address');
 		$user_id = $_SESSION['loginUseracc'];
 		$did = $_POST['ID'];
-		$name = $_POST['s_name'];
-		$are = $_POST['s_address'];
-		$tel= $_POST['s_tel'];
+		$name = $_POST['user_name'];
+		$are = $_POST['address'];
+		$tel= $_POST['tel'];
 
 		$data['user_id'] = $user_id;
 		$data['user_name'] = $name;
@@ -555,7 +555,7 @@ public function dizhiAdd(){
 			echo '0';
 		}
 	}
-    // 增加地址
+    // 修改地址
 	public function addadr(){
 		$address = M('address');
 		$id = $_GET['ID'];

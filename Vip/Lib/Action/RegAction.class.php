@@ -49,7 +49,7 @@ class RegAction extends CommonAction{
 		}
 		// 节点关系
 	    if(empty($_POST['father_id'])){
-	    $this->error('请填写电你的朋友帐号！');
+	    $this->error('请填写你的朋友帐号！');
 	    exit;
 		}
 		unset($authInfoo,$mappp);
@@ -99,9 +99,14 @@ class RegAction extends CommonAction{
 			$data['bk2'] = $authInfoo['bk2'] + 1;   //路径绝对层数
 			
 		} else {
-			$this->error('上级会员不存在！');
+			$this->error('填写的朋友关系不存在！');
 			exit;
 		}
+		unset($mappp,$authInfoo);
+		//检测报单中心
+		$authInfoo = $this->find_shopid($RID);
+	    $data['bk5'] = $authInfoo['user_id'];
+	    $data['bk6'] = $authInfoo['user_name'];
 		// 查询参数表
 		$fee  = M ('fee') -> find();
 		// 投资金额
@@ -134,6 +139,20 @@ class RegAction extends CommonAction{
 			exit;
 		}
 	}
+	// 递归检测报单中心
+	public function find_shopid($user_id) {
+	    $member = M('member');
+	    $mappp  = array();
+	    $mappp['user_id'] = $user_id;
+	    $authInfoo = $member->where($mappp)->field('user_id,user_name,is_agent,father_id,father_name')->find();
+	    if ($authInfoo['is_agent'] == 1){
+	        return $authInfoo;
+	    } else {
+	        $authInfoo = $this->find_shopid($authInfoo['father_name']);
+	        return $authInfoo;
+	    }
+	}
+	
 	// 找回密码
 	public function find_pw_s() {
 			if(empty($_POST['user_id']) || empty($_POST['tel'])) {

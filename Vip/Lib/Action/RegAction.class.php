@@ -105,7 +105,9 @@ class RegAction extends CommonAction{
 		unset($mappp,$authInfoo);
 		//检测报单中心
 		$authInfoo = $this->find_shopid($RID);
+		// 报单中心的用户名
 	    $data['bk5'] = $authInfoo['user_id'];
+	    // 报单中心姓名
 	    $data['bk6'] = $authInfoo['user_name'];
 		// 查询参数表
 		$fee  = M ('fee') -> find();

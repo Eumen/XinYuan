@@ -286,44 +286,40 @@ class RechargeAction extends CommonAction{
 	
 	public function adminCurrencyRechargeAdd(){
 		//为会员充值
-		if ($_SESSION['UrlPTPass'] == 'MyssGuanMangGuo'){
-			$fck = M ('member');
-			if (!$fck->autoCheckToken($_POST)){
-				$this->error('页面过期，请刷新页面！');
-				exit;
-			}
-			$userId = $_POST['userId'];
-			$userName = $_POST['userName'];
-			$ePoints = $_POST['ePoints'];
-			$rechargeType = (int)$_POST['rechargeType'];
-			if (is_numeric($ePoints) == false){
-				$this->error('金额错误，请重新输入！');
-				exit;
-			}
-			if (!empty($userId) && !empty($ePoints)){
-				$where = array();
-				$where['user_id'] = $userId;
-				$frs = $fck->where($where)->field('user_id, user_name')->find();
-				if ($frs){
-					$recharge = M ('recharge');
-					$data = array();
-					$data['user_id'] = $frs['user_id'];
-					$data['user_name'] = $frs['user_name'];
-					$data['money'] = $ePoints;
-					$data['recharge_type'] = $rechargeType;
-					$data['is_pay'] = 0;
-					$data['recharge_time'] = strtotime(date('c'));
-					$result = $recharge->add($data);
-					unset($data,$recharge);
-					$bUrl = __URL__.'/adminCurrencyRecharge';
-					$this->_box(1,'申请充值成功！',$bUrl,1);
-				}else{
-					$this->error('没有该会员，请重新输入!');
-				}
-				unset($fck,$frs,$where,$UserID,$ePoints);
+	   $fck = M ('member');
+		if (!$fck->autoCheckToken($_POST)){
+			$this->error('页面过期，请刷新页面！');
+			exit;
+		}
+		$userId = $_POST['userId'];
+		$userName = $_POST['userName'];
+		$ePoints = $_POST['ePoints'];
+		$rechargeType = (int)$_POST['rechargeType'];
+		if (is_numeric($ePoints) == false){
+			$this->error('金额错误，请重新输入！');
+			exit;
+		}
+		if (!empty($userId) && !empty($ePoints)){
+			$where = array();
+			$where['user_id'] = $userId;
+			$frs = $fck->where($where)->field('user_id,user_name')->find();
+			if ($frs){
+				$recharge = M ('recharge');
+				$data = array();
+				$data['user_id'] = $frs['user_id'];
+				$data['user_name'] = $frs['user_name'];
+				$data['money'] = $ePoints;
+				$data['recharge_type'] = $rechargeType;
+				$data['is_pay'] = 0;
+				$data['recharge_time'] = strtotime(date('c'));
+				$result = $recharge->add($data);
+				unset($data,$recharge);
+				$bUrl = __URL__.'/adminCurrencyRecharge';
+				$this->_box(1,'申请充值成功！',$bUrl,1);
 			}else{
-				$this->error('错误!');
+				$this->error('没有该会员，请重新输入!');
 			}
+			unset($fck,$frs,$where,$UserID,$ePoints);
 		}else{
 			$this->error('错误!');
 		}
@@ -344,13 +340,13 @@ class RechargeAction extends CommonAction{
 			$where = array();
 			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
-			$recharge_rs = $recharge ->where($where)->field('money')->find();
+			$recharge_rs = $recharge ->where($where)->field('money,user_id')->find();
 			$data['update_time'] = strtotime(date('c'));
 			$data['is_pay'] = 1;
 			$rs = $recharge->where($where)->save($data);
 			if ($rs){
 			    //提交事务
-			    $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE id = {$PTid[0]}");
+			    $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
 			    if ($rs2) {
 			        $recharge->commit();
 			        $bUrl = __URL__.'/adminCurrencyRecharge';

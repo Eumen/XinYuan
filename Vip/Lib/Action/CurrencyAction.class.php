@@ -341,7 +341,7 @@ class CurrencyAction extends CommonAction {
 					$data['user_name'] = $frs['user_name'];
 					$data['money'] = $ePoints;
 					$data['epoint'] = $ePoints * ((100 - $s3['s3'])/100);
-					$data['withdraw_type'] = $rechargeType;
+					$data['withdraw_type'] = $withdrawType;
 					$data['bankid'] = $bankId;
 					$data['bank'] = $bank;
 					$data['tel'] = $tel;
@@ -351,8 +351,7 @@ class CurrencyAction extends CommonAction {
 					$result = $withdraw->add($data);
 					unset($data,$withdraw);
 					$bUrl = __URL__.'/adminCurrency';
-					$this->_box(1,'确认充值成功！',$bUrl,1);
-					//$this->_adminCurrencyRechargeOpen($rearray);
+					$this->_box(1,'确认提现成功！',$bUrl,1);
 				}else{
 					$this->error('没有该会员，请重新输入!');
 				}

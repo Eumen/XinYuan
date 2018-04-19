@@ -59,7 +59,7 @@ class ChangeAction extends CommonAction {
 		}
 		switch ($Urlsz){
 			case 1:
-				$_SESSION['DLTZURL02'] = 'changedata';
+				$_SESSION['DLTZURL02'] = 'profile';
 				$bUrl = __URL__.'/profile';//修改资料
 				$this->_boxx($bUrl);
 				break;
@@ -104,62 +104,57 @@ class ChangeAction extends CommonAction {
 
 	/* --------------- 修改保存会员信息 ---------------- */
 	public function changedataSave(){
-		if ($_SESSION['DLTZURL02'] == 'changedata'){
-			$member = M('member');
-			$myw = array();
-			$myw['id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$mrs = $member->where($myw)->field('*')->find();
-			if(!$mrs){
-				$this->error('非法提交数据!');
-				exit;
-			}
-			// 验证密码
-			if(strlen($_POST['password']) < 6 or strlen($_POST['password']) > 16){
-			    $this->error('密码应该6-16位之间！');
-			    exit;
-			}
-			// 验证电话号码
-			if(empty($_POST['tel'])){
-			    $this->error('请填写电话号码！');
-			    exit;
-			}
-			// 验证电话号码
-			if(strlen(trim($_POST['tel'])) != 11){
-			    $this->error('请输入11位手机号！');
-			    exit;
-			}
-			$data = array();
-			$data['id'] = $_SESSION[C('USER_AUTH_KEY')]; //主键
-			$data['bank'] = $_POST['bank']; //银行名称
-			$data['bankcard_number']  = $_POST['bankcard_number']; //银行卡号
-			$data['user_name'] = $_POST['user_name']; //开户姓名
-			$data['bank_province'] = $_POST['bank_province'];    //省份
-			$data['bank_city'] = $_POST['bank_city']; //城市
-			$data['bank_address'] = $_POST['bank_address'];     //开户地址
-			$data['user_code'] = $_POST['user_code']; //身份证号码
-			$data['tel']  = $_POST['tel'];  //联系电话
-			// 一级密码不加密
-			$data['pwd1'] = trim($_POST['password']);
-			// 二级密码不加密
-			$data['pwd2'] = trim($_POST['password2']);
-			// 一级密码加密
-			$data['password'] = md5(trim($_POST['password']));
-			// 二级密码加密
-			$data['password2'] = md5(trim($_POST['password2']));
-			$usimg = trim($_POST['us_img']);// 用户头像
-			if(!empty($usimg)){
-				$data['us_img'] = $usimg;
-			}
-			$rs = $member->save($data);
-			if($rs){
-				$bUrl = __URL__.'/profile';
-				$this->_box(1,'资料修改成功！',$bUrl,1);
-			} else {
-			    $this->_box(1,'资料修改成功！',$bUrl,1);
-			}
-		}else{
-			$this->error('操作错误!');
+		$member = M('member');
+		$myw = array();
+		$myw['id'] = $_SESSION[C('USER_AUTH_KEY')];
+		$mrs = $member->where($myw)->field('*')->find();
+		if(!$mrs){
+			$this->error('非法提交数据!');
 			exit;
+		}
+		// 验证密码
+		if(strlen($_POST['password']) < 6 or strlen($_POST['password']) > 16){
+		    $this->error('密码应该6-16位之间！');
+		    exit;
+		}
+		// 验证电话号码
+		if(empty($_POST['tel'])){
+		    $this->error('请填写电话号码！');
+		    exit;
+		}
+		// 验证电话号码
+		if(strlen(trim($_POST['tel'])) != 11){
+		    $this->error('请输入11位手机号！');
+		    exit;
+		}
+		$data = array();
+		$data['id'] = $_SESSION[C('USER_AUTH_KEY')]; //主键
+		$data['bank'] = $_POST['bank']; //银行名称
+		$data['bankcard_number']  = $_POST['bankcard_number']; //银行卡号
+		$data['user_name'] = $_POST['user_name']; //开户姓名
+		$data['bank_province'] = $_POST['bank_province'];    //省份
+		$data['bank_city'] = $_POST['bank_city']; //城市
+		$data['bank_address'] = $_POST['bank_address'];     //开户地址
+		$data['user_code'] = $_POST['user_code']; //身份证号码
+		$data['tel']  = $_POST['tel'];  //联系电话
+		// 一级密码不加密
+		$data['pwd1'] = trim($_POST['password']);
+		// 二级密码不加密
+		$data['pwd2'] = trim($_POST['password2']);
+		// 一级密码加密
+		$data['password'] = md5(trim($_POST['password']));
+		// 二级密码加密
+		$data['password2'] = md5(trim($_POST['password2']));
+		$usimg = trim($_POST['us_img']);// 用户头像
+		if(!empty($usimg)){
+			$data['us_img'] = $usimg;
+		}
+		$rs = $member->save($data);
+		if($rs){
+			$bUrl = __URL__.'/profile';
+			$this->_box(1,'资料修改成功！',$bUrl,1);
+		} else {
+		    $this->_box(1,'资料修改失败，没有资料要修改！',$bUrl,1);
 		}
 	}
 	

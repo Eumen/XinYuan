@@ -1749,6 +1749,13 @@ class YouZiAction extends CommonAction
             $result = $member->where('id=' . $voo['id'])->save($data);
             unset($data);
         }
+        
+        // 调用 过程
+        $sql = "CALL calFutou(@code, @msg);";
+        mysql_query($sql);
+        $result = mysql_query('select @code, @msg;');
+        
+        
         unset($member, $where, $where_two, $rs);
         if ($vo) {
             unset($vo);

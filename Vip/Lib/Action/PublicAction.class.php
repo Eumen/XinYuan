@@ -104,7 +104,15 @@ class PublicAction extends CommonAction
         $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
         $_SESSION['login_user_type'] = $user_type;
         $where['id'] = $authInfo['id'];
+        $fck->where($where)->setField('bk3', $user_type);
         $fck->where($where)->setField('last_login_time',mktime()); 
+        // 管理员
+        $parmd = $this->_cheakPrem();
+        if ($authInfo['id'] == 1 || $parmd[11] == 1) {
+            $_SESSION['administrator'] = 1;
+        } else {
+            $_SESSION['administrator'] = 2;
+        }
         $fck->execute("update __TABLE__ set last_login_time=" . time() . ",last_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
         // 缓存访问权限
         RBAC::saveAccessList();

@@ -97,6 +97,7 @@ class CommonAction extends CheFieldAction {
 			$this->LinkOut();
 			exit;
 		}
+		$this->check_order_isout();
 		$this->_user_mktime($_SESSION['UserMktimes']);
 		$User = M ('member');
 		//生成认证条件
@@ -158,6 +159,7 @@ class CommonAction extends CheFieldAction {
 	protected function check_order_isout(){
 		$id  = $_SESSION[C('USER_AUTH_KEY')];
 		$member = M ('member');
+		$cashpp = M ('cashpp');
 		$nowdate = strtotime(date('c'));
 		
 		$fee = M('fee');
@@ -168,6 +170,31 @@ class CommonAction extends CheFieldAction {
 		$buylasttime = $nowdate - $fee_s12*3600;
 		$selllasttime = $nowdate - $fee_str9*3600;
 		
+		if($id>1){
+			//未打款检查
+			$mapp            =   array();
+			$mapp['uid']    = $id;
+			$mapp['is_buy']	= 1;
+			$mapp['is_pay'] = 0;
+			$mapp['bdt']	= array('lt',$buylasttime);
+			$buych = $cashpp ->where($mapp)->select();
+			if($buych){
+				$member->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
+				$this->LinkOut();
+			}
+			
+			//收款未确认检查
+			$map           =   array();
+			$map['bid']    = $id;
+			$map['is_buy'] = 2;
+			$map['is_pay'] = 0;
+			$map['bdt']	   = array('lt',$selllasttime);
+			$sellch = $cashpp ->where($map)->select();
+			if($sellch){
+				$member->execute("UPDATE __TABLE__ SET `is_lock`=1 where id>1 and id=".$id);
+				$this->LinkOut();
+			}
+		}
 	}
 	
 	public function LinkOut(){

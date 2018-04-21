@@ -62,41 +62,42 @@ div#bg {
 <body>
 	<div id="bg"></div>
 	<div class="register-container container">
-		<div class="row">
-			<div class="iphone span5">
-	            <img src="__PUBLIC__/resource/assets/img/iphone.png" alt="">
-	        </div>
-			<div class="register span6">
-				<form method='post' name="login" id="form1" onsubmit="return false">
-					<h2>
-						<span class="blue">登陆</span>
-					</h2>
-					<label for="account">用户名：</label>
-					<input type="text" id="account"
-						name="account" placeholder="请输入登录用户名..." maxlength="10">
-					<label for="password">密码：</label>
-					<input type="password" id="password"
-						name="password" placeholder="请输入登录密码..." maxlength="16">
-					<label for="verify">验证码：</label>
-					<input name="verify" id="verify" type="text" onKeyDown="keydown(event)" check="Require" value=""
-						maxlength="4" style="width: 75%" />
-					<img id="verifyImg" src="__URL__/verify/" width="55"
-						onClick="fleshVerify()" border="0" alt="点击刷新验证码"
-						style="cursor: pointer" align="absmiddle" />
-					<button name="button" type="submit" id="btn_submit"
+	<div class="row">
+		<div class="iphone span5">
+           <img src="__PUBLIC__/resource/assets/img/iphone.png" alt="">
+       </div>
+		<div class="register span6">
+			<form method='post' name="login" id="form1" onsubmit="return false">
+				<li><h3>
+						<span class="blue">用户登录</span>
+					</h3> <label for="account">用户名：</label> <input type="text"
+					id="account" name="account" placeholder="请输入登录用户名..."
+					maxlength="10"></li>
+				<li><label for="password">密码：</label> <input type="password"
+					id="password" name="password" placeholder="请输入登录密码..."
+					maxlength="16"></li>
+				<li><label for="verify">验证码：</label><input name="verify"
+					id="verify" type="text" onKeyDown="keydown(event)"
+					check="Require" value="" maxlength="4" style="width: 75%" />
+					&nbsp;&nbsp;&nbsp;&nbsp; <img id="verifyImg"
+					src="__URL__/verify/" width="55" onClick="fleshVerify()"
+					border="0" alt="点击刷新验证码" style="cursor: pointer"
+					align="absmiddle" /></li>
+				<li><button name="button" type="submit" id="btn_submit"
 						onClick="ThinkAjax.sendForm('form1','__URL__/checkLogin/',loginHandle,'result')">点击登陆</button>
-					<input type="hidden" name="ajax" value="1">
-					<button name="button" type="submit" id="btn_submit"
-						onclick="location.href='__APP__/Reg/find_pw/'">忘记密码</button>
-					<button name="button" type="submit" id="btn_submit" class="button"
-						onclick="location.href='__APP__/Reg/reg?rid=carNo1'">免费注册</button>
+					<input type="hidden" name="ajax" value="1"></li>
+				<li><button name="button" type="submit" id="btn_submit"
+						onclick="location.href='__APP__/Reg/find_pw/'">忘记密码</button></li>
+				<li><button name="button" type="submit" id="btn_submit"
+						class="button" onclick="location.href='__APP__/Reg/reg?rid=carNo1'">免费注册</button></li>
+				<li>
 					<div class="error">
 						<span id="result"></span>
 					</div>
-
-				</form>
-			</div>
+				</li>
+			</form>
 		</div>
+	</div>
 	</div>
 	<include file="Public:xyFoot" />
 </body>

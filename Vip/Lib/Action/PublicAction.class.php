@@ -13,10 +13,7 @@ class PublicAction extends CommonAction
     // 过滤查询字段
     function _filter(&$map)
     {
-        $map['title'] = array(
-            'like',
-            "%" . $_POST['name'] . "%"
-        );
+        $map['title'] = array( 'like',"%" . $_POST['name'] . "%");
     }
     // 顶部页面
     public function top()
@@ -30,59 +27,6 @@ class PublicAction extends CommonAction
     {
         C('SHOW_RUN_TIME', false); // 运行时间显示
         C('SHOW_PAGE_TRACE', false);
-        $this->display();
-    }
-    // 菜单页面
-    public function menu()
-    {
-        $this->_checkUser();
-        $id = $_SESSION[C('USER_AUTH_KEY')]; // 登录AutoId
-        $member = M('member');
-        $map['id'] = $_SESSION[C('USER_AUTH_KEY')];
-        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8,us_img,grade,is_agent';
-        $authInfo = $member->where($map)->field($field)->find();
-        // 使用用户名、密码和状态的方式进行认证
-        if (false == $authInfo) {
-            $this->error('帐号不存在或已禁用！');
-        } else {
-            $_SESSION['loginUserName'] = $authInfo['user_name']; // 用户姓名
-            $_SESSION['register_time'] = $authInfo['register_time'];// 注册时间
-            $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];// 最近登录时间
-            $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否服务中心
-            $_SESSION['cash'] = $authInfo['cash']; // 现金币
-            $_SESSION['point'] = $authInfo['point']; // 积分币
-            $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
-            $_SESSION['UserMktimes'] = mktime();
-            $_SESSION['grade'] = $authInfo['grade']; // 级别
-            $_SESSION['is_agent'] = $authInfo['is_agent']; // 服务中心
-        }
-        $this->display('menu');
-    }
-    // 后台首页 查看系统信息
-    public function main()
-    {
-        $this->_checkUser();
-        $ppfg = $_POST['ppfg'];
-        $id = $_SESSION[C('USER_AUTH_KEY')]; // 登录AutoId
-        $member = M('member');
-        $map['id'] = $_SESSION[C('USER_AUTH_KEY')];
-        $field = 'id,user_id,user_name,password,password2,register_time,last_login_time,is_agent,cash,point,bk8,us_img,grade,is_agent';
-        $authInfo = $member->where($map)->field($field)->find();
-        // 使用用户名、密码和状态的方式进行认证
-        if (false == $authInfo) {
-            $this->error('帐号不存在或已禁用！');
-        } else {
-            $_SESSION['loginUserName'] = $authInfo['user_name']; // 用户姓名
-            $_SESSION['register_time'] = $authInfo['register_time'];// 注册时间
-            $_SESSION['lastLoginTime'] = $authInfo['last_login_time'];// 最近登录时间
-            $_SESSION['login_isAgent'] = $authInfo['is_agent']; // 是否服务中心
-            $_SESSION['cash'] = $authInfo['cash']; // 现金币
-            $_SESSION['point'] = $authInfo['point']; // 积分币
-            $_SESSION['us_img'] = $authInfo['us_img']; // 用户头像
-            $_SESSION['UserMktimes'] = mktime();
-            $_SESSION['grade'] = $authInfo['grade']; // 级别
-            $_SESSION['is_agent'] = $authInfo['is_agent']; // 服务中心
-        }
         $this->display();
     }
     // 用户登录页面
@@ -160,15 +104,7 @@ class PublicAction extends CommonAction
         $user_type = md5($_SERVER['HTTP_USER_AGENT'] . 'wtp' . rand(0, 999999));
         $_SESSION['login_user_type'] = $user_type;
         $where['id'] = $authInfo['id'];
-        $fck->where($where)->setField('bk3', $user_type);
         $fck->where($where)->setField('last_login_time',mktime()); 
-        // 管理员
-        $parmd = $this->_cheakPrem();
-        if ($authInfo['id'] == 1 || $parmd[11] == 1) {
-            $_SESSION['administrator'] = 1;
-        } else {
-            $_SESSION['administrator'] = 2;
-        }
         $fck->execute("update __TABLE__ set last_login_time=" . time() . ",last_login_ip='" . $_SERVER['REMOTE_ADDR'] . "' where id=" . $authInfo['id']);
         // 缓存访问权限
         RBAC::saveAccessList();

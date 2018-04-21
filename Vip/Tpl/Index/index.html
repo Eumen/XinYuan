@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>车壹号汽车尾气清洁剂管理系统</title>
-    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/resource/css/bootstrap.min.css" title="default">
@@ -13,6 +12,7 @@
 <script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
 <script src="__PUBLIC__/resource/js/bootstrap.min.js"></script>
 <style>
+-webkit-touch-callout:default;
 .center {
   width: 100%px;
   height: 30px;
@@ -68,19 +68,19 @@
         <div class="col-xs-6">
             <div class="row">
                 <div class="form-group-sm" style="width: 100%;">
-                	<label class="text-danger">用户等级:</label>
-                    <?php if(  $_SESSION['grade']  ==  "0"): ?><label class="text-success">普通用户</label><a href="__APP__/Agent/memberuplevel">(升级)</a><?php endif; ?>
-                    <?php if(  $_SESSION['grade']  ==  "1"): ?><label class="text-success">会员</label><?php endif; ?>
+                	<label class="text-danger">用户等级：</label>
+                    <?php if(  $_SESSION['grade']  ==  "0"): ?><label class="text-success">会员</label><a href="__APP__/Agent/memberuplevel">(升级)</a><?php endif; ?>
+                    <?php if(  $_SESSION['grade']  ==  "1"): ?><label class="text-success">消费商</label><?php endif; ?>
                     <?php if(  $_SESSION['grade']  ==  "2"): ?><label class="text-success">管理员</label><?php endif; ?>
                 </div>
                 <div class="form-group-sm" style="width: 100%;height: 50%">
-                    <label class="text-danger">会员账号:</label><label class="text-success">{$_SESSION['loginUseracc']}</label>
+                    <label class="text-danger">会员账号：</label><label class="text-success">{$_SESSION['loginUseracc']}</label>
                 </div>
                 <div class="form-group-sm" style="width: 100%;height: 50%">
-                    <label class="text-danger">会员姓名:</label><label class="text-success">{$_SESSION['loginUserName']}</label>
+                    <label class="text-danger">会员姓名：</label><label class="text-success">{$_SESSION['loginUserName']}</label>
                 </div>
                 <div class="form-group-sm" style="width: 100%;height: 50%">
-                    <label class="text-danger">注册时间:</label><label class="text-success">{$_SESSION['register_time']|date='Y-m-d',###}</label>
+                    <label class="text-danger">注册时间：</label><label class="text-success">{$_SESSION['register_time']|date='Y-m-d',###}</label>
                 </div>
             </div>
         </div>
@@ -209,18 +209,16 @@
 </body>
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">我的推荐码</h4>
         </div>
         <div class="modal-body">
-        	<div class="col-xs-4 col-sm-4">
 			<div id="qrDiv"></div>
-				<div id="imagQrDiv" ></div>
-			</div>
-        </div>
+			<div id="imagQrDiv"></div>
+		</div>
+      </div>
         <div class="modal-footer">
         </div>
       </div>
@@ -257,13 +255,9 @@
 	}
 
 	//获取网页中的canvas对象
-
 	var mycanvas1=document.getElementsByTagName('canvas')[0];
-
 	//将转换后的img标签插入到html中
-
 	var img=convertCanvasToImage(mycanvas1);
-
 	 $('#imagQrDiv').append(img);//imagQrDiv表示你要插入的容器id
 </script>
 </html>

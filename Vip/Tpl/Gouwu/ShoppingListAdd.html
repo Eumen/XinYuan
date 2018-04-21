@@ -55,22 +55,6 @@
 									style="float: left" />
 							</fieldset>
 						</div> <br />
-						<fieldset style="display: none">
-							<div class="product_cart">
-								<div class="product_cart" id="PaySet">
-									<h4>
-										支付信息： <label class="lb"> 支付类型</label> <span
-											id="ctl00_ContentPlaceHolder1_Order1_WalletType"><input
-											id="ctl00_ContentPlaceHolder1_Order1_WalletType_0"
-											type="radio"
-											name="ctl00$ContentPlaceHolder1$Order1$WalletType" value="1"
-											checked="checked" /><label
-											for="ctl00_ContentPlaceHolder1_Order1_WalletType_0">报单账户</label><br /></span>
-									</h4>
-									<div class="form-regsiter"></div>
-								</div>
-							</div>
-						</fieldset> <br />
 						<h4>产品信息：</h4>
 					</td>
 				</tr>
@@ -103,8 +87,8 @@
 				</tr>
 				<tr>
 					<td align="center" colspan="6"><span style="color: #F00;">*支付方式：</span>
-						<input type="radio" name="sel" value="1">现金币<input
-						type="radio" name="sel" value="2" checked="checked">现金币+积分币</td>
+						<input type="radio" name="sel" value="1">现金币&nbsp;&nbsp;
+						<input type="radio" name="sel" value="2" checked="checked">现金币+积分币(<font style="color: #F00;">{$ids[$vo['id']]*76}现金+{$ids[$vo['id']]*20}积分)</font></td>
 				</tr>
 			</table>
 			<TABLE class="table table-bordered" border=0 cellSpacing=5 cellPadding=5 width="100%">

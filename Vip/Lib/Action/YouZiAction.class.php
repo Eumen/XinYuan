@@ -1528,6 +1528,13 @@ class YouZiAction extends CommonAction
                 $this->error('会员错误！');
                 exit();
             }
+            $us_money = $rs['cash'];
+            $money_b = $fee_rs['s1'];
+            if ($us_money < $money_b) {
+                $bUrl = __URL__ . '/adminMenber';
+                $this->_box(0, '现金余额不足！', $bUrl, 1);
+                exit();
+            }
             /**************** 发奖金 加奖金记录*******开始***********/
             // 推荐奖
             $money_recommend = $fee_rs['s6'];

@@ -1258,30 +1258,48 @@ public function dizhiAdd(){
         }
     }
 
-    private function _adminLogisticsOK($XGid){
-    	//确定发货
-        if ($_SESSION['UrlszUserpass'] == 'MyssWuliuList'){
-    $shopping = M ('gouwu');
-    $where = array();
-    $where['id'] = array ('in',$XGid);
-    $where['bk3'] = array ('eq',0);
-    $sessionID = $_SESSION[C('USER_AUTH_KEY')];
-    $member = M ('member');
-    $member_rs2 = $member->where('id ='.$sessionID)->find();
-    $valuearray = array(
-    	'bk3' => '1',
-    	'confirm_send_time' => mktime(),
-        'confirm_send_id'=> $member_rs2['user_id'],
-        'confirm_send_name'=> $member_rs2['user_name']
-    );
-    $shopping->where($where)->setField($valuearray);
-    unset($shopping,$where);
-
-    $bUrl = __URL__.'/adminLogistics';
-    $this->_box(1,'发货成功！',$bUrl,1);
-    exit;
-        }else{
-    $this->error('错误!');
+    private function _adminLogisticsOK($XGid)
+    {
+        // 确定发货
+        if ($_SESSION['UrlszUserpass'] == 'MyssWuliuList') {
+            
+            $sessionID = $_SESSION[C('USER_AUTH_KEY')];
+            // 查询会员表
+            $member = M('member');
+            $member_rs2 = $member->where('id =' . $sessionID)->find();
+            $shopping = M('gouwu');
+            $where = array();
+            $where['id'] = array(
+                'in',
+                $XGid
+            );
+            $where['bk3'] = array(
+                'eq',
+                0
+            );
+            $valuearray = array(
+                'bk3' => '1',
+                'confirm_send_time' => mktime(),
+                'confirm_send_id' => $member_rs2['user_id'],
+                'confirm_send_name' => $member_rs2['user_name']
+            );
+            $stock_rs = $shopping->where($where)->field("count")->select();
+            $count = 0;
+            foreach ($stock_rs as $value){
+                $count += $value['count'];
+            }
+            $result = $shopping->where($where)->setField($valuearray);
+            if ($result) {
+                $member_rs2 = $member->where('id =' . $sessionID)->find();
+                $rs = $member->query("UPDATE `xy_member` SET agency_count=agency_count - ".$count." where id=" . $sessionID);
+            }
+            unset($shopping, $where);
+            
+            $bUrl = __URL__ . '/adminLogistics';
+            $this->_box(1, '发货成功！', $bUrl, 1);
+            exit();
+        } else {
+            $this->error('错误!');
         }
     }
 

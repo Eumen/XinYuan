@@ -878,6 +878,65 @@ class AgentAction extends CommonAction
         $this->display('menberok');
         exit();
     }
+    // 服务中心列表
+    public function agencyList($Urlsz = 0)
+    {
+        // 列表过滤器，生成查询Map对象
+        $member = M('member');
+        $map = array();
+        $id = $_SESSION[C('USER_AUTH_KEY')];
+        $user_id = $_SESSION['loginUseracc'];
+        $gid = (int) $_GET['bj_id'];
+        // 服务中心
+        $map['is_agent'] = array( 'gt',0);
+        $UserID = $_POST['UserID'];
+        if (! empty($UserID)) {
+            import("@.ORG.KuoZhan"); // 导入扩展类
+            $KuoZhan = new KuoZhan();
+            if ($KuoZhan->is_utf8($UserID) == false) {
+                $UserID = iconv('GB2312', 'UTF-8', $UserID);
+            }
+            unset($KuoZhan);
+            $where['user_name'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['user_id'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['agency_name'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['agency_address'] = array(
+                'like',
+                "%" . $UserID . "%"
+            );
+            $where['_logic'] = 'or';
+            $map['_complex'] = $where;
+            $UserID = urlencode($UserID);
+        }
+        // 查询字段
+        $field = '*';
+        // =====================分页开始==============================================
+        import("@.ORG.ZQPage"); // 导入分页类
+        $count = $member->where($map)->count(); // 总页数
+        $listrows = C('ONE_PAGE_RE'); // 每页显示的记录数
+        $page_where = 'UserID=' . $UserID; // 分页条件
+        $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+        // ===============(总页数,每页显示记录数,css样式 0-9)
+        $show = $Page->show(); // 分页变量
+        $this->assign('page', $show); // 分页变量输出到模板
+        $list = $member->where($map)->field($field)->order('bk4 asc,register_time desc')->page($Page->getPage() . ',' . $listrows)->select();
+        $this->assign('list', $list); // 数据输出到模板
+        $where = array();
+        $where['user_id'] = $user_id;
+        $member_rs = $member->where($where)->field('*')->find();
+        $this->assign('frs', $member_rs);
+        $this->display('agencyList');
+        exit();
+    }
     // 开通会员
     public function menberAC()
     {

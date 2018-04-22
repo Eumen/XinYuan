@@ -1535,177 +1535,53 @@ class YouZiAction extends CommonAction
                 $this->_box(0, '现金余额不足！', $bUrl, 1);
                 exit();
             }
-            /**************** 发奖金 加奖金记录*******开始***********/
-            // 推荐奖
-            $money_recommend = $fee_rs['s6'];
-            // 当前待开通会员的推荐人
-            $recommand_id = $voo['re_id'];
-            // 判断是否分红
-            $is_fenh = $member->where(" where `id`=" . $recommand_id." and is_fenh = 0")->field('*')->find();
-            if ($is_fenh) {
-                // 给推荐人加奖金+添加单数
-                $member->query("update __TABLE__ set `recommend_sum`=recommend_sum+1,`cash`=cash+" . $money_recommend . " where `id`=" . $recommand_id);
-                // 给推荐人添加个人奖金详细
-                $detail_rs = $member->where("user_id='".$voo['re_name']."' and is_fenh = 0")->field('user_name')->find();
-                $detail = array();
-                $detail['user_id'] = $voo['re_name'];
-                $detail['user_name'] = $detail_rs['user_name'];
-                $detail['money'] = $money_recommend;
-                $detail['son_id'] = $voo['user_id'];
-                $detail['son_name'] = $voo['user_name'];
-                $detail['bonus_type'] = 1;
-                $detail['bz'] = '推荐奖';
-                $detail['time'] = $nowdate;
-                $personbonusdetail->add($detail);
-                unset($detail);
-                // 给推荐人添加奖金历史记录
-                $data = array();
-                $data['user_id'] = $voo['re_name'];
-                $data['produce_userid'] = $voo['user_id'];
-                $data['produce_username'] = $voo['user_name'];
-                $data['action_type'] = 1;
-                $data['time'] = mktime();
-                $data['money'] = $money_recommend;
-                $data['in_money'] = $money_recommend;
-                $data['bz'] = '推荐奖';
-                $bonushistory->add($data);
-                unset($data);
-                // 给推荐人添加个人奖金汇总记录
-                $personSum_rs = $personbonussum->where("user_id='".$voo['re_name']."'")->field('*')->find();
-                if ($personSum_rs) {
-                    $personbonussum->query("update __TABLE__ set `money`=money+".$money_recommend.",`re_money`=re_money+".$money_recommend. " where `user_id`='" . $voo['re_name']."' and is_fenh = 0");
-                } else {
-                    $data = array();
-                    $data['user_id'] = $voo['re_name'];
-                    $data['user_name'] = $detail_rs['user_name'];
-                    $data['money'] = $money_recommend;
-                    $data['re_money'] = $money_recommend;
-                    $data['update_time'] = mktime();
-                    $personbonussum->add($data);
-                    unset($data);
-                }
-                // 添加平台汇总记录
-                $sum_rs = $bonussummary->where("id>0")->field('*')->find();
-                if ($sum_rs) {
-                    $bonussummary->query("update __TABLE__ set `money`=money+".$money_recommend.",`re_money`=re_money+".$money_recommend);
-                } else {
-                    $data = array();
-                    $data['money'] = $money_recommend;
-                    $data['re_money'] = $money_recommend;
-                    $data['update_time'] = mktime();
-                    $bonussummary->add($data);
-                    unset($data);
-                }
-            }
-            // 判断是否分红
-            $is_fenh = $member->where(" where `user_id`='" . $voo['bk5']."' and is_fenh = 0")->field('*')->find();
-            if ($is_fenh) {
-                // 报单奖
-                $money_register = $fee_rs['s8'];
-                // 给报单中心加奖金
-                $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['bk5']."' and is_fenh = 0");
-                // 给报单中心添加个人奖金详细
-                $detail = array();
-                $detail['user_id'] = $voo['bk5'];
-                $detail['user_name'] = $voo['bk6'];
-                $detail['money'] = $money_register;
-                $detail['son_id'] = $voo['user_id'];
-                $detail['son_name'] = $voo['user_name'];
-                $detail['bonus_type'] = 2;
-                $detail['bz'] = '报单奖';
-                $detail['time'] = $nowdate;
-                $personbonusdetail->add($detail);
-                unset($detail);
-                // 给报单中心添加奖金历史记录
-                $data = array();
-                $data['user_id'] = $voo['bk5'];
-                $data['user_name'] = $voo['bk6'];
-                $data['produce_userid'] = $voo['user_id'];
-                $data['produce_username'] = $voo['user_name'];
-                $data['action_type'] = 2;
-                $data['time'] = mktime();
-                $data['money'] = $money_register;
-                $data['in_money'] = $money_register;
-                $data['bz'] = '报单奖';
-                $bonushistory->add($data);
-                unset($data);
-                
-                $personSum_rs = $personbonussum->where("user_id='".$voo['bk5']."'")->field('*')->find();
-                if ($personSum_rs) {
-                    $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['bk5']."'");
-                } else {
-                    $data = array();
-                    $data['user_id'] = $voo['bk5'];
-                    $data['user_name'] = $voo['bk6'];
-                    $data['money'] = $money_register;
-                    $data['reg_money'] = $money_register;
-                    $data['update_time'] = mktime();
-                    $personbonussum->add($data);
-                    unset($data);
-                }
-                // 添加平台汇总记录
-                $sum_rs = $bonussummary->where("id>0")->field('*')->find();
-                if ($sum_rs) {
-                    $bonussummary->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register);
-                } else {
-                    $data = array();
-                    $data['money'] = $money_register;
-                    $data['reg_money'] = $money_register;
-                    $data['update_time'] = mktime();
-                    $bonussummary->add($data);
-                    unset($data);
-                }
-            }
-            // 见点奖
-            $money_point = $fee_rs['s7'];
-            // 见点层数
-            $floors = $fee_rs['s15'];
-            // 检索节点路径数据
-            $ppath = $voo['p_path'];
-            $lirs = $member->where('id in (0' . $ppath . '0)  and is_fenh=0')
-                ->field('id,user_id,user_name,is_fenh,recommend_sum,team_sum')->order('id desc')->select();
-            $i = 0;
-            foreach ($lirs as $lrs) {
-                $myid = $lrs['user_id'];
-                $is_fenh = $lrs['is_fenh'];
-                if ($floors > $i && $is_fenh == 0) {
-                    // 给上面会员加奖金+团队人数
-                    $member->query("update __TABLE__ set `team_sum`=team_sum+1,`cash`=cash+" . $money_point . " where `user_id`='" . $myid."'");
-                    // 给上面会员添加个人奖金详细
+            $reduce_rs = $member->execute("update __TABLE__ set `cash`=cash-" . $money_b . " where `id`=" . $ID);
+            if ($reduce_rs) {
+                /**************** 发奖金 加奖金记录*******开始***********/
+                // 推荐奖
+                $money_recommend = $fee_rs['s6'];
+                // 当前待开通会员的推荐人
+                $recommand_id = $voo['re_id'];
+                // 判断是否分红
+                $is_fenh = $member->where(" where `id`=" . $recommand_id." and is_fenh = 0")->field('*')->find();
+                if ($is_fenh) {
+                    // 给推荐人加奖金+添加单数
+                    $member->query("update __TABLE__ set `recommend_sum`=recommend_sum+1,`cash`=cash+" . $money_recommend . " where `id`=" . $recommand_id);
+                    // 给推荐人添加个人奖金详细
+                    $detail_rs = $member->where("user_id='".$voo['re_name']."' and is_fenh = 0")->field('user_name')->find();
                     $detail = array();
-                    $detail['user_id'] = $lrs['user_id'];
-                    $detail['user_name'] = $lrs['user_name'];
-                    $detail['money'] = $money_point;
+                    $detail['user_id'] = $voo['re_name'];
+                    $detail['user_name'] = $detail_rs['user_name'];
+                    $detail['money'] = $money_recommend;
                     $detail['son_id'] = $voo['user_id'];
                     $detail['son_name'] = $voo['user_name'];
-                    $detail['bonus_type'] = 3;
-                    $detail['bz'] = '见点奖';
+                    $detail['bonus_type'] = 1;
+                    $detail['bz'] = '推荐奖';
                     $detail['time'] = $nowdate;
                     $personbonusdetail->add($detail);
                     unset($detail);
-                    // 给上面会员添加奖金历史记录
+                    // 给推荐人添加奖金历史记录
                     $data = array();
-                    $data['user_id'] = $lrs['user_id'];
-                    $data['user_name'] = $lrs['user_name'];
+                    $data['user_id'] = $voo['re_name'];
                     $data['produce_userid'] = $voo['user_id'];
                     $data['produce_username'] = $voo['user_name'];
-                    $data['action_type'] = 3;
+                    $data['action_type'] = 1;
                     $data['time'] = mktime();
-                    $data['money'] = $money_point;
-                    $data['in_money'] = $money_point;
-                    $data['bz'] = '见点奖';
+                    $data['money'] = $money_recommend;
+                    $data['in_money'] = $money_recommend;
+                    $data['bz'] = '推荐奖';
                     $bonushistory->add($data);
                     unset($data);
-                    // 给上面会员添加个人奖金汇总记录
-                    $personSum_rs = $personbonussum->where("user_id='".$lrs['user_id']."'")->field('*')->find();
+                    // 给推荐人添加个人奖金汇总记录
+                    $personSum_rs = $personbonussum->where("user_id='".$voo['re_name']."'")->field('*')->find();
                     if ($personSum_rs) {
-                        $personbonussum->query("update __TABLE__ set `money`=money+".$money_point.",`point_money`=point_money+".$money_point. " where `user_id`='" . $lrs['user_id']."'");
+                        $personbonussum->query("update __TABLE__ set `money`=money+".$money_recommend.",`re_money`=re_money+".$money_recommend. " where `user_id`='" . $voo['re_name']."' and is_fenh = 0");
                     } else {
                         $data = array();
-                        $data['user_id'] = $lrs['user_id'];
-                        $data['user_name'] = $lrs['user_name'];
-                        $data['money'] = $money_point;
-                        $data['point_money'] = $money_point;
+                        $data['user_id'] = $voo['re_name'];
+                        $data['user_name'] = $detail_rs['user_name'];
+                        $data['money'] = $money_recommend;
+                        $data['re_money'] = $money_recommend;
                         $data['update_time'] = mktime();
                         $personbonussum->add($data);
                         unset($data);
@@ -1713,64 +1589,194 @@ class YouZiAction extends CommonAction
                     // 添加平台汇总记录
                     $sum_rs = $bonussummary->where("id>0")->field('*')->find();
                     if ($sum_rs) {
-                        $bonussummary->query("update __TABLE__ set `money`=money+".$money_point.",`point_money`=point_money+".$money_point);
+                        $bonussummary->query("update __TABLE__ set `money`=money+".$money_recommend.",`re_money`=re_money+".$money_recommend);
                     } else {
                         $data = array();
-                        $data['money'] = $money_point;
-                        $data['point_money'] = $money_point;
+                        $data['money'] = $money_recommend;
+                        $data['re_money'] = $money_recommend;
                         $data['update_time'] = mktime();
                         $bonussummary->add($data);
                         unset($data);
                     }
                 }
-                $i++;
+                // 判断是否分红
+                $is_fenh = $member->where(" where `user_id`='" . $voo['bk5']."' and is_fenh = 0")->field('*')->find();
+                if ($is_fenh) {
+                    // 报单奖
+                    $money_register = $fee_rs['s8'];
+                    // 给报单中心加奖金
+                    $member->query("update __TABLE__ set `cash`=cash+" . $money_register . " where `user_id`='" . $voo['bk5']."' and is_fenh = 0");
+                    // 给报单中心添加个人奖金详细
+                    $detail = array();
+                    $detail['user_id'] = $voo['bk5'];
+                    $detail['user_name'] = $voo['bk6'];
+                    $detail['money'] = $money_register;
+                    $detail['son_id'] = $voo['user_id'];
+                    $detail['son_name'] = $voo['user_name'];
+                    $detail['bonus_type'] = 2;
+                    $detail['bz'] = '报单奖';
+                    $detail['time'] = $nowdate;
+                    $personbonusdetail->add($detail);
+                    unset($detail);
+                    // 给报单中心添加奖金历史记录
+                    $data = array();
+                    $data['user_id'] = $voo['bk5'];
+                    $data['user_name'] = $voo['bk6'];
+                    $data['produce_userid'] = $voo['user_id'];
+                    $data['produce_username'] = $voo['user_name'];
+                    $data['action_type'] = 2;
+                    $data['time'] = mktime();
+                    $data['money'] = $money_register;
+                    $data['in_money'] = $money_register;
+                    $data['bz'] = '报单奖';
+                    $bonushistory->add($data);
+                    unset($data);
+                
+                    $personSum_rs = $personbonussum->where("user_id='".$voo['bk5']."'")->field('*')->find();
+                    if ($personSum_rs) {
+                        $personbonussum->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register. " where `user_id`='" . $voo['bk5']."'");
+                    } else {
+                        $data = array();
+                        $data['user_id'] = $voo['bk5'];
+                        $data['user_name'] = $voo['bk6'];
+                        $data['money'] = $money_register;
+                        $data['reg_money'] = $money_register;
+                        $data['update_time'] = mktime();
+                        $personbonussum->add($data);
+                        unset($data);
+                    }
+                    // 添加平台汇总记录
+                    $sum_rs = $bonussummary->where("id>0")->field('*')->find();
+                    if ($sum_rs) {
+                        $bonussummary->query("update __TABLE__ set `money`=money+".$money_register.",`reg_money`=reg_money+".$money_register);
+                    } else {
+                        $data = array();
+                        $data['money'] = $money_register;
+                        $data['reg_money'] = $money_register;
+                        $data['update_time'] = mktime();
+                        $bonussummary->add($data);
+                        unset($data);
+                    }
+                }
+                // 见点奖
+                $money_point = $fee_rs['s7'];
+                // 见点层数
+                $floors = $fee_rs['s15'];
+                // 检索节点路径数据
+                $ppath = $voo['p_path'];
+                $lirs = $member->where('id in (0' . $ppath . '0)  and is_fenh=0')
+                ->field('id,user_id,user_name,is_fenh,recommend_sum,team_sum')->order('id desc')->select();
+                $i = 0;
+                foreach ($lirs as $lrs) {
+                    $myid = $lrs['user_id'];
+                    $is_fenh = $lrs['is_fenh'];
+                    if ($floors > $i && $is_fenh == 0) {
+                        // 给上面会员加奖金+团队人数
+                        $member->query("update __TABLE__ set `team_sum`=team_sum+1,`cash`=cash+" . $money_point . " where `user_id`='" . $myid."'");
+                        // 给上面会员添加个人奖金详细
+                        $detail = array();
+                        $detail['user_id'] = $lrs['user_id'];
+                        $detail['user_name'] = $lrs['user_name'];
+                        $detail['money'] = $money_point;
+                        $detail['son_id'] = $voo['user_id'];
+                        $detail['son_name'] = $voo['user_name'];
+                        $detail['bonus_type'] = 3;
+                        $detail['bz'] = '见点奖';
+                        $detail['time'] = $nowdate;
+                        $personbonusdetail->add($detail);
+                        unset($detail);
+                        // 给上面会员添加奖金历史记录
+                        $data = array();
+                        $data['user_id'] = $lrs['user_id'];
+                        $data['user_name'] = $lrs['user_name'];
+                        $data['produce_userid'] = $voo['user_id'];
+                        $data['produce_username'] = $voo['user_name'];
+                        $data['action_type'] = 3;
+                        $data['time'] = mktime();
+                        $data['money'] = $money_point;
+                        $data['in_money'] = $money_point;
+                        $data['bz'] = '见点奖';
+                        $bonushistory->add($data);
+                        unset($data);
+                        // 给上面会员添加个人奖金汇总记录
+                        $personSum_rs = $personbonussum->where("user_id='".$lrs['user_id']."'")->field('*')->find();
+                        if ($personSum_rs) {
+                            $personbonussum->query("update __TABLE__ set `money`=money+".$money_point.",`point_money`=point_money+".$money_point. " where `user_id`='" . $lrs['user_id']."'");
+                        } else {
+                            $data = array();
+                            $data['user_id'] = $lrs['user_id'];
+                            $data['user_name'] = $lrs['user_name'];
+                            $data['money'] = $money_point;
+                            $data['point_money'] = $money_point;
+                            $data['update_time'] = mktime();
+                            $personbonussum->add($data);
+                            unset($data);
+                        }
+                        // 添加平台汇总记录
+                        $sum_rs = $bonussummary->where("id>0")->field('*')->find();
+                        if ($sum_rs) {
+                            $bonussummary->query("update __TABLE__ set `money`=money+".$money_point.",`point_money`=point_money+".$money_point);
+                        } else {
+                            $data = array();
+                            $data['money'] = $money_point;
+                            $data['point_money'] = $money_point;
+                            $data['update_time'] = mktime();
+                            $bonussummary->add($data);
+                            unset($data);
+                        }
+                    }
+                    $i++;
+                }
+                unset($fee, $lirs, $lrs);
+                /**************** 发奖金 加奖金记录*******结束***********/
+                // 添加购物信息
+                $data = array();
+                // 用户名
+                $data['user_id'] = $voo['user_id'];
+                // 用户姓名
+                $data['user_name'] = $voo['user_name'];
+                // 金额
+                $data['money'] = $fee_rs['s1'];
+                // 购物时间
+                $data['time'] = mktime();
+                // 支付与否
+                $data['ispay'] = 1;
+                // 邮寄地址
+                $address = M('address');
+                $address_rs = $address->where("user_id= '".$voo['user_id']."'")->field('*')->find();
+                $data['address'] = $address_rs['address'];
+                // 收货人用户名
+                $data['receive_id'] = $voo['user_id'];
+                // 收货人姓名
+                $data['receive_name'] = $voo['user_name'];
+                // 收货人电话
+                $data['tel'] = $voo['tel'];
+                $data['bk2'] = '开通会员';
+                $gouwu->add($data);
+                unset($data,$address,$address_rs);
+                
+                // 开通会员
+                $data = array();
+                $data['id'] = $voo['id'];
+                $data['user_id'] = $voo['user_id'];
+                $data['money'] = $fee_rs['s1'];
+                $data['bk7'] = time();
+                $data['point'] = 6000;
+                $data['grade'] = 1;
+                $data['bk4'] = 1;
+                $result = $member->where('id=' . $voo['id'])->save($data);
+                unset($data);
+            } else {
+                $bUrl = __URL__ . '/adminMenber';
+                $this->_box(0, '开通会员失败！', $bUrl, 1);
+                exit();
             }
-            unset($fee, $lirs, $lrs);
-            /**************** 发奖金 加奖金记录*******结束***********/
-            // 添加购物信息
-            $data = array();
-            // 用户名
-            $data['user_id'] = $voo['user_id'];
-            // 用户姓名
-            $data['user_name'] = $voo['user_name'];
-            // 金额
-            $data['money'] = $fee_rs['s1'];
-            // 购物时间
-            $data['time'] = mktime();
-            // 支付与否
-            $data['ispay'] = 1;
-            // 邮寄地址
-            $address = M('address');
-            $address_rs = $address->where("user_id= '".$voo['user_id']."'")->field('*')->find();
-            $data['address'] = $address_rs['address'];
-            // 收货人用户名
-            $data['receive_id'] = $voo['user_id'];
-            // 收货人姓名
-            $data['receive_name'] = $voo['user_name'];
-            // 收货人电话
-            $data['tel'] = $voo['tel'];
-            $data['bk2'] = '开通会员';
-            $gouwu->add($data);
-            unset($data,$address,$address_rs);
-            
-            // 开通会员
-            $data = array();
-            $data['id'] = $voo['id'];
-            $data['user_id'] = $voo['user_id'];
-            $data['money'] = $fee_rs['s1'];
-            $data['bk7'] = time();
-            $data['point'] = 6000;
-            $data['grade'] = 1;
-            $data['bk4'] = 1;
-            $result = $member->where('id=' . $voo['id'])->save($data);
-            unset($data);
         }
         
         // 调用 过程
         $sql = "CALL calFutou(@code, @msg);";
         mysql_query($sql);
         $result = mysql_query('select @code, @msg;');
-        
         
         unset($member, $where, $where_two, $rs);
         if ($vo) {

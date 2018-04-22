@@ -108,7 +108,7 @@ function CheckAll(form)
 	<td>{$vo['user_id']}</td>
 	<td>{$vo['user_name']}</td>
 	<td><span class="STYLE1">{$vo['money']}</span></td>
-	<td><eq name="vo.stype" value="0">充值电子币<else/>充入现金币</eq></td>
+	<td><eq name="vo.recharge_type" value="0">充值积分<else/>充值现金币</eq></td>
 	<td><eq name="vo['is_pay']" value="1"><span style="color: #F00;">已确认</span></eq><eq name="vo['is_pay']" value="0"><span style="color: #090;">未确认</span></eq></td>
 	<td><if condition="empty($vo['recharge_time']) neq true">{$vo.recharge_time|date='Y-m-d H:i:s',###}</if></td>
 	<td><if condition="empty($vo['update_time']) neq true">{$vo.update_time|date='Y-m-d H:i:s',###}</if></td>

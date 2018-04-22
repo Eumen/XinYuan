@@ -340,13 +340,17 @@ class RechargeAction extends CommonAction{
 			$where = array();
 			$where['is_pay'] = 0;
 			$where['id'] = array ('in',$PTid);
-			$recharge_rs = $recharge ->where($where)->field('money,user_id')->find();
+			$recharge_rs = $recharge ->where($where)->field('money,user_id,recharge_type')->find();
 			$data['update_time'] = strtotime(date('c'));
 			$data['is_pay'] = 1;
 			$rs = $recharge->where($where)->save($data);
 			if ($rs){
 			    //提交事务
-			    $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			    if ($recharge_rs['recharge_type'] == 0) {
+			        $rs2 = $member->execute("UPDATE __TABLE__ SET point=point+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			    } else {
+			        $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			    }
 			    if ($rs2) {
 			        $recharge->commit();
 			        $bUrl = __URL__.'/adminCurrencyRecharge';

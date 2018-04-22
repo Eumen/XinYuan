@@ -1181,7 +1181,8 @@ public function dizhiAdd(){
             $ss_type = (int) $_REQUEST['type'];
             $map = array();
 		  if($ss_type==0){
-				$map['bk3'] = array('egt',0);
+		  		// TODO 暂时注掉bk3条件，后续再改
+				//$map['bk3'] = array('egt',0);
 			}elseif($ss_type==1){
 				$map['bk3'] = array('eq',0);
 			}elseif($ss_type==2){
@@ -1202,29 +1203,29 @@ public function dizhiAdd(){
 			if ($member_rs2['id'] != '1' && $member_rs2['user_id'] != 'cc') {
 			    $map['user_id'] = array('in',$idArray);
 			}
-    //查询字段
-    $field   = '*';
-    //=====================分页开始==============================================
-    import ( "@.ORG.ZQPage" );  //导入分页类
-    $count = $shopping->where($map)->count();//总页数
-    $listrows = C('PAGE_LISTROWS')  ;//每页显示的记录数
-		    $page_where = '&type='.$ss_type;//分页条件
-    $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
-    //===============(总页数,每页显示记录数,css样式 0-9)
-    $show = $Page->show();//分页变量
-    $this->assign('page',$show);//分页变量输出到模板
-    $list = $shopping ->where($map)->field($field)->page($Page->getPage().','.$listrows)->select();
-    $this->assign('list',$list);//数据输出到模板
-    //=================================================
-    foreach($list as $vv){
-    	$ttid = $vv['bk1'];
-    	$trs = $product->where('id='.$ttid)->find();
-    	$voo[$ttid] = $trs['name'];
-    }
-    $this->assign('voo',$voo);
-    $title = '物流管理';
-    $this->assign('title',$title);
-    $this->display('adminLogistics');
+		    //查询字段
+		    $field   = '*';
+		    //=====================分页开始==============================================
+		    import ( "@.ORG.ZQPage" );  //导入分页类
+		    $count = $shopping->where($map)->count();//总页数
+		    $listrows = C('PAGE_LISTROWS')  ;//每页显示的记录数
+				    $page_where = '&type='.$ss_type;//分页条件
+		    $Page = new ZQPage($count, $listrows, 1, 0, 3, $page_where);
+		    //===============(总页数,每页显示记录数,css样式 0-9)
+		    $show = $Page->show();//分页变量
+		    $this->assign('page',$show);//分页变量输出到模板
+		    $list = $shopping ->where($map)->field($field)->page($Page->getPage().','.$listrows)->select();
+		    $this->assign('list',$list);//数据输出到模板
+		    //=================================================
+		    foreach($list as $vv){
+		    	$ttid = $vv['bk1'];
+		    	$trs = $product->where('id='.$ttid)->find();
+		    	$voo[$ttid] = $trs['name'];
+		    }
+		    $this->assign('voo',$voo);
+		    $title = '物流管理';
+		    $this->assign('title',$title);
+		    $this->display('adminLogistics');
 		}else{
 			$this->error('错误!');
 			exit;

@@ -118,6 +118,7 @@ class RegAction extends CommonAction{
 		// 当前日期
 		$data['user_id']   = $_POST['user_id'];
 		$data['status'] = 0;  //状态：0:正常 1：禁止登录
+		$data['is_fenh'] = 1;  //状态：0:正常分红 1：禁止分红
 		$data['password']  = md5(trim($_POST['password']));  //一级密码加密
 		$data['pwd1']  = trim($_POST['password']);   //一级密码不加密
 		$data['user_name'] = $_POST['user_name'];   //姓名

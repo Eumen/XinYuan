@@ -1543,8 +1543,8 @@ class YouZiAction extends CommonAction
                 // 当前待开通会员的推荐人
                 $recommand_id = $voo['re_id'];
                 // 判断是否分红
-                $is_fenh = $member->where(" where `id`=" . $recommand_id." and is_fenh = 0")->field('*')->find();
-                if ($is_fenh) {
+                $is_rs = $member->where(" where `id`=" . $recommand_id)->field('is_fenh')->find();
+                if ($is_rs['is_fenh'] == 0) {
                     // 给推荐人加奖金+添加单数
                     $member->query("update __TABLE__ set `recommend_sum`=recommend_sum+1,`cash`=cash+" . $money_recommend . " where `id`=" . $recommand_id);
                     // 给推荐人添加个人奖金详细
@@ -1600,8 +1600,8 @@ class YouZiAction extends CommonAction
                     }
                 }
                 // 判断是否分红
-                $is_fenh = $member->where(" where `user_id`='" . $voo['bk5']."' and is_fenh = 0")->field('*')->find();
-                if ($is_fenh) {
+                $is_rs = $member->where(" where `user_id`='" . $voo['bk5']."'")->field('is_fenh')->find();
+                if ($is_rs['is_fenh'] == 0) {
                     // 报单奖
                     $money_register = $fee_rs['s8'];
                     // 给报单中心加奖金
@@ -1764,6 +1764,7 @@ class YouZiAction extends CommonAction
                 $data['point'] = 6000;
                 $data['grade'] = 1;
                 $data['bk4'] = 1;
+                $data['is_fenh'] = 0;
                 $result = $member->where('id=' . $voo['id'])->save($data);
                 unset($data);
             } else {

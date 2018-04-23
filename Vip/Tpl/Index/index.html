@@ -51,6 +51,10 @@ body {
 .modal-open {  
   overflow-y: auto;  
 } 
+
+.clickable {
+    cursor: pointer;
+}
 </style>
 </head>
 <body class="container-fluid" style="background-color: #f0f3ef;">
@@ -91,7 +95,7 @@ body {
             </div>
         </div>
         <div class="col-xs-3 padding-one">
-            <div class="row text-center" style="padding-top: 5%" data-toggle="modal" data-target="#myModal">
+            <div class="row text-center clickable" style="padding-top: 5%" data-toggle="modal" data-target="#myModal">
                 <div class="text-primary text-center" width="70%" >
                     <img src="__PUBLIC__/resource/image/qrcode.png" class="img-responsive"></div>
                 <div class="text-primary text-left" width="70%">点击获取推荐码</div>

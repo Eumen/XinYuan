@@ -34,8 +34,8 @@
 </head>
 <script src="__PUBLIC__/resource/js/d3.v3.min.js"></script>
 <script src="__PUBLIC__/resource/js/jquery-1.12.4.min.js"></script>
-<body class="container-fluid" style="background-color: #f0f3ef;">
-<div class="row">
+<body style="background-color: #f0f3ef; overflow: auto">
+<div data-gr-c-s-loaded="true">
 	<div class="navbar-fixed-up" style="background-color: #41b9e7;">
 		<div style="color: #ffffff;padding: 10px; margin-bottom:0;font-size: 16px; height: inherit;">
 		<a class="glyphicon glyphicon-home" href="__APP__/"
@@ -58,7 +58,20 @@
 </div>
 </body>
 <script>
-var margin = {top: 20, right: 120, bottom: 20, left: 80},
+var getDepth = function (obj) {
+    var depth = 0;
+    if (obj.children) {
+        obj.children.forEach(function (d) {
+            var tmpDepth = getDepth(d)
+            if (tmpDepth > depth) {
+                depth = tmpDepth
+            }
+        })
+    }
+    return 1 + depth
+}
+
+var margin = {top: 0, right: 120, bottom: 20, left: 80},
     width = 1024 - margin.right - margin.left,
     height = 800 - margin.top - margin.bottom;
 
@@ -73,14 +86,15 @@ var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+.attr("width", getDepth({$data}) *180)
+.attr("height", "80%")
+.append("g")
+.attr("transform", "translate(" + 120 + "," + margin.top + ")");
     
     
 // start
   root = {$data};
+  
   root.x0 = height / 2;
   root.y0 = 0;
   function collapse(d) {
@@ -104,7 +118,9 @@ function update(source) {
       links = tree.links(nodes);
 
   // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 180; });
+  nodes.forEach(function(d) { 
+	  d.y = d.depth * 180; 
+	  });
 
   // Update the nodes…
   var node = svg.selectAll("g.node")

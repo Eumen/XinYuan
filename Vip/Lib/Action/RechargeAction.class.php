@@ -334,6 +334,7 @@ class RechargeAction extends CommonAction{
 		    }
 			$recharge = M ('recharge');
 			$member = M ('member');
+			$bonushistory = M ('bonushistory');
 			//开始事务处理
 			$recharge->startTrans();
 			//插入充值表
@@ -348,10 +349,66 @@ class RechargeAction extends CommonAction{
 			    //提交事务
 			    if ($recharge_rs['recharge_type'] == 0) {
 			        $rs2 = $member->execute("UPDATE __TABLE__ SET point=point+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			        // 添加充值会员历史记录
+			        $data = array();
+			        $data['user_id'] = $recharge_rs['user_id'];
+			        $data['user_name'] = $recharge_rs['user_name'];
+			        $data['produce_userid'] = $_SESSION['loginUseracc'];
+			        $data['produce_username'] = $_SESSION['loginUserName'];
+			        $data['action_type'] = 6;
+			        $data['time'] = mktime();
+			        $data['money'] = 0;
+			        $data['in_money'] = $recharge_rs['money'];
+			        $data['bz'] = '会员充值';
+			        $bonushistory->add($data);
+			        unset($data);
+			        $rs3 = $member->execute("UPDATE __TABLE__ SET point=point+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			        
+			        // 添加操作者历史记录
+			        $data = array();
+			        $data['user_id'] = $_SESSION['loginUseracc'];
+			        $data['user_name'] = $_SESSION['loginUserName'];
+			        $data['produce_userid'] = $recharge_rs['user_id'];
+			        $data['produce_username'] = $recharge_rs['user_name'];
+			        $data['action_type'] = 6;
+			        $data['time'] = mktime();
+			        $data['money'] = 0;
+			        $data['in_money'] = -$recharge_rs['money'];
+			        $data['bz'] = '会员充值';
+			        $bonushistory->add($data);
+			        unset($data);
 			    } else {
 			        $rs2 = $member->execute("UPDATE __TABLE__ SET cash=cash+{$recharge_rs['money']} WHERE user_id ='{$recharge_rs['user_id']}'");
+			        // 添加充值会员历史记录
+			        $data = array();
+			        $data['user_id'] = $recharge_rs['user_id'];
+			        $data['user_name'] = $recharge_rs['user_name'];
+			        $data['produce_userid'] = $_SESSION['loginUseracc'];
+			        $data['produce_username'] = $_SESSION['loginUserName'];
+			        $data['action_type'] = 6;
+			        $data['time'] = mktime();
+			        $data['money'] = $recharge_rs['money'];
+			        $data['in_money'] = 0;
+			        $data['bz'] = '会员充值';
+			        $bonushistory->add($data);
+			        unset($data);
+			         
+			        $rs3 = $member->execute("UPDATE __TABLE__ SET cash=cash-{$recharge_rs['money']} WHERE user_id ='{$_SESSION['loginUseracc']}'");
+			        // 添加操作者历史记录
+			        $data = array();
+			        $data['user_id'] = $_SESSION['loginUseracc'];
+			        $data['user_name'] = $_SESSION['loginUserName'];
+			        $data['produce_userid'] = $recharge_rs['user_id'];
+			        $data['produce_username'] = $recharge_rs['user_name'];
+			        $data['action_type'] = 6;
+			        $data['time'] = mktime();
+			        $data['money'] = -$recharge_rs['money'];
+			        $data['in_money'] = 0;
+			        $data['bz'] = '会员充值';
+			        $bonushistory->add($data);
+			        unset($data);
 			    }
-			    if ($rs2) {
+			    if ($rs2&&$rs3) {
 			        $recharge->commit();
 			        $bUrl = __URL__.'/adminCurrencyRecharge';
 			        $this->_box(1,'确认充值成功！',$bUrl,1);
@@ -371,10 +428,8 @@ class RechargeAction extends CommonAction{
 			    exit;
 			}
 			
-			
-			
 		}else{
-			$this->error('错误!');
+			$this->error('充值失败，请刷新页面重试!');
 			exit;
 		}
 	}

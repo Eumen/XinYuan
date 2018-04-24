@@ -1224,7 +1224,20 @@ public function dizhiAdd(){
 		    $show = $Page->show();//分页变量
 		    $this->assign('page',$show);//分页变量输出到模板
 		    $list = $shopping ->where($map)->order('time desc')->field($field)->page($Page->getPage().','.$listrows)->select();
-		    $this->assign('list',$list);//数据输出到模板
+		    
+		    $userId = $_POST['UserID'];
+		    if (!empty($userId)) {
+		    	$queryList = array();
+		    	foreach ($list as $value){
+		    		if($value['user_id'] == $userId){
+			    		array_push($queryList, $value);
+		    		}
+		    	}
+			    $this->assign('list',$queryList);//数据输出到模板
+		    }else{
+			    $this->assign('list',$list);//数据输出到模板
+		    }
+		    
 		    //=================================================
 		    foreach($list as $vv){
 		    	$ttid = $vv['bk1'];

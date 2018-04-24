@@ -689,6 +689,7 @@ public function dizhiAdd(){
 			$gwd['count'] = $ids[$vo['id']];
 			// 总金额
 			$gwd['money'] = $ids[$vo['id']]*$w_money;
+			$gwd['bk2'] = '商城购物';
 			
 			$gouwu->add($gwd);
 		}
@@ -1324,32 +1325,29 @@ public function dizhiAdd(){
 
     private function _adminLogisticsDone($XGid){
     	//确认收货
-        if ($_SESSION['UrlszUserpass'] == 'MyssWuliuList'){
-    $shopping = M ('gouwu');
-    $where = array();
-    $where['id'] = array ('in',$XGid);
-    $where['bk3'] = array ('egt',0);
-    $sessionID = $_SESSION[C('USER_AUTH_KEY')];
-    $member = M ('member');
-    $member_rs2 = $member->where('id ='.$sessionID)->find();
-
-    $valuearray = array(
-    	'bk3' => '2',
-    	'confirm_receive_time' => mktime(),
-        'confirm_receive_id'=> $member_rs2['user_id'],
-        'confirm_receive_name'=> $member_rs2['user_name']
-    );
-
-    $shopping->where($where)->setField($valuearray);
-    unset($shopping,$where);
-
-    $bUrl = __URL__.'/adminLogistics';
-    $this->_box(1,'确认收货成功！',$bUrl,1);
-    exit;
-        }else{
-    $this->error('错误!');
-    exit;
+        $shopping = M ('gouwu');
+        $where = array();
+        $where['id'] = array ('in',$XGid);
+        $sessionID = $_SESSION[C('USER_AUTH_KEY')];
+        $member = M ('member');
+        $member_rs2 = $member->where('id ='.$sessionID)->find();
+        $valuearray = array(
+        	'bk3' => '2',
+        	'confirm_receive_time' => mktime(),
+            'confirm_receive_id'=> $member_rs2['user_id'],
+            'confirm_receive_name'=> $member_rs2['user_name']
+        );
+        $result = $shopping->where($where)->setField($valuearray);
+        unset($shopping,$where);
+        if ($result) {
+            $bUrl = __URL__.'/BuycpInfo';
+            $this->_box(1,'确认收货成功！',$bUrl,1);
+            exit;
+        } else {
+            $this->error('确认收货失败！');
+            exit;
         }
+        
     }
 
     private function _adminLogisticsDel($XGid){

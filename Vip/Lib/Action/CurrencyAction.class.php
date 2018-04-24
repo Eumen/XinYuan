@@ -222,7 +222,7 @@ class CurrencyAction extends CommonAction {
 				//提交事务
 				$member->execute("UPDATE __TABLE__ SET cash=cash-{$money} WHERE id={$member_rs['id']}");
 				$withdraw->commit();
-				$bUrl = __URL__.'/frontCurrency';
+				$bUrl = __URL__.'/withdraw';
 				$this->_box(1,'提现申请已提交，24小时之内到账！',$bUrl,1);
 				exit;
 			}else{

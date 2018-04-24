@@ -1,4 +1,8 @@
 <include file="Public:xyHead" />
+<style>
+.STYLE1 {color:#F00;}
+.STYLE2 {color:#00F;}
+</style>
 <link href="__PUBLIC__/Css/bootstrap.min.css" rel="stylesheet" />
 <div class="row">
 	<div class="col-xs-12">
@@ -11,29 +15,36 @@
 </div>
 <div class="row">
 	<div class="col-xs-12">
+	<form action="__URL__/adminLogisticsAC" method="post" name="form1">
 		<table width="100%" class="table table-bordered table-responsive"
 			id="tb1">
 			<thead>
+				<th><input type="checkbox" name="chkall" value="checkbox" onclick="CheckAll(this.form)"  class="btn2" id="chkall" /></th>
 				<th>会员编号</th>
 				<th>收货人姓名</th>
 				<th>产品名</th>
 				<th>购买时间</th>
 				<th>总金额</th>
 				<th>状态</th>
-				<th>备注</th>
 			</thead>
-			<form action="" method="post" name="form1">
 				<volist name="list" id="vo">
 				<tr>
+					<td><input type="checkbox" name="tabledb[]" value="{$vo['id']}" class="btn2" /></td>
 					<td>{$vo.user_id}</td>
 					<td>{$vo.user_name}&nbsp;</td>
 					<td>{$vo.name}&nbsp;</td>
 					<td>{$vo.time|date='Y-m-d H:i:s',###}</td>
 					<td>{$vo.money}</td>
-					<td><eq name="vo.bk3" value="1"> 已发货 <else /> <eq
-							name="vo.bk3" value="2"> 已收货 <else /> <span
-							style="color: #F00">未发货</span> </eq> </eq></td>
-					<td>{$vo.bk2}</td>
+					<td><eq name="vo.bk3" value="1">
+							<span class="STYLE2">
+					          已发货
+				            </span> 
+						<else />
+							<eq name="vo.bk3" value="2"> 已收货 
+							<else />
+							<span style="color: #F00">未发货</span> 
+							</eq>
+						</eq></td>
 				</tr>
 				</volist>
 				<tr>
@@ -55,8 +66,16 @@
 						</table>
 					</td>
 				</tr>
-			</form>
 		</table>
+		<table width="100%" class="tab3_bottom" border="0" cellpadding="0" cellspacing="1" bgcolor="#b9c8d0">
+			<tr>
+			    <td>
+			    <input name="全选" type="button" class="btn1" id="全选" onclick="CheckAll(this.form)" value="全选" />&nbsp;&nbsp;
+			    <input type="submit" name="action" value="确定收货" onclick="{if(confirm('要确定已收到货吗?')){return true;}return false;}" class="btn1" id="action" />&nbsp;&nbsp;
+			    </td>
+			</tr>
+		</table>
+	</form>
 	</div>
 </div>
 <include file="Public:xyFoot" />

@@ -1190,8 +1190,7 @@ public function dizhiAdd(){
             $ss_type = (int) $_REQUEST['type'];
             $map = array();
 		  if($ss_type==0){
-		  		// TODO 暂时注掉bk3条件，后续再改
-				//$map['bk3'] = array('egt',0);
+				$map['bk3'] = array('egt',0);
 			}elseif($ss_type==1){
 				$map['bk3'] = array('eq',0);
 			}elseif($ss_type==2){
@@ -1207,11 +1206,8 @@ public function dizhiAdd(){
 			foreach ($member_rs as $value){
 			    array_push($idArray,$value['user_id']);
 			}
-			// 物流管理员和后台可以查看所有物流信息
+			// 查看所有物流信息
 			$member_rs2 = $member->where('id ='.$sessionID)->find();
-			if ($member_rs2['id'] != '1' && $member_rs2['user_id'] != 'cc') {
-			    $map['user_id'] = array('in',$idArray);
-			}
 		    //查询字段
 		    $field   = '*';
 		    //=====================分页开始==============================================

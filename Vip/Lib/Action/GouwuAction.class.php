@@ -378,6 +378,10 @@ class GouwuAction extends CommonAction{
 			}
 		}
 		$_SESSION["shopping"] = $shopping_id;
+		if ($ID == 9) {
+			$_SESSION["is_exchange"] = false;
+		}
+		
 		$this->success("删除成功！");
 	}
 	public function reset(){
@@ -512,7 +516,7 @@ public function dizhiAdd(){
 		$this->assign('sum',$sum);
 		$this->assign('eps',$eps);
 		$this->assign('ep',$ep);
-
+		
 		$this -> display('ShoppingListAdd');
 	}
 
@@ -620,33 +624,38 @@ public function dizhiAdd(){
 			$this->error('二级密码输入错误!!');
 			exit;
 		}
-		// 地址判定
-		$aid = $_POST['adid'];
-		$ars = $address->where('id='.$aid)->find();
-		if(!$ars){
-			$this->error('请选择收货地址!');
-			exit;
-		}
+		
 		$id = $_SESSION[C('USER_AUTH_KEY')];
 		$gouwu = M('gouwu');
+		$exchange = $_SESSION['is_exchange'];
 		// 待存入数据库数据
 		$gwd = array();
-		// 邮寄地址
-		$gwd['address'] = $ars['address'];
+		if ($exchange != 'y') {
+		// 地址判定
+			$aid = $_POST['adid'];
+			$ars = $address->where('id='.$aid)->find();
+			if(!$ars){
+				$this->error('请选择收货地址!');
+				exit;
+			}
+			// 邮寄地址
+			$gwd['address'] = $ars['address'];
+			// 用户姓名
+			$gwd['user_name']    = $ars['user_name'];
+			// 收货人用户名
+			$gwd['receive_id'] = $ars['user_id'];
+			// 收货人姓名
+			$gwd['receive_name'] = $ars['user_name'];
+			// 收货人联系电话
+			$gwd['tel'] = $ars['tel'];
+		}
 		// 用户名
 		$gwd['user_id'] = $member_rs['user_id'];
-		// 用户姓名
-		$gwd['user_name']    = $ars['user_name'];
 		// 购物时间
 		$gwd['time'] = strtotime(date('c'));
 		// 是否支付
 		$gwd['ispay'] = 0;
-		// 收货人用户名
-		$gwd['receive_id'] = $ars['user_id'];
-		// 收货人姓名
-		$gwd['receive_name'] = $ars['user_name'];
-		// 收货人联系电话
-		$gwd['tel'] = $ars['tel'];
+		
         if($_POST['sel']==1){
     		if($member_rs['cash'] < $prices){
     			$this->error("您的现金币余额不足！");
@@ -1214,7 +1223,7 @@ public function dizhiAdd(){
 		    //===============(总页数,每页显示记录数,css样式 0-9)
 		    $show = $Page->show();//分页变量
 		    $this->assign('page',$show);//分页变量输出到模板
-		    $list = $shopping ->where($map)->field($field)->page($Page->getPage().','.$listrows)->select();
+		    $list = $shopping ->where($map)->order('time desc')->field($field)->page($Page->getPage().','.$listrows)->select();
 		    $this->assign('list',$list);//数据输出到模板
 		    //=================================================
 		    foreach($list as $vv){

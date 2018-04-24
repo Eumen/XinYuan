@@ -1537,6 +1537,10 @@ public function gTotle(){
 				}
 			}
 			$_SESSION["shopping"] = $shopping_id;
+			$exchange = $_GET['exchange'];
+			if ($exchange == 'y') {
+				$_SESSION["is_exchange"] = true;
+			}
 		}
 	}
 

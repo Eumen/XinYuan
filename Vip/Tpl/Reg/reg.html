@@ -20,17 +20,16 @@
             <form action="__URL__/regAC" id="registerForm" method="post">
             	<input name="rid" id="rid" type="hidden" value="{$rid}" class="ipt"/>
                 <h2> <span class="blue"><strong>注册</strong></span></h2>
-                <label for="user_id">帐号：</label>
+                <label for="user_id"><span style="color: #FF3300;">*</span>帐号：</label>
                 <input type="text" id="user_id" name="user_id" placeholder="请输入登录用户名..." maxlength="10">
-                <label for="password">密码：</label>
+                <label for="password"><span style="color: #FF3300;">*</span>密码：</label>
                 <input id="password" name="password" type="password" placeholder="请输入登录密码..." maxlength="16">
-                <label for="confirm_password">确认密码：</label>
-                <input id="confirm_password" name="confirm_password" type="password" placeholder="请确认登录密码..."
-                       maxlength="16">
-                <label for="tel">手机号：</label>
+                <label for="confirm_password"><span style="color: #FF3300;">*</span>确认密码：</label>
+                <input id="confirm_password" name="confirm_password" type="password" placeholder="请确认登录密码..." maxlength="16">
+                <label for="tel"><span style="color: #FF3300;">*</span>手机号：</label>
                 <input type="text" id="tel" name="tel" placeholder="请输入11位手机号码..." maxlength="11">
                 <label for="tel">朋友关系：</label>
-                <input type="text" id="father_id" name="father_id" placeholder="请输入一位朋友的用户名..." maxlength="11">
+                <input type="text" id="father_id" name="father_id" value="" placeholder="请输入一位朋友的用户名..." maxlength="11">
                 <button type="submit">注册</button>
                 <button type="button" onclick="javascript:window.location.href='__APP__/Public/login/'">返回</button>
             </form>

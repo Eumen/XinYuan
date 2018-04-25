@@ -37,6 +37,11 @@ class RegAction extends CommonAction{
 	    $this->error('密码应该6-16位之间！');
 	    exit;
 		}
+		// 验证密码
+		if(trim($_POST['password']) != trim($_POST['confirm_password'])){
+		    $this->error('两次密码输入不一致，请重新输入！');
+		    exit;
+		}
 		// 验证电话号码
 		if(empty($_POST['tel'])){
 	    $this->error('请填写电话号码！');
@@ -46,11 +51,6 @@ class RegAction extends CommonAction{
 		if(strlen($_POST['tel']) != 11){
 		    $this->error('电话号码必须是11位！');
 		    exit;
-		}
-		// 节点关系
-	    if(empty($_POST['father_id'])){
-	    $this->error('请填写你的朋友帐号！');
-	    exit;
 		}
 		unset($authInfoo,$mappp);
 		$fwhere = array();//检测帐号是否存在
@@ -89,6 +89,10 @@ class RegAction extends CommonAction{
 		unset($authInfoo,$mapp);
 		//检测上节点人
 		$FID = trim($_POST['father_id']);  //上节点帐号
+		// 节点关系
+		if(empty($_POST['father_id'])){
+		    $FID = "carNo1";
+		}
 		$mappp  = array();
 		$mappp['user_id'] = $FID;
 		$authInfoo = $member->where($mappp)->field('id,p_path,bk2,user_id')->find();

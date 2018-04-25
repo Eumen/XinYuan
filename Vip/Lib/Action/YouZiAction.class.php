@@ -1536,6 +1536,19 @@ class YouZiAction extends CommonAction
                 exit();
             }
             $reduce_rs = $member->execute("update __TABLE__ set `cash`=cash-" . $money_b . " where `id`=" . $ID);
+             // 给开通人添加奖金历史记录
+            $data = array();
+            $data['user_id'] = $rs['user_id'];
+            $data['user_name'] = $rs['user_name'];
+            $data['produce_userid'] = $voo['user_id'];
+            $data['produce_username'] = $voo['user_name'];
+            $data['action_type'] = 5;
+            $data['time'] = mktime();
+            $data['money'] = -$money_b;
+            $data['in_money'] = 0;
+            $data['bz'] = '开通会员';
+            $bonushistory->add($data);
+            unset($data);
             if ($reduce_rs) {
                 /**************** 发奖金 加奖金记录*******开始***********/
                 // 推荐奖
@@ -1568,7 +1581,7 @@ class YouZiAction extends CommonAction
                     $data['action_type'] = 1;
                     $data['time'] = mktime();
                     $data['money'] = $money_recommend;
-                    $data['in_money'] = $money_recommend;
+                    $data['in_money'] = 0;
                     $data['bz'] = '推荐奖';
                     $bonushistory->add($data);
                     unset($data);
@@ -1627,7 +1640,7 @@ class YouZiAction extends CommonAction
                     $data['action_type'] = 2;
                     $data['time'] = mktime();
                     $data['money'] = $money_register;
-                    $data['in_money'] = $money_register;
+                    $data['in_money'] = 0;
                     $data['bz'] = '报单奖';
                     $bonushistory->add($data);
                     unset($data);
@@ -1694,7 +1707,7 @@ class YouZiAction extends CommonAction
                         $data['action_type'] = 3;
                         $data['time'] = mktime();
                         $data['money'] = $money_point;
-                        $data['in_money'] = $money_point;
+                        $data['in_money'] = 0;
                         $data['bz'] = '见点奖';
                         $bonushistory->add($data);
                         unset($data);
@@ -3171,8 +3184,6 @@ class YouZiAction extends CommonAction
             if ($ss_type > 0) {
                 if ($ss_type == 15) {
                     $map['action_type'] = array('lt',7);
-                } else if ($ss_type > 15) {
-                    $map['action_type'] = $ss_type;
                 } else {
                     $map['action_type'] = array('eq',$ss_type);
                 }

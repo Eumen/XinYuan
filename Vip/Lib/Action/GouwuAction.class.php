@@ -725,6 +725,7 @@ public function dizhiAdd(){
 			$bonushistory->add($data);
 		}
 		if($rs !== false){
+			$_SESSION['is_exchange'] = 'n';
 			$_SESSION["shopping"]='';
 			$_SESSION["shopping_bz"]='';
 			$url = __URL__.'/BuycpInfo/';
@@ -1206,6 +1207,10 @@ public function dizhiAdd(){
 			foreach ($member_rs as $value){
 			    array_push($idArray,$value['user_id']);
 			}
+			$userId = $_POST['UserID'];
+			if (!empty($userId)) {
+				$map['user_id'] = $userId;
+			}
 			// 查看所有物流信息
 			$member_rs2 = $member->where('id ='.$sessionID)->find();
 		    //查询字段
@@ -1221,18 +1226,7 @@ public function dizhiAdd(){
 		    $this->assign('page',$show);//分页变量输出到模板
 		    $list = $shopping ->where($map)->order('time desc')->field($field)->page($Page->getPage().','.$listrows)->select();
 		    
-		    $userId = $_POST['UserID'];
-		    if (!empty($userId)) {
-		    	$queryList = array();
-		    	foreach ($list as $value){
-		    		if($value['user_id'] == $userId){
-			    		array_push($queryList, $value);
-		    		}
-		    	}
-			    $this->assign('list',$queryList);//数据输出到模板
-		    }else{
-			    $this->assign('list',$list);//数据输出到模板
-		    }
+		    $this->assign('list',$list);//数据输出到模板
 		    
 		    //=================================================
 		    foreach($list as $vv){

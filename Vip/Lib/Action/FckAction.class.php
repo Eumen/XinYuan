@@ -1498,6 +1498,11 @@ public function gTotle(){
 		$gid = $_GET['GID'];
 		$bnum = (int)$_GET['bnum'];
 		$p_rs = $pora->where('id ='.$gid)->find();
+		
+		$exchange = $_GET['exchange'];
+		if ($exchange == 'y') {
+			$_SESSION["is_exchange"] = true;
+		}
 
 		if($bnum<1){
 			$num = 1;
@@ -1537,10 +1542,6 @@ public function gTotle(){
 				}
 			}
 			$_SESSION["shopping"] = $shopping_id;
-			$exchange = $_GET['exchange'];
-			if ($exchange == 'y') {
-				$_SESSION["is_exchange"] = true;
-			}
 		}
 	}
 

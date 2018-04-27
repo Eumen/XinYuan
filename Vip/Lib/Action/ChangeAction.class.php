@@ -320,67 +320,87 @@ class ChangeAction extends CommonAction {
 			$this->ajaxReturn('',$upload->getErrorMsg(),0,'json');
 		}else{										// 上传成功 获取上传文件信息
 			$info =  $upload->getUploadFileInfo();
-			$temp_size = getimagesize($fileName.'.jpg');
-// 			if($temp_size[0] < 100 || $temp_size[1] < 100){//判断宽和高是否符合头像要求
-// 				$this->ajaxReturn(0,'图片宽或高不得小于100px!',0,'json');
-// 			}
-			$this->ajaxReturn(__ROOT__.'/Public/Uploads/'.$fileName.'.jpg',$info,1,'json');
+			$params = json_decode($_POST['avatar_data'], true);
+			$randPath = $_SESSION[C('USER_AUTH_KEY')];
+			//头像目录地址
+			$path = './Public/Uploads/';
+			//要保存的图片
+			$real_path = $path.$randPath.'.jpg';
+			//临时图片地址
+			$pic_path = $path.$randPath.'.jpg';
+			import('@.ORG.ThinkImage.ThinkImage');
+			$Think_img = new ThinkImage(THINKIMAGE_GD);
+			//裁剪原图
+			$x = $params["x"];
+			$Think_img->open($pic_path)->crop($params['width'],$params['height'],$params['x'],$params['y'])->save($real_path);
+			//生成缩略图
+			$final_path = $path.$randPath.'avatar_150_150.jpg';
+			$Think_img->open($pic_path)->thumb(150,150, 1)->save($final_path);
+			// 		$Think_img->open($real_path)->thumb(60,60, 1)->save($path.'avatar_60.jpg');
+			// 		$Think_img->open($real_path)->thumb(30,30, 1)->save($path.'avatar_30.jpg');
+			$out_realpath = str_replace("./","/",__ROOT__.$final_path);
+			echo "<script>window.form1.img_src.src='".$out_realpath."';</script>";
+			$real_path=(str_replace('./Public/','__PUBLIC__/',$out_realpath));
+			echo "<script>window.form1.img_src.value='".$real_path."';</script>";
+			
+			$data['URL'] = "/profile";
+            $data['result'] = $out_realpath;
+			$this->ajaxReturn($data,'json');
 		}
 	}
     
 	//裁剪并保存图像
-	public function cropImg(){
-		//图片裁剪数据
-		$params = $_POST;						//裁剪参数
-		if(!isset($params) && empty($params)){
-			return;
-		}
-		//随时间生成文件名
-// 		$randPath = date("Y").date("m").date("d").date("H").date("i").date("s").rand(1,100);
-		$randPath = $_SESSION[C('USER_AUTH_KEY')];
-		//头像目录地址
-		$path = './Public/Uploads/';
-		//要保存的图片
-		$real_path = $path.$randPath.'.jpg';
-		//临时图片地址
-		$pic_path = $path.$randPath.'.jpg';
-		import('@.ORG.ThinkImage.ThinkImage');
-		$Think_img = new ThinkImage(THINKIMAGE_GD); 
-		//裁剪原图
-		$Think_img->open($pic_path)->crop($params['w'],$params['h'],$params['x'],$params['y'])->save($real_path);
-		//生成缩略图
-		$final_path = $path.$randPath.'avatar_150_150.jpg';
-		$Think_img->open($pic_path)->thumb(150,150, 1)->save($final_path);
-// 		$Think_img->open($real_path)->thumb(60,60, 1)->save($path.'avatar_60.jpg');
-// 		$Think_img->open($real_path)->thumb(30,30, 1)->save($path.'avatar_30.jpg');
-		$out_realpath = str_replace("./","/",__ROOT__.$final_path);
-		echo "<script>window.parent.form1.img_src.src='".$out_realpath."';</script>";
-		$real_path=(str_replace('./Public/','__PUBLIC__/',$out_realpath));
-		echo "<script>window.parent.form1.img_src.value='".$real_path."';</script>";
+// 	public function cropImg(){
+// 		//图片裁剪数据
+// // 		$params = $_POST['avatar_data'];					//裁剪参数
+// 		$params = json_decode($_POST['avatar_data'], true);
+// 		//随时间生成文件名
+// // 		$randPath = date("Y").date("m").date("d").date("H").date("i").date("s").rand(1,100);
+// 		$randPath = $_SESSION[C('USER_AUTH_KEY')];
+// 		//头像目录地址
+// 		$path = './Public/Uploads/';
+// 		//要保存的图片
+// 		$real_path = $path.$randPath.'.jpg';
+// 		//临时图片地址
+// 		$pic_path = $path.$randPath.'.jpg';
+// 		import('@.ORG.ThinkImage.ThinkImage');
+// 		$Think_img = new ThinkImage(THINKIMAGE_GD); 
+// 		//裁剪原图
+// 		$x = $params["x"];
+// 		$Think_img->open($pic_path)->crop($params['width'],$params['height'],$params['x'],$params['y'])->save($real_path);
+// 		//生成缩略图
+// 		$final_path = $path.$randPath.'avatar_150_150.jpg';
+// 		$Think_img->open($pic_path)->thumb(150,150, 1)->save($final_path);
+// // 		$Think_img->open($real_path)->thumb(60,60, 1)->save($path.'avatar_60.jpg');
+// // 		$Think_img->open($real_path)->thumb(30,30, 1)->save($path.'avatar_30.jpg');
+// 		$out_realpath = str_replace("./","/",__ROOT__.$final_path);
+// 		echo "<script>window.parent.form1.img_src.src='".$out_realpath."';</script>";
+// 		$real_path=(str_replace('./Public/','__PUBLIC__/',$out_realpath));
+// 		echo "<script>window.parent.form1.img_src.value='".$real_path."';</script>";
 		
-		$member	 =	 M('member');
-		$id   = $_SESSION[C('USER_AUTH_KEY')];
-		//输出登录用户资料记录
-		$vo	= $member -> getById($id);  //该登录会员记录
-		if(empty($vo['us_img'])){
-		    $vo['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
-		}
-		$this->assign('vo',$vo);
-		$this->assign('img_src',$out_realpath);
-		$this->assign('img_value',$real_path);
-		$this->assign('us_img',$real_path);
-		unset($vo);
-		//输出银行
-		$b_bank = $member -> where('id='.$id) -> field("bank,user_name") -> find();
-		$this->assign('b_bank',$b_bank);
-		unset($bank,$b_bank);
-		$fee = M ('fee');
-		$fee_s = $fee->field('*')->find();
-		$bank = explode('|',$fee_s['s10']);
-		$this->assign('bank',$bank);
-// 		$this->success('图像保存成功','profile');
-		$this->display('profile');
-	}
+// 		$member	 =	 M('member');
+// 		$id   = $_SESSION[C('USER_AUTH_KEY')];
+// 		//输出登录用户资料记录
+// 		$vo	= $member -> getById($id);  //该登录会员记录
+// 		if(empty($vo['us_img'])){
+// 		    $vo['us_img'] = "__PUBLIC__/Images/mctxico.jpg";
+// 		}
+// 		$this->assign('vo',$vo);
+// 		$this->assign('img_src',$out_realpath);
+// 		$this->assign('img_value',$real_path);
+// 		$this->assign('us_img',$real_path);
+// 		unset($vo);
+// 		//输出银行
+// 		$b_bank = $member -> where('id='.$id) -> field("bank,user_name") -> find();
+// 		$this->assign('b_bank',$b_bank);
+// 		unset($bank,$b_bank);
+// 		$fee = M ('fee');
+// 		$fee_s = $fee->field('*')->find();
+// 		$bank = explode('|',$fee_s['s10']);
+// 		$this->assign('bank',$bank);
+// // 		$this->success('图像保存成功','profile');
+// 		$this->display('profile');
+// 	}
 
 }
 ?>

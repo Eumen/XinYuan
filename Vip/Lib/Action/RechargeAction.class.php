@@ -260,7 +260,7 @@ class RechargeAction extends CommonAction{
 		$action = $_POST['action'];
 		//获取复选框的值
 		$PTid = $_POST['tabledb'];
-		$fck = M ('fck');
+		$fck = M ('member');
 		if (!$fck->autoCheckToken($_POST)){
 			$this->error('页面过期，请刷新页面！');
 			exit;

@@ -1250,11 +1250,11 @@ public function dizhiAdd(){
         $action = $_POST['action'];
         //获取复选框的值
         $XGid = $_POST['tabledb'];
-        if (!isset($XGid) || empty($XGid)){
-    $bUrl = __URL__.'/adminLogistics';
-    $this->_box(0,'请选择货物！',$bUrl,1);
-    exit;
-        }
+//         if (!isset($XGid) || empty($XGid)){
+//             $bUrl = __URL__.'/adminLogistics';
+//             $this->_box(0,'请选择货物！',$bUrl,1);
+//             exit;
+//         }
         switch ($action){
     case '确认发货';
         $this->_adminLogisticsOK($XGid);
@@ -1273,7 +1273,12 @@ public function dizhiAdd(){
     }
 
     private function _adminLogisticsOK($XGid)
-    {
+    {   
+        if (!isset($XGid) || empty($XGid)){
+            $bUrl = __URL__.'/adminLogistics';
+            $this->_box(0,'请选择货物！',$bUrl,1);
+            exit;
+        }
         // 确定发货
         if ($_SESSION['UrlszUserpass'] == 'MyssWuliuList') {
             
@@ -1338,7 +1343,7 @@ public function dizhiAdd(){
             $this->_box(1,'确认收货成功！',$bUrl,1);
             exit;
         } else {
-            $this->error('确认收货失败！');
+            $this->error('请勾选要确认的货物！');
             exit;
         }
         

@@ -1327,6 +1327,7 @@ public function dizhiAdd(){
         $shopping = M ('gouwu');
         $where = array();
         $where['id'] = array ('in',$XGid);
+        $where['bk3'] = array('eq',1);
         $sessionID = $_SESSION[C('USER_AUTH_KEY')];
         $member = M ('member');
         $member_rs2 = $member->where('id ='.$sessionID)->find();
@@ -1343,7 +1344,7 @@ public function dizhiAdd(){
             $this->_box(1,'确认收货成功！',$bUrl,1);
             exit;
         } else {
-            $this->error('请勾选要确认的货物！');
+            $this->error('请确认商家已发货，并且已勾选了要确认的货物！');
             exit;
         }
         

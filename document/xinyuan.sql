@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : Xinyuan
-Source Server Version : 50553
+Source Server         : localhost
+Source Server Version : 50639
 Source Host           : localhost:3306
 Source Database       : xinyuan
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50639
 File Encoding         : 65001
 
-Date: 2018-04-23 00:02:46
+Date: 2018-04-29 11:16:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `xy_access`
+-- Table structure for xy_access
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_access`;
 CREATE TABLE `xy_access` (
@@ -34,7 +34,7 @@ CREATE TABLE `xy_access` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `xy_address`
+-- Table structure for xy_address
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_address`;
 CREATE TABLE `xy_address` (
@@ -54,15 +54,14 @@ CREATE TABLE `xy_address` (
   `bk2` varchar(255) DEFAULT NULL COMMENT '备用字段2',
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段3',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='地址表';
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='地址表';
 
 -- ----------------------------
 -- Records of xy_address
 -- ----------------------------
-INSERT INTO `xy_address` VALUES ('11', '1001', 'fdads', 'fefewfew', '1561561561', '0', '', '', '0', '', '0', '', null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_bonushistory`
+-- Table structure for xy_bonushistory
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_bonushistory`;
 CREATE TABLE `xy_bonushistory` (
@@ -85,25 +84,130 @@ CREATE TABLE `xy_bonushistory` (
   `bk3` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='资金流向表';
+) ENGINE=MyISAM AUTO_INCREMENT=1449 DEFAULT CHARSET=utf8 COMMENT='资金流向表';
 
 -- ----------------------------
 -- Records of xy_bonushistory
 -- ----------------------------
-INSERT INTO `xy_bonushistory` VALUES ('31', '1001', '', '1001', '', '4', '1524372081', '-76', '-20', '商城购物', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('30', 'carNo1', '公司', '1006', null, '3', '1524370644', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('29', '1002', '', '1006', null, '3', '1524370644', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('28', '1005', null, '1006', null, '3', '1524370644', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('27', 'carNo1', '公司', '1003', null, '3', '1524369623', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('26', 'carNo1', '公司', '1005', null, '3', '1524368910', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('25', '1002', null, '1005', null, '3', '1524368910', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('24', 'carNo1', '公司', '1004', null, '3', '1524368747', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('23', '1001', '', '1004', null, '3', '1524368747', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('22', 'carNo1', '公司', '1002', null, '3', '1524368430', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
-INSERT INTO `xy_bonushistory` VALUES ('21', 'carNo1', '公司', '1001', '', '3', '1524368424', '90', '90', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1396', '1002', null, '2005', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1395', '1003', null, '2005', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1394', '2000', null, '2005', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1393', '1003', '', '2005', null, '1', '1524877478', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1392', 'carNo1', '公司', '2005', null, '5', '1524877478', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1391', '1000', null, '1001', null, '3', '1524877427', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1390', '1000', null, '1001', null, '1', '1524877427', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1389', '1000', null, '2004', null, '3', '1524877427', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1388', '1001', null, '2004', null, '3', '1524877427', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1387', '1002', null, '2004', null, '3', '1524877427', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1386', '1003', null, '2004', null, '3', '1524877427', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1385', '1003', '', '2004', null, '1', '1524877427', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1384', 'carNo1', '公司', '2004', null, '5', '1524877427', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1383', '1000', null, '1002', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1382', '1001', null, '1002', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1381', '1001', null, '1002', null, '1', '1524877396', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1380', '1000', null, '1001', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1379', '1000', null, '1001', null, '1', '1524877396', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1378', '1000', null, '2003', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1377', '1001', null, '2003', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1376', '1002', null, '2003', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1375', '1003', null, '2003', null, '3', '1524877396', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1374', '1003', '', '2003', null, '1', '1524877396', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1373', 'carNo1', '公司', '2003', null, '5', '1524877396', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1372', '1000', null, '1003', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1371', '1001', null, '1003', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1370', '1002', null, '1003', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1369', '1002', null, '1003', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1367', '1001', null, '1002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1368', '1000', null, '1002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1366', '1001', null, '1002', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1365', '1000', null, '1001', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1364', '1000', null, '1001', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1363', '1000', null, '2002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1362', '1001', null, '2002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1360', '1003', null, '2002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1361', '1002', null, '2002', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1359', '1003', '', '2002', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1358', 'carNo1', '公司', '2002', null, '5', '1524877384', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1357', '1000', null, '2001', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1356', '1001', null, '2001', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1355', '1002', null, '2001', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1354', '1003', null, '2001', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1353', '1003', '', '2001', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1352', 'carNo1', '公司', '2001', null, '5', '1524877384', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1351', '1000', null, '2000', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1350', '1001', null, '2000', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1349', '1002', null, '2000', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1348', '1003', null, '2000', null, '3', '1524877384', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1346', 'carNo1', '公司', '2000', null, '5', '1524877384', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1347', '1003', '', '2000', null, '1', '1524877384', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1345', '1000', null, '1003', null, '3', '1524877240', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1344', '1001', null, '1003', null, '3', '1524877240', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1343', '1002', null, '1003', null, '3', '1524877240', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1341', 'carNo1', '公司', '1003', null, '5', '1524877240', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1342', '1002', '', '1003', null, '1', '1524877240', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1340', '1000', null, '1002', null, '3', '1524877138', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1339', '1001', null, '1002', null, '3', '1524877138', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1338', '1001', '', '1002', null, '1', '1524877138', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1337', 'carNo1', '公司', '1002', null, '5', '1524877138', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1336', '1000', null, '1001', null, '3', '1524877053', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1335', '1000', '', '1001', null, '1', '1524877053', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1334', 'carNo1', '公司', '1001', null, '5', '1524877053', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1333', 'carNo1', '公司', '1000', null, '5', '1524876864', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1397', '1001', null, '2005', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1398', '1000', null, '2005', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1399', '1002', null, '1003', null, '1', '1524877478', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1400', '1002', null, '1003', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1401', '1001', null, '1003', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1402', '1000', null, '1003', null, '3', '1524877478', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1403', 'carNo1', '公司', '2006', null, '5', '1524877518', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1404', '1003', '', '2006', null, '1', '1524877518', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1405', '2001', null, '2006', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1406', '1003', null, '2006', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1407', '1002', null, '2006', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1408', '1001', null, '2006', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1409', '1000', null, '2006', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1410', '1000', null, '1001', null, '1', '1524877518', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1411', '1000', null, '1001', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1412', '1001', null, '1002', null, '1', '1524877518', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1413', '1001', null, '1002', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1414', '1000', null, '1002', null, '3', '1524877518', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1415', 'carNo1', '公司', '2007', null, '5', '1524877564', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1416', '1003', '', '2007', null, '1', '1524877564', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1417', '2002', null, '2007', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1418', '1003', null, '2007', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1419', '1002', null, '2007', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1420', '1001', null, '2007', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1421', '1000', null, '2007', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1422', '1000', null, '1001', null, '1', '1524877564', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1423', '1000', null, '1001', null, '3', '1524877564', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1424', 'carNo1', '公司', '2009', null, '5', '1524877596', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1425', '1003', '', '2009', null, '1', '1524877596', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1426', '2004', null, '2009', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1427', '1003', null, '2009', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1428', '1002', null, '2009', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1429', '1001', null, '2009', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1430', '1000', null, '2009', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1431', '1001', null, '1002', null, '1', '1524877596', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1432', '1001', null, '1002', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1433', '1000', null, '1002', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1434', '1002', null, '1003', null, '1', '1524877596', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1435', '1002', null, '1003', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1436', '1001', null, '1003', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1437', '1000', null, '1003', null, '3', '1524877596', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1438', 'carNo1', '公司', '2008', null, '5', '1524880490', '-3000', '0', '开通会员', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1439', '1003', '', '2008', null, '1', '1524880490', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1440', '2003', null, '2008', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1441', '1003', null, '2008', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1442', '1002', null, '2008', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1443', '1001', null, '2008', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1444', '1000', null, '2008', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1445', '1000', null, '1001', null, '1', '1524880490', '300', '0', '推荐奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1446', '1000', null, '1001', null, '3', '1524880490', '10000', '0', '见点奖', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1447', '2003', '', '2003', '', '4', '1524881630', '-152', '-40', '商城购物', '0', '0', '', '', null, null, null, null);
+INSERT INTO `xy_bonushistory` VALUES ('1448', '2003', '', '2003', '', '4', '1524881831', '-228', '-60', '商城购物', '0', '0', '', '', null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_bonussummary`
+-- Table structure for xy_bonussummary
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_bonussummary`;
 CREATE TABLE `xy_bonussummary` (
@@ -123,15 +227,15 @@ CREATE TABLE `xy_bonussummary` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='平台奖金汇总表';
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='平台奖金汇总表';
 
 -- ----------------------------
 -- Records of xy_bonussummary
 -- ----------------------------
-INSERT INTO `xy_bonussummary` VALUES ('2', '900', '0', '900', '0', null, null, null, '1524368424', null, null, null, null, null, null);
+INSERT INTO `xy_bonussummary` VALUES ('13', '747800', '7800', '740000', '0', null, null, null, '1524880490', null, null, null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_cody`
+-- Table structure for xy_cody
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_cody`;
 CREATE TABLE `xy_cody` (
@@ -175,7 +279,7 @@ INSERT INTO `xy_cody` VALUES ('29', '29');
 INSERT INTO `xy_cody` VALUES ('30', '30');
 
 -- ----------------------------
--- Table structure for `xy_cptype`
+-- Table structure for xy_cptype
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_cptype`;
 CREATE TABLE `xy_cptype` (
@@ -209,7 +313,7 @@ INSERT INTO `xy_cptype` VALUES ('16', '图书/音像/电子书', '0', '0', '0', 
 INSERT INTO `xy_cptype` VALUES ('17', '机票/酒店/旅游/生活', '0', '0', '0', '0');
 
 -- ----------------------------
--- Table structure for `xy_fee`
+-- Table structure for xy_fee
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_fee`;
 CREATE TABLE `xy_fee` (
@@ -240,10 +344,10 @@ CREATE TABLE `xy_fee` (
 -- ----------------------------
 -- Records of xy_fee
 -- ----------------------------
-INSERT INTO `xy_fee` VALUES ('1', '3000', '', '5', '网站关闭升级中，请互相转告！', '普通用户|会员', '300', '90', '200', '100', '农业银行|工商银行|招商银行|建设银行|中国银行', '恭喜您注册成功，激活会员将有更多福利等您领取！', '', '', '', '11', 'carNo1', '10', '直推奖|报单奖|见点奖|商城购物', '您已汇款成功，请耐心等待管理员审核！', null);
+INSERT INTO `xy_fee` VALUES ('1', '3000', '', '5', '网站关闭升级中，请互相转告！', '会员|消费商', '300', '10000', '200', '100', '农业银行|工商银行|招商银行|建设银行|中国银行', '恭喜您注册成功，激活会员将有更多福利等您领取！', '', '', '', '11', 'carNo1', '10', '直推奖|报单奖|见点奖|商城购物|开通会员|会员充值', '您已汇款成功，请耐心等待管理员审核！', null);
 
 -- ----------------------------
--- Table structure for `xy_form_class`
+-- Table structure for xy_form_class
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_form_class`;
 CREATE TABLE `xy_form_class` (
@@ -259,7 +363,7 @@ CREATE TABLE `xy_form_class` (
 INSERT INTO `xy_form_class` VALUES ('1', '新闻公告', '0');
 
 -- ----------------------------
--- Table structure for `xy_gouwu`
+-- Table structure for xy_gouwu
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_gouwu`;
 CREATE TABLE `xy_gouwu` (
@@ -293,21 +397,108 @@ CREATE TABLE `xy_gouwu` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='购物表';
+) ENGINE=MyISAM AUTO_INCREMENT=193 DEFAULT CHARSET=utf8 COMMENT='购物表';
 
 -- ----------------------------
 -- Records of xy_gouwu
 -- ----------------------------
-INSERT INTO `xy_gouwu` VALUES ('27', '1001', 'fdads', '96', '1524372081', '0', '1', '96', 'fefewfew', '1001', 'fdads', '1561561561', null, null, null, null, null, null, null, null, null, null, null, null, '9', '0', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('26', '1006', null, '3000', '1524370644', '1', null, null, null, '1006', null, '15787648467', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('25', '1003', null, '3000', '1524369623', '1', null, null, null, '1003', null, '18174715702', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('21', '1001', '', '3000', '1524368424', '1', null, null, null, '1001', '', '18174715700', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('22', '1002', null, '3000', '1524368430', '1', null, null, null, '1002', null, '18174715701', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('23', '1004', null, '3000', '1524368747', '1', null, null, null, '1004', null, '18174715703', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
-INSERT INTO `xy_gouwu` VALUES ('24', '1005', null, '3000', '1524368910', '1', null, null, null, '1005', null, '18174715704', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', null, null, null);
+INSERT INTO `xy_gouwu` VALUES ('186', '2005', null, '3000', '1524877478', '1', null, null, null, '2005', null, '15868478855', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('185', '2004', null, '3000', '1524877427', '1', null, null, null, '2004', null, '15998556998', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('184', '2003', null, '3000', '1524877396', '1', null, null, null, '2003', null, '15866655478', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('183', '2002', null, '3000', '1524877384', '1', null, null, null, '2002', null, '28885266988', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('182', '2001', null, '3000', '1524877384', '1', null, null, null, '2001', null, '15968547888', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('181', '2000', null, '3000', '1524877384', '1', null, null, null, '2000', null, '15668455668', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('180', '1003', null, '3000', '1524877240', '1', null, null, null, '1003', null, '15887456998', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('179', '1002', null, '3000', '1524877138', '1', null, null, null, '1002', null, '15888445662', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('178', '1001', null, '3000', '1524877053', '1', null, null, null, '1001', null, '15869885555', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('177', '1000', null, '3000', '1524876864', '1', null, null, null, '1000', null, '25885669888', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('187', '2006', null, '3000', '1524877518', '1', null, null, null, '2006', null, '15984558888', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('188', '2007', null, '3000', '1524877564', '1', null, null, null, '2007', null, '15898845558', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('189', '2009', null, '3000', '1524877596', '1', null, null, null, '2009', null, '25984456665', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('190', '2008', null, '3000', '1524880490', '1', null, null, null, '2008', null, '18965488888', null, null, null, null, null, null, null, null, null, null, null, null, null, '开通会员', '0', null, null);
+INSERT INTO `xy_gouwu` VALUES ('191', '2003', null, '192', '1524881630', '0', '2', '96', null, null, null, null, null, null, '1003', '', '1524881946', null, null, null, null, null, null, null, '9', '商城购物', '1', null, null);
+INSERT INTO `xy_gouwu` VALUES ('192', '2003', null, '288', '1524881831', '0', '3', '96', null, null, null, null, null, null, null, null, null, '2003', '', '1524881961', null, null, null, null, '9', '商城购物', '2', null, null);
 
 -- ----------------------------
--- Table structure for `xy_member`
+-- Table structure for xy_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `xy_logs`;
+CREATE TABLE `xy_logs` (
+  `log_time` time DEFAULT NULL,
+  `money` int(11) DEFAULT NULL,
+  `msg` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=39;
+
+-- ----------------------------
+-- Records of xy_logs
+-- ----------------------------
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:08:15', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:09:18', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:09:59', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:10:33', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('03:10:33', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:11:04', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('03:11:04', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '复投人id：1002');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '复投人id：1003');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '复投人id：1004');
+INSERT INTO `xy_logs` VALUES ('03:12:13', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('08:54:24', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('08:57:33', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('08:58:58', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:00:40', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:00:40', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:03:04', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:03:04', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:03:04', '0', '复投人id：1002');
+INSERT INTO `xy_logs` VALUES ('09:03:04', '0', '复投人id：1003');
+INSERT INTO `xy_logs` VALUES ('09:03:04', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:03:16', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:03:16', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:03:16', '0', '复投人id：1002');
+INSERT INTO `xy_logs` VALUES ('09:03:16', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:03:47', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:03:47', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:03:47', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:04:38', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:04:38', '0', '复投人id：1003');
+INSERT INTO `xy_logs` VALUES ('09:04:38', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:05:18', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:05:18', '0', '复投人id：1002');
+INSERT INTO `xy_logs` VALUES ('09:05:18', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:06:04', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:06:04', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:06:04', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:06:36', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:06:36', '0', '复投人id：1002');
+INSERT INTO `xy_logs` VALUES ('09:06:36', '0', '复投人id：1003');
+INSERT INTO `xy_logs` VALUES ('09:06:36', '0', '执行结束');
+INSERT INTO `xy_logs` VALUES (null, '0', '执行开始');
+INSERT INTO `xy_logs` VALUES ('09:54:50', '0', '复投人id：1000');
+INSERT INTO `xy_logs` VALUES ('09:54:50', '0', '复投人id：1001');
+INSERT INTO `xy_logs` VALUES ('09:54:50', '0', '执行结束');
+
+-- ----------------------------
+-- Table structure for xy_member
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_member`;
 CREATE TABLE `xy_member` (
@@ -368,21 +559,29 @@ CREATE TABLE `xy_member` (
   `bk14` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk15` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=191 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 -- Records of xy_member
 -- ----------------------------
-INSERT INTO `xy_member` VALUES ('1', 'carNo1', '公司', '15677145136', '1524411590', '::1', '0', '4297f44b13955235245b2497399d7a93', '4297f44b13955235245b2497399d7a93', '123123', '123123', '1', '工商银行', '6222023400003222805', '广西', '南宁', '民族大道支行', '1523608131', '0', '0', '0', '0', '2', '3000', '982440', '1000000', '5', '8', '0', ',', ',', '1', '1', '0', null, '0', null, '0', '0', '0', '23f5f2a41767806bc93aeb280f3565e3', '1', 'carNo1', '南宁总部', '1523699005', '1000', null, '90', '211224198901267212', '/Public/Uploads/1avatar_150_150.jpg', '0', '南宁市青秀区阳光100T2栋802', '南宁总部', null, null, null);
-INSERT INTO `xy_member` VALUES ('27', '1006', '南宁市服务中心', '15787648467', '1524372668', '180.138.189.206', '0', 'e10adc3949ba59abbe56e057f20f883e', 'd41d8cd98f00b204e9800998ecf8427e', '123456', '', '', '农业银行', '', '', '', '', '1524370517', '24', '1003', '26', '1005', '1', '3000', '0', '6000', '0', '0', '', ',1,24,', ',1,23,26,', '1', '0', '0', '', '0', '', '0', '2', '3', '6484cb5735921712d9ccb342d3250806', '1', 'carNo1', '公司', '1524370644', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
-INSERT INTO `xy_member` VALUES ('22', '1001', '', '18174715700', '1524372432', '180.138.189.206', '0', 'e10adc3949ba59abbe56e057f20f883e', '4297f44b13955235245b2497399d7a93', '123456', '123123', '', '农业银行', '', '', '', '', '1524367742', '1', 'carNo1', '1', 'carNo1', '1', '3000', '14', '5982', '0', '1', '', ',1,', ',1,', '0', '0', '0', '', '0', '', '0', '1', '1', '52df18f34863fb51b019576380d8f0bf', '1', 'carNo1', '公司', '1524368424', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', '', null, null, null);
-INSERT INTO `xy_member` VALUES ('23', '1002', '', '18174715701', '1524370103', '180.138.189.206', '0', '4297f44b13955235245b2497399d7a93', 'd41d8cd98f00b204e9800998ecf8427e', '123123', '', '', '农业银行', '', '', '', '', '1524367797', '1', 'carNo1', '1', 'carNo1', '1', '3000', '180', '6000', '0', '2', '', ',1,', ',1,', '0', '0', '0', '', '0', '', '0', '1', '1', 'a8e8b048cbe071de66b2c706d1155864', '1', 'carNo1', '公司', '1524368430', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', '', null, null, null);
-INSERT INTO `xy_member` VALUES ('24', '1003', null, '18174715702', '1524370470', '180.138.189.206', '0', '4297f44b13955235245b2497399d7a93', '', '123123', '', '', '', '', '', '', '', '1524367843', '1', 'carNo1', '1', 'carNo1', '1', '3000', '0', '6000', '0', '0', '', ',1,', ',1,', '0', '0', '0', '', '0', '', '0', '1', '1', '5eab977699de0ef4eac795eb8374dfa0', '1', 'carNo1', '公司', '1524369623', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
-INSERT INTO `xy_member` VALUES ('25', '1004', null, '18174715703', '1524369883', '180.138.189.206', '0', '4297f44b13955235245b2497399d7a93', '', '123123', '', '', '', '', '', '', '', '1524368694', '1', 'carNo1', '22', '1001', '1', '3000', '0', '6000', '0', '0', '', ',1,', ',1,22,', '0', '0', '0', '', '0', '', '0', '1', '2', '3bcb11c8f4c477781a7dc517968e09b7', '1', 'carNo1', '公司', '1524368747', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
-INSERT INTO `xy_member` VALUES ('26', '1005', null, '18174715704', '1524373442', '58.59.213.166', '0', '4297f44b13955235245b2497399d7a93', '', '123123', '', '', '', '', '', '', '', '1524368873', '22', '1001', '23', '1002', '1', '3000', '90', '6000', '0', '1', '', ',1,22,', ',1,23,', '0', '0', '0', '', '0', '', '0', '2', '2', 'a77e69c28189578fcdb678f091cdd72c', '1', 'carNo1', '公司', '1524368910', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('1', 'carNo1', '公司', '15677145136', '1524970815', '116.1.242.92', '0', '4297f44b13955235245b2497399d7a93', '4297f44b13955235245b2497399d7a93', '123123', '123123', '1', '工商银行', '6222023400003222805', '广西', '南宁', '民族大道支行', '1523608131', '0', '0', '0', '0', '2', '3000', '9958000', '100000', '13', '40', '0', ',', ',', '1', '1', '0', null, '0', null, '0', '0', '0', '848c44bf2518ffcb99fa97b7dd8d0021', '1', 'carNo1', '南宁总部', '1523699005', '1000', null, '90', '211224198901267212', '/Public/Uploads/1avatar_150_150.jpg', '1', '南宁市青秀区阳光100T2栋802', '南宁总部', null, null, null);
+INSERT INTO `xy_member` VALUES ('186', '2005', null, '15868478855', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877464', '180', '1003', '181', '2000', '1', '3000', '0', '6000', '0', '0', '', ',1,177,178,179,180,', ',1,177,178,179,180,181,', '0', '0', '0', '', '0', '', '0', '5', '6', '', '1', 'carNo1', '公司', '1524877478', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('185', '2004', '', '15998556998', '', '', '0', '96e79218965eb72c92a549dd5a330112', 'd41d8cd98f00b204e9800998ecf8427e', '111111', '', '', '农业银行', '', '', '', '', '1524877420', '180', '1003', '180', '1003', '1', '3000', '10000', '6000', '0', '1', '', ',1,177,178,179,180,', ',1,177,178,179,180,', '1', '0', '0', '', '0', '', '0', '5', '5', '', '1', 'carNo1', '公司', '1524877427', '0', '', '20', '', '__PUBLIC__/Images/mctxico.jpg', '0', '2', '2', null, null, null);
+INSERT INTO `xy_member` VALUES ('184', '2003', '', '15866655478', '1524881933', '113.12.24.3', '0', '96e79218965eb72c92a549dd5a330112', '96e79218965eb72c92a549dd5a330112', '111111', '111111', '', '农业银行', '', '', '', '', '1524877375', '180', '1003', '180', '1003', '1', '3000', '9620', '5900', '0', '1', '', ',1,177,178,179,180,', ',1,177,178,179,180,', '0', '0', '0', '', '0', '', '0', '5', '5', 'b06574bc5c9ceffacbd0bdf1c918941f', '1', 'carNo1', '公司', '1524877396', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', '', null, null, null);
+INSERT INTO `xy_member` VALUES ('183', '2002', null, '28885266988', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877339', '180', '1003', '180', '1003', '1', '3000', '10000', '6000', '0', '1', '', ',1,177,178,179,180,', ',1,177,178,179,180,', '0', '0', '0', '', '0', '', '0', '5', '5', '', '1', 'carNo1', '公司', '1524877384', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('181', '2000', null, '15668455668', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877286', '180', '1003', '180', '1003', '1', '3000', '10000', '6000', '0', '1', '', ',1,177,178,179,180,', ',1,177,178,179,180,', '0', '0', '0', '', '0', '', '0', '5', '5', '', '1', 'carNo1', '公司', '1524877384', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('182', '2001', null, '15968547888', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877314', '180', '1003', '180', '1003', '1', '3000', '10000', '6000', '0', '1', '', ',1,177,178,179,180,', ',1,177,178,179,180,', '0', '0', '0', '', '0', '', '0', '5', '5', '', '1', 'carNo1', '公司', '1524877384', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('178', '1001', null, '15869885555', '1524886089', '113.12.24.3', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877025', '177', '1000', '177', '1000', '1', '3000', '120300', '6000', '1', '12', '', ',1,177,', ',1,177,', '0', '0', '0', '', '0', '', '18000', '2', '2', '1f94f7ebadef44e1d5b8e7d2f92628a8', '1', 'carNo1', '公司', '1524877053', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('179', '1002', null, '15888445662', '1524886151', '113.12.24.3', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877131', '178', '1001', '178', '1001', '1', '3000', '110300', '6000', '1', '11', '', ',1,177,178,', ',1,177,178,', '0', '0', '0', '', '0', '', '12000', '3', '3', 'b1aeb50cd58426de92c0871e9aa009d5', '1', 'carNo1', '公司', '1524877138', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('180', '1003', '', '15887456998', '1524883872', '113.12.24.3', '0', '96e79218965eb72c92a549dd5a330112', 'd41d8cd98f00b204e9800998ecf8427e', '111111', '', '', '农业银行', '', '', '', '', '1524877228', '179', '1002', '179', '1002', '1', '3000', '103000', '6000', '10', '10', '', ',1,177,178,179,', ',1,177,178,179,', '1', '0', '0', '', '0', '', '9000', '4', '4', '554ae16327bffbe817ed6d44cf8d958f', '1', 'carNo1', '公司', '1524877240', '0', '', '8', '', '__PUBLIC__/Images/mctxico.jpg', '0', '1', '1', null, null, null);
+INSERT INTO `xy_member` VALUES ('177', '1000', null, '25885669888', '1524885905', '113.12.24.3', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524876842', '1', 'carNo1', '1', 'carNo1', '1', '3000', '130300', '6000', '1', '13', '', ',1,', ',1,', '0', '0', '0', '', '0', '', '24000', '1', '1', 'c46b115152aa553b65f4e2dd26d52768', '1', 'carNo1', '公司', '1524876864', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('187', '2006', null, '15984558888', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877501', '180', '1003', '182', '2001', '1', '3000', '0', '6000', '0', '0', '', ',1,177,178,179,180,', ',1,177,178,179,180,182,', '0', '0', '0', '', '0', '', '0', '5', '6', '', '1', 'carNo1', '公司', '1524877518', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('188', '2007', null, '15898845558', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877531', '180', '1003', '183', '2002', '1', '3000', '0', '6000', '0', '0', '', ',1,177,178,179,180,', ',1,177,178,179,180,183,', '0', '0', '0', '', '0', '', '0', '5', '6', '', '1', 'carNo1', '公司', '1524877564', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('189', '2008', null, '18965488888', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877559', '180', '1003', '184', '2003', '1', '3000', '0', '6000', '0', '0', '', ',1,177,178,179,180,', ',1,177,178,179,180,184,', '0', '0', '0', '', '0', '', '0', '5', '6', '', '1', 'carNo1', '公司', '1524880490', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
+INSERT INTO `xy_member` VALUES ('190', '2009', null, '25984456665', '', '', '0', '96e79218965eb72c92a549dd5a330112', '', '111111', '', '', '', '', '', '', '', '1524877587', '180', '1003', '185', '2004', '1', '3000', '0', '6000', '0', '0', '', ',1,177,178,179,180,', ',1,177,178,179,180,185,', '0', '0', '0', '', '0', '', '0', '5', '6', '', '1', 'carNo1', '公司', '1524877596', '0', '', '0', '', '__PUBLIC__/Images/mctxico.jpg', '0', '', null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_message`
+-- Table structure for xy_message
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_message`;
 CREATE TABLE `xy_message` (
@@ -416,7 +615,7 @@ CREATE TABLE `xy_message` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `xy_news`
+-- Table structure for xy_news
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_news`;
 CREATE TABLE `xy_news` (
@@ -450,7 +649,7 @@ INSERT INTO `xy_news` VALUES ('5', '踏足着春迹，寻找梦的开始', '<p>&
 INSERT INTO `xy_news` VALUES ('6', '不要笑，CEO看哭了，有一天互联网会发展成这样', '<p><strong style=\"margin: 0px; padding: 0px; color: rgb(0, 128, 255); font-family: punctuation, 微软雅黑, Tohoma; font-size: 14px; background-color: rgb(36, 99, 157);\">开互联网未来发展趋势第一篇：智能家居</strong></p>\r\n<p><span style=\"background-color: rgb(36, 99, 157); color:', null, '1', null, '1523892121', null, '0', '1', null, null, null, null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_personbonusdetail`
+-- Table structure for xy_personbonusdetail
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_personbonusdetail`;
 CREATE TABLE `xy_personbonusdetail` (
@@ -474,34 +673,124 @@ CREATE TABLE `xy_personbonusdetail` (
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk6` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='个人奖金详细';
+) ENGINE=MyISAM AUTO_INCREMENT=1315 DEFAULT CHARSET=utf8 COMMENT='个人奖金详细';
 
 -- ----------------------------
 -- Records of xy_personbonusdetail
 -- ----------------------------
-INSERT INTO `xy_personbonusdetail` VALUES ('28', 'carNo1', '公司', '90', '1006', null, '3', '见点奖', '1524370644', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('27', '1002', '', '90', '1006', null, '3', '见点奖', '1524370644', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('26', '1005', null, '90', '1006', null, '3', '见点奖', '1524370644', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('25', 'carNo1', '公司', '90', '1003', null, '3', '见点奖', '1524369623', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('24', 'carNo1', '公司', '90', '1005', null, '3', '见点奖', '1524368910', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('23', '1002', null, '90', '1005', null, '3', '见点奖', '1524368910', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('22', 'carNo1', '公司', '90', '1004', null, '3', '见点奖', '1524368747', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('21', '1001', '', '90', '1004', null, '3', '见点奖', '1524368747', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('20', 'carNo1', '公司', '90', '1002', null, '3', '见点奖', '1524368430', null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `xy_personbonusdetail` VALUES ('19', 'carNo1', '公司', '90', '1001', '', '3', '见点奖', '1524368424', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1261', '1001', null, '10000', '2004', null, '3', '见点奖', '1524877427', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1262', '1000', null, '10000', '2004', null, '3', '见点奖', '1524877427', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1260', '1002', null, '10000', '2004', null, '3', '见点奖', '1524877427', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1258', '1003', null, '300', '2004', null, '1', '推荐奖', '1524877427', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1259', '1003', null, '10000', '2004', null, '3', '见点奖', '1524877427', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1257', '1000', null, '10000', '1002', null, '3', '见点奖', '1524877396', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1256', '1001', null, '10000', '1002', null, '3', '见点奖', '1524877396', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1254', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877396', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1255', '1001', null, '300', '1002', null, '1', '推荐奖', '1524877396', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1253', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877396', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1251', '1001', null, '10000', '2003', null, '3', '见点奖', '1524877396', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1252', '1000', null, '10000', '2003', null, '3', '见点奖', '1524877396', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1250', '1002', null, '10000', '2003', null, '3', '见点奖', '1524877396', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1248', '1003', null, '300', '2003', null, '1', '推荐奖', '1524877396', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1249', '1003', null, '10000', '2003', null, '3', '见点奖', '1524877396', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1247', '1000', null, '10000', '1003', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1246', '1001', null, '10000', '1003', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1245', '1002', null, '10000', '1003', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1244', '1002', null, '300', '1003', null, '1', '推荐奖', '1524877384', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1243', '1000', null, '10000', '1002', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1242', '1001', null, '10000', '1002', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1241', '1001', null, '300', '1002', null, '1', '推荐奖', '1524877384', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1240', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877384', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1239', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877384', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1238', '1000', null, '10000', '2002', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1236', '1002', null, '10000', '2002', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1237', '1001', null, '10000', '2002', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1235', '1003', null, '10000', '2002', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1234', '1003', null, '300', '2002', null, '1', '推荐奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1233', '1000', null, '10000', '2001', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1231', '1002', null, '10000', '2001', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1232', '1001', null, '10000', '2001', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1230', '1003', null, '10000', '2001', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1229', '1003', null, '300', '2001', null, '1', '推荐奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1228', '1000', null, '10000', '2000', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1227', '1001', null, '10000', '2000', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1226', '1002', null, '10000', '2000', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1225', '1003', null, '10000', '2000', null, '3', '见点奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1224', '1003', null, '300', '2000', null, '1', '推荐奖', '1524877384', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1223', '1000', null, '10000', '1003', null, '3', '见点奖', '1524877240', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1221', '1002', null, '10000', '1003', null, '3', '见点奖', '1524877240', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1222', '1001', null, '10000', '1003', null, '3', '见点奖', '1524877240', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1220', '1002', null, '300', '1003', null, '1', '推荐奖', '1524877240', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1219', '1000', null, '10000', '1002', null, '3', '见点奖', '1524877138', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1218', '1001', null, '10000', '1002', null, '3', '见点奖', '1524877138', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1217', '1001', null, '300', '1002', null, '1', '推荐奖', '1524877138', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1216', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877053', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1215', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877053', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1263', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877427', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1264', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877427', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1265', '1003', null, '300', '2005', null, '1', '推荐奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1266', '2000', null, '10000', '2005', null, '3', '见点奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1267', '1003', null, '10000', '2005', null, '3', '见点奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1268', '1002', null, '10000', '2005', null, '3', '见点奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1269', '1001', null, '10000', '2005', null, '3', '见点奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1270', '1000', null, '10000', '2005', null, '3', '见点奖', '1524877478', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1271', '1002', null, '300', '1003', null, '1', '推荐奖', '1524877478', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1272', '1002', null, '10000', '1003', null, '3', '见点奖', '1524877478', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1273', '1001', null, '10000', '1003', null, '3', '见点奖', '1524877478', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1274', '1000', null, '10000', '1003', null, '3', '见点奖', '1524877478', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1275', '1003', null, '300', '2006', null, '1', '推荐奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1276', '2001', null, '10000', '2006', null, '3', '见点奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1277', '1003', null, '10000', '2006', null, '3', '见点奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1278', '1002', null, '10000', '2006', null, '3', '见点奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1279', '1001', null, '10000', '2006', null, '3', '见点奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1280', '1000', null, '10000', '2006', null, '3', '见点奖', '1524877518', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1281', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877518', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1282', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877518', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1283', '1001', null, '300', '1002', null, '1', '推荐奖', '1524877518', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1284', '1001', null, '10000', '1002', null, '3', '见点奖', '1524877518', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1285', '1000', null, '10000', '1002', null, '3', '见点奖', '1524877518', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1286', '1003', null, '300', '2007', null, '1', '推荐奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1287', '2002', null, '10000', '2007', null, '3', '见点奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1288', '1003', null, '10000', '2007', null, '3', '见点奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1289', '1002', null, '10000', '2007', null, '3', '见点奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1290', '1001', null, '10000', '2007', null, '3', '见点奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1291', '1000', null, '10000', '2007', null, '3', '见点奖', '1524877564', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1292', '1000', null, '300', '1001', null, '1', '推荐奖', '1524877564', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1293', '1000', null, '10000', '1001', null, '3', '见点奖', '1524877564', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1294', '1003', null, '300', '2009', null, '1', '推荐奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1295', '2004', null, '10000', '2009', null, '3', '见点奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1296', '1003', null, '10000', '2009', null, '3', '见点奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1297', '1002', null, '10000', '2009', null, '3', '见点奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1298', '1001', null, '10000', '2009', null, '3', '见点奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1299', '1000', null, '10000', '2009', null, '3', '见点奖', '1524877596', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1300', '1001', null, '300', '1002', null, '1', '推荐奖', '1524877596', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1301', '1001', null, '10000', '1002', null, '3', '见点奖', '1524877596', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1302', '1000', null, '10000', '1002', null, '3', '见点奖', '1524877596', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1303', '1002', null, '300', '1003', null, '1', '推荐奖', '1524877596', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1304', '1002', null, '10000', '1003', null, '3', '见点奖', '1524877596', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1305', '1001', null, '10000', '1003', null, '3', '见点奖', '1524877596', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1306', '1000', null, '10000', '1003', null, '3', '见点奖', '1524877596', null, null, null, null, '复投见点奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1307', '1003', null, '300', '2008', null, '1', '推荐奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1308', '2003', null, '10000', '2008', null, '3', '见点奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1309', '1003', null, '10000', '2008', null, '3', '见点奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1310', '1002', null, '10000', '2008', null, '3', '见点奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1311', '1001', null, '10000', '2008', null, '3', '见点奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1312', '1000', null, '10000', '2008', null, '3', '见点奖', '1524880490', null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1313', '1000', null, '300', '1001', null, '1', '推荐奖', '1524880490', null, null, null, null, '复投推荐奖', null, null, null, null, null);
+INSERT INTO `xy_personbonusdetail` VALUES ('1314', '1000', null, '10000', '1001', null, '3', '见点奖', '1524880490', null, null, null, null, '复投见点奖', null, null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_personbonussum`
+-- Table structure for xy_personbonussum
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_personbonussum`;
 CREATE TABLE `xy_personbonussum` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) DEFAULT NULL COMMENT '用户名',
   `user_name` varchar(255) DEFAULT NULL COMMENT '用户姓名',
-  `money` varchar(255) DEFAULT NULL COMMENT '总奖金',
-  `re_money` varchar(255) DEFAULT NULL COMMENT '推荐奖金',
-  `point_money` varchar(255) DEFAULT NULL COMMENT '见点奖',
-  `reg_money` varchar(255) DEFAULT NULL COMMENT '报单奖',
+  `money` varchar(255) DEFAULT '0' COMMENT '总奖金',
+  `re_money` varchar(255) DEFAULT '0' COMMENT '推荐奖金',
+  `point_money` varchar(255) DEFAULT '0' COMMENT '见点奖',
+  `reg_money` varchar(255) DEFAULT '0' COMMENT '报单奖',
   `update_flag` varchar(255) DEFAULT NULL COMMENT '更新标志',
   `delete_flag` varchar(255) DEFAULT NULL COMMENT '删除标志',
   `update_time` varchar(255) DEFAULT NULL COMMENT '更新时间',
@@ -512,18 +801,23 @@ CREATE TABLE `xy_personbonussum` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='个人奖金汇总表';
+) ENGINE=MyISAM AUTO_INCREMENT=124 DEFAULT CHARSET=utf8 COMMENT='个人奖金汇总表';
 
 -- ----------------------------
 -- Records of xy_personbonussum
 -- ----------------------------
-INSERT INTO `xy_personbonussum` VALUES ('11', 'carNo1', '公司', '540', null, '540', null, null, null, '1524368424', null, null, null, null, null, null);
-INSERT INTO `xy_personbonussum` VALUES ('12', '1001', '', '90', null, '90', null, null, null, '1524368747', null, null, null, null, null, null);
-INSERT INTO `xy_personbonussum` VALUES ('13', '1002', null, '180', null, '180', null, null, null, '1524368910', null, null, null, null, null, null);
-INSERT INTO `xy_personbonussum` VALUES ('14', '1005', null, '90', null, '90', null, null, null, '1524370644', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('119', '2000', null, '10000', null, '10000', null, null, null, '1524877478', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('118', '1003', null, '100300', '300', null, null, null, null, '1524877384', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('117', '1002', null, '141200', '1200', null, null, null, null, '1524877240', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('116', '1001', null, '191500', '1500', null, null, null, null, '1524877138', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('115', '1000', null, '262100', '2100', null, null, null, null, '1524877053', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('120', '2001', null, '10000', null, '10000', null, null, null, '1524877518', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('121', '2002', null, '10000', null, '10000', null, null, null, '1524877564', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('122', '2004', null, '10000', null, '10000', null, null, null, '1524877596', null, null, null, null, null, null);
+INSERT INTO `xy_personbonussum` VALUES ('123', '2003', null, '10000', null, '10000', null, null, null, '1524880490', null, null, null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_product`
+-- Table structure for xy_product
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_product`;
 CREATE TABLE `xy_product` (
@@ -560,7 +854,7 @@ CREATE TABLE `xy_product` (
 INSERT INTO `xy_product` VALUES ('9', 'carNo1', '公司', '亚凯龙科技', '车一号尾气净化剂', '1524045478', null, '120', '80', '96', '__PUBLIC__/Uploads/image/2018041819035967.jpg', null, null, null, null, null, '1000', '1', '0', null, null, null, null, '<p>&nbsp;保护环境，人人有责。</p>');
 
 -- ----------------------------
--- Table structure for `xy_recharge`
+-- Table structure for xy_recharge
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_recharge`;
 CREATE TABLE `xy_recharge` (
@@ -586,17 +880,14 @@ CREATE TABLE `xy_recharge` (
   `bk4` varchar(255) DEFAULT NULL COMMENT '备用字段',
   `bk5` varchar(255) DEFAULT NULL COMMENT '备用字段',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='充值记录表';
 
 -- ----------------------------
 -- Records of xy_recharge
 -- ----------------------------
-INSERT INTO `xy_recharge` VALUES ('9', '1003', null, null, null, '6000', null, '1524369296', '0', null, null, '1', null, null, '1524369344', null, null, null, null, null, null);
-INSERT INTO `xy_recharge` VALUES ('8', '1002', null, null, null, '6000', null, '1524368378', '0', null, null, '1', null, null, '1524369338', null, null, null, null, null, null);
-INSERT INTO `xy_recharge` VALUES ('10', '1006', null, null, null, '6000', null, '1524370613', '0', null, null, '0', null, null, null, null, null, null, null, null, null);
 
 -- ----------------------------
--- Table structure for `xy_region`
+-- Table structure for xy_region
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_region`;
 CREATE TABLE `xy_region` (
@@ -4024,7 +4315,7 @@ INSERT INTO `xy_region` VALUES ('3407', '3401', '肥东县', '3', '0');
 INSERT INTO `xy_region` VALUES ('3408', '3401', '肥西县', '3', '0');
 
 -- ----------------------------
--- Table structure for `xy_selectdetail`
+-- Table structure for xy_selectdetail
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_selectdetail`;
 CREATE TABLE `xy_selectdetail` (
@@ -4047,7 +4338,7 @@ CREATE TABLE `xy_selectdetail` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `xy_transfer`
+-- Table structure for xy_transfer
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_transfer`;
 CREATE TABLE `xy_transfer` (
@@ -4077,7 +4368,7 @@ CREATE TABLE `xy_transfer` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `xy_withdraw`
+-- Table structure for xy_withdraw
 -- ----------------------------
 DROP TABLE IF EXISTS `xy_withdraw`;
 CREATE TABLE `xy_withdraw` (
@@ -4098,36 +4389,35 @@ CREATE TABLE `xy_withdraw` (
   `update_time` varchar(255) DEFAULT NULL COMMENT '更新时间',
   `delete_time` varchar(255) DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='提现记录表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='提现记录表';
 
 -- ----------------------------
 -- Records of xy_withdraw
 -- ----------------------------
-INSERT INTO `xy_withdraw` VALUES ('2', 'carNo1', '公司', '6222023400003222805', '工商银行', '100', '95', '1524408395', '0', null, '15677145136', '0', null, null, null, null);
 
 -- ----------------------------
--- View structure for `xy_bonus_detail_v`
+-- View structure for xy_bonus_detail_v
 -- ----------------------------
 DROP VIEW IF EXISTS `xy_bonus_detail_v`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `xy_bonus_detail_v` AS select `t`.`user_id` AS `user_id`,date_format(from_unixtime(`t`.`time`),'%Y-%m-%f') AS `create_date`,(case `t`.`bonus_type` when '1' then sum(`t`.`money`) else '0' end) AS `recom`,(case `t`.`bonus_type` when '2' then sum(`t`.`money`) else '0' end) AS `invest`,(case `t`.`bonus_type` when '3' then sum(`t`.`money`) else '0' end) AS `create` from `xy_personbonusdetail` `t` group by date_format(from_unixtime(`t`.`time`),'%Y-%m-%f'),`t`.`user_id` ;
 
 -- ----------------------------
--- Procedure structure for `calFutou`
+-- Procedure structure for calFutou
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `calFutou`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `calFutou`(OUT code int, OUT msg varchar(255))
 BEGIN
-  
+
   DECLARE cur_user_Id varchar(50);
   DECLARE sum_money int(100);
   DECLARE done int DEFAULT 0;
 
   DECLARE tmp_re_money int(10);
-  
+
   DECLARE TMP_RE_USER_ID varchar(50);
   DECLARE tmp_RE_user_name varchar(50);
-  
+
   DECLARE TMP_CURRENT_ID varchar(50);
   DECLARE TMP_CURRENT_USER_ID varchar(50);
   DECLARE tmp_CURRENT_user_name varchar(50);
@@ -4135,21 +4425,56 @@ BEGIN
   DECLARE TMP_BD_USER_ID varchar(50);
   DECLARE tmp_BD_user_name varchar(50);
 
+  DECLARE TMP_JD_USER_ID varchar(50);
+  DECLARE tmp_JD_user_name varchar(50);
+
   DECLARE parents varchar(50);
 
   DECLARE agentId varchar(50);
+  DECLARE tmp_isfenth varchar(2);
 
-  
+  DECLARE tempId int(5);
+  DECLARE fatherId int(5);
+  DECLARE treeLevel int(5);
+
+  -- 推荐
+  DECLARE re_bonus int(5);
+  -- 见点
+  DECLARE jd_bouns int(5);
+  -- 报单
+  DECLARE bd_bonus int(5);
+  -- 见点层数
+  DECLARE jd_level int(5);
+
+  -- count
+  DECLARE tmp_count int(100);
+
+  DECLARE logTime varchar(50);
+
+
   DECLARE cur_user_sum_money CURSOR FOR
   (SELECT
       user_id,
-      SUM(money)
-    FROM xy_personbonusdetail
-    GROUP BY user_id);
+      SUM(money) AS summoney
+    FROM xy_personbonusdetail xp
+    WHERE xp.bonus_type = '3'
+    GROUP BY user_id
+    HAVING summoney >= 30000);
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = NULL;
 
 outer_label:
   BEGIN
+
+  -- 生成日志
+    INSERT INTO xy_logs (log_time, money, msg)
+      VALUES (logTime, 0, '执行开始');
+    SELECT
+      s6,
+      s7,
+      s8,
+      s15 INTO re_bonus, jd_bouns, bd_bonus, jd_level
+    FROM xy_fee;
+    SET logTime = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s');
 
     OPEN cur_user_sum_money;
     FETCH cur_user_sum_money INTO cur_user_Id, sum_money;
@@ -4158,28 +4483,124 @@ outer_label:
         re_money INTO tmp_re_money
       FROM xy_member m
       WHERE m.user_id = cur_user_Id;
-      IF (sum_money / 10 - tmp_re_money) = 3000 THEN
-        
+      IF (sum_money / 10 - tmp_re_money) >= 3000 THEN
+
+         -- 生成日志
+        INSERT INTO xy_logs (log_time, money, msg)
+            VALUES (logTime, 0, CONCAT('复投人id：', cur_user_Id));
+
         UPDATE xy_member m
         SET m.re_money = (m.re_money + 3000)
         WHERE m.user_id = cur_user_Id;
-        
-        SELECT
-          m.re_id,
-          m.re_name INTO TMP_RE_USER_ID, tmp_RE_user_name
-        FROM xy_member m
-        WHERE m.user_id = cur_user_Id;
+
+
+        -- 推荐奖
         SELECT
           m.id,
           m.user_id,
-          m.user_name INTO TMP_CURRENT_ID, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name
+          m.user_name,
+          m.re_id,
+          m.re_name INTO TMP_CURRENT_ID, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, TMP_RE_USER_ID, tmp_RE_user_name
         FROM xy_member m
         WHERE m.user_id = cur_user_Id;
-        INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time)
-          VALUES (TMP_RE_USER_ID, tmp_RE_user_name, 300, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 4, 'ftTj', NOW());
 
-        
-        CALL genJdParents(TMP_CURRENT_ID, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, code);
+        SELECT
+          xm.is_fenh INTO tmp_isfenth
+        FROM xy_member xm
+        WHERE xm.id = TMP_RE_USER_ID;
+
+        IF tmp_isfenth = 0 THEN
+          -- 人个明细，直接插入
+          INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time, bk1)
+            VALUES (tmp_RE_user_name, (SELECT user_name FROM xy_member xm WHERE xm.id = TMP_RE_USER_ID), re_bonus, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 1, '推荐奖', UNIX_TIMESTAMP(NOW()), '复投推荐奖');
+
+          -- xy_bonushistory 货币流向表，直接插入
+          INSERT INTO xy_bonushistory (user_id, user_name, produce_userid, produce_username, action_type, time, money, in_money, bz, update_flag, delete_flag)
+            VALUES (tmp_RE_user_name, (SELECT user_name FROM xy_member xm WHERE xm.id = TMP_RE_USER_ID), TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 1, UNIX_TIMESTAMP(NOW()), re_bonus, 0, '推荐奖', 0, 0);
+          -- xy_bonussummary 平台奖金汇总表
+          SELECT
+            COUNT(1) INTO tmp_count
+          FROM xy_bonussummary;
+          IF tmp_count > 0 THEN
+            UPDATE xy_bonussummary xb
+            SET xb.re_money = xb.re_money + re_bonus,
+                xb.money = xb.money + re_bonus,
+                xb.update_time = UNIX_TIMESTAMP(NOW());
+          ELSE
+            INSERT INTO xy_bonussummary (money, re_money, point_money, reg_money, time)
+              VALUES (re_bonus, re_bonus, 0, 0, UNIX_TIMESTAMP(NOW()));
+          END IF;
+          -- xy_personbonussum 个人奖金汇总表
+          SELECT
+            COUNT(1) INTO tmp_count
+          FROM xy_personbonussum xp
+          WHERE xp.user_id = tmp_RE_user_name;
+          IF tmp_count > 0 THEN
+            UPDATE xy_personbonussum xp
+            SET xp.re_money = xp.re_money + re_bonus,
+                xp.money = xp.money + re_bonus
+            WHERE xp.user_id = tmp_RE_user_name;
+          ELSE
+            INSERT INTO xy_personbonussum (user_id, user_name, money, re_money, point_money, reg_money, update_time)
+              VALUES (tmp_RE_user_name, (SELECT user_name FROM xy_member xm WHERE xm.id = TMP_RE_USER_ID), re_bonus, re_bonus, 0, 0, UNIX_TIMESTAMP(NOW()));
+          END IF;
+        END IF;
+
+        -- 生成见点奖       
+        SET tempId = TMP_CURRENT_ID;
+        SET treeLevel = 0;
+        WHILE tempId <> 1
+          AND treeLevel < jd_level DO
+          SELECT
+            m.father_id INTO fatherId
+          FROM xy_member m
+          WHERE m.id = tempId;
+          SELECT
+            user_id,
+            user_name,
+            xm.is_fenh INTO TMP_JD_USER_ID, tmp_JD_user_name, tmp_isfenth
+          FROM xy_member xm
+          WHERE xm.id = fatherId;
+          IF tmp_isfenth = 0 THEN
+            INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time, bk1)
+              VALUES (TMP_JD_USER_ID, tmp_JD_user_name, jd_bouns, TMP_CURRENT_USER_ID, TMP_CURRENT_USER_name, 3, '见点奖', UNIX_TIMESTAMP(NOW()), '复投见点奖');
+
+            -- xy_bonushistory 货币流向表 直接插入
+            INSERT INTO xy_bonushistory (user_id, user_name, produce_userid, produce_username, action_type, time, money, in_money, bz, update_flag, delete_flag)
+              VALUES (TMP_JD_USER_ID, tmp_JD_user_name, TMP_CURRENT_USER_ID, TMP_CURRENT_USER_name, 3, UNIX_TIMESTAMP(NOW()), jd_bouns, '0', '见点奖', 0, 0);
+            -- xy_bonussummary 平台奖金汇总表 没有生成，有更新
+            SELECT
+              COUNT(1) INTO tmp_count
+            FROM xy_bonussummary xb;
+            IF tmp_count > 0 THEN
+              UPDATE xy_bonussummary xb
+              SET xb.point_money = xb.point_money + jd_bouns,
+                  xb.money = xb.money + jd_bouns,
+                  xb.update_time = UNIX_TIMESTAMP(NOW());
+            ELSE
+              INSERT INTO xy_bonussummary (money, re_money, point_money, reg_money, time, update_time)
+                VALUES (jd_bouns, 0, jd_bouns, 0, UNIX_TIMESTAMP(NOW()));
+            END IF;
+            -- xy_personbonussum 个人奖金汇总表
+            SELECT
+              COUNT(1) INTO tmp_count
+            FROM xy_personbonussum xp
+            WHERE xp.user_id = TMP_JD_USER_ID;
+            IF tmp_count > 0 THEN
+              UPDATE xy_personbonussum xp
+              SET xp.point_money = xp.point_money + jd_bouns,
+                  xp.money = xp.money + jd_bouns
+              WHERE xp.user_id = tmp_JD_user_id;
+            ELSE
+              INSERT INTO xy_personbonussum (user_id, user_name, money, re_money, point_money, reg_money, update_time)
+                VALUES (TMP_JD_USER_ID, tmp_JD_user_name, jd_bouns, 0, jd_bouns, 0, UNIX_TIMESTAMP(NOW()));
+            END IF;
+
+          END IF;
+          SET treeLevel = treeLevel + 1;
+          SET tempId = fatherId;
+        END WHILE;
+        -- 见点奖结束
 
         IF code <> 1 THEN
           SET CODE = 0;
@@ -4187,68 +4608,70 @@ outer_label:
           LEAVE outer_label;
         END IF;
 
-        
+        -- 报单奖
         CALL getParentAgent(TMP_CURRENT_ID, agentId);
-        SELECT
-          m.user_id,
-          m.user_name INTO TMP_BD_USER_ID, tmp_BD_user_name
-        FROM xy_member m
-        WHERE m.id = agentId;
-        INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time)
-          VALUES (TMP_BD_USER_ID, tmp_BD_user_name, 200, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 5, 'ftBd', NOW());
+        IF agentId IS NOT NULL THEN
+          SELECT
+            m.user_id,
+            m.user_name,
+            m.is_fenh INTO TMP_BD_USER_ID, tmp_BD_user_name, tmp_isfenth
+          FROM xy_member m
+          WHERE m.id = agentId;
 
+          IF tmp_isfenth = 0 THEN
+            INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time, bk1)
+              VALUES (TMP_BD_USER_ID, tmp_BD_user_name, bd_bonus, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 2, '报单奖', UNIX_TIMESTAMP(NOW()), '复投报单奖');
+
+            -- xy_bonushistory 货币流向表  直接插入
+            INSERT INTO xy_bonushistory (user_id, user_name, produce_userid, produce_username, action_type, time, money, in_money, bz, update_flag, delete_flag)
+              VALUES (TMP_BD_USER_ID, tmp_BD_user_name, TMP_CURRENT_USER_ID, tmp_CURRENT_user_name, 2, UNIX_TIMESTAMP(NOW()), bd_bonus, 0, '报单奖', 0, 0);
+            -- xy_bonussummary 平台奖金汇总表 没有生成，有更新
+            SELECT
+              COUNT(1) INTO tmp_count
+            FROM xy_bonussummary xb;
+            IF tmp_count > 0 THEN
+              UPDATE xy_bonussummary xb
+              SET xb.reg_money = xb.reg_money + bd_bonus,
+                  xb.money = xb.money + bd_bonus,
+                  xb.update_time = UNIX_TIMESTAMP(NOW());
+            ELSE
+              INSERT INTO xy_bonussummary (money, re_money, point_money, reg_money, time)
+                VALUES (re_bonus, 0, 0, re_bonus, UNIX_TIMESTAMP(NOW()));
+            END IF;
+
+            -- xy_personbonussum 个人奖金汇总表
+            SELECT
+              COUNT(1) INTO tmp_count
+            FROM xy_personbonussum xp
+            WHERE xp.user_id = tmp_RE_user_name;
+            IF tmp_count > 0 THEN
+              UPDATE xy_personbonussum xp
+              SET xp.reg_money = xp.reg_money + bd_bonus,
+                  xp.money = xp.money + bd_bonus
+              WHERE xp.user_id = TMP_BD_USER_ID;
+            ELSE
+              INSERT INTO xy_personbonussum (user_id, user_name, money, re_money, point_money, reg_money, update_time)
+                VALUES (TMP_BD_USER_ID, tmp_BD_user_name, bd_bonus, 0, 0, bd_bonus, UNIX_TIMESTAMP(NOW()));
+            END IF;
+
+          END IF;
+        END IF;
       END IF;
-      
+
       FETCH cur_user_sum_money INTO cur_user_Id, sum_money;
     END WHILE;
     CLOSE cur_user_sum_money;
     SET CODE = 1;
+    -- 生成日志
+    INSERT INTO xy_logs (log_time, money, msg)
+      VALUES (logTime, 0, '执行结束');
   END outer_label;
 END
 ;;
 DELIMITER ;
 
 -- ----------------------------
--- Procedure structure for `genJdParents`
--- ----------------------------
-DROP PROCEDURE IF EXISTS `genJdParents`;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `genJdParents`(IN rootId int, IN sonId varchar(255), IN sonName varchar(255), OUT code varbinary(255))
-BEGIN
-  DECLARE tempId int(5);
-  DECLARE fatherId int(5);
-  DECLARE treeLevel int(5);
-
-  DECLARE tmpUserId varchar(255);
-  DECLARE tmpUserName varchar(255);
-
-  SET treeLevel = 0;
-  SET tempId = rootId;
-
-  WHILE tempId <> 1
-    AND treeLevel < 11 DO
-    SELECT
-      m.father_id INTO fatherId
-    FROM xy_member m
-    WHERE m.id = tempId;
-    SELECT
-      user_id,
-      user_name INTO tmpUserId, tmpUserName
-    FROM xy_member xm
-    WHERE xm.id = fatherId;
-    INSERT INTO xy_personbonusdetail (user_id, user_name, money, son_id, son_name, bonus_type, bz, time)
-      VALUES (tmpUserId, tmpUserName, 90, sonId, sonName, 6, 'FtJd', NOW());
-    SET treeLevel = treeLevel + 1;
-    SET tempId = fatherId;
-  END WHILE;
-
-  SET CODE = 1;
-END
-;;
-DELIMITER ;
-
--- ----------------------------
--- Procedure structure for `getParentAgent`
+-- Procedure structure for getParentAgent
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `getParentAgent`;
 DELIMITER ;;
@@ -4258,7 +4681,7 @@ BEGIN
   DECLARE fatherId int(5);
   DECLARE treeLevel int(5);
   DECLARE id int(5);
-  DECLARE tmpAgent varchar(2);
+  DECLARE tmpAgent varchar(2) DEFAULT NULL;
 
   SET treeLevel = 0;
   SET tempId = rootId;

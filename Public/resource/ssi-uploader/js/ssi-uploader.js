@@ -785,7 +785,7 @@
         var defaults = {
             url: '',
             data: {},
-            locale: 'en',
+            locale: 'zh_CN',
             preview: true,
             dropZone: true,
             maxNumberOfFiles: '',

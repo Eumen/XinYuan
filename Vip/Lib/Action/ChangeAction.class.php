@@ -318,9 +318,9 @@ class ChangeAction extends CommonAction {
 		$upload->thumbPath = $path;
 		$upload->thumbPrefix = $fileName . 'avatar_';
 		$upload->thumbFile = '150_150';
-		$upload->thumbMaxWidth = '100';
+		$upload->thumbMaxWidth = '120';
 		//设置缩略图最大高度
-		$upload->thumbMaxHeight = '100';
+		$upload->thumbMaxHeight = '120';
 		
 		$info =  $upload->upload();
 		if(!$info) {						// 上传错误提示错误信息
@@ -334,6 +334,7 @@ class ChangeAction extends CommonAction {
 			$imgPath = '/Public/Uploads/' . $upload->thumbPrefix . $fileName . $type;
 			$mem = M ('member');
 			$mem-> where('id ='.$id)->setField('us_img', $imgPath);
+			$_SESSION['us_img'] = $imgPath; // 用户头像
 			
 			echo json_encode(array(
     			'success' => 'success msg'

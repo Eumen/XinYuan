@@ -308,7 +308,7 @@ class ChangeAction extends CommonAction {
 		$fileName = $_SESSION[C('USER_AUTH_KEY')];
 		$upload = new UploadFile();						// 实例化上传类
 		$upload->maxSize = 1*1024*1024;					//设置上传图片的大小
-		$upload->allowExts = array('jpg','jpeg','png');	//设置上传图片的后缀
+		$upload->allowExts = array('jpg','jpeg','png','gif');	//设置上传图片的后缀
 		$upload->uploadReplace = true;					//同名则替换
 		$upload->saveRule = $fileName;					//设置上传头像命名规则(临时图片),修改了UploadFile上 传类
 		//完整的头像路径
@@ -318,8 +318,8 @@ class ChangeAction extends CommonAction {
 		$upload->thumbPath = $path;
 		$upload->thumbPrefix = $fileName . 'avatar_';
 		$upload->thumbFile = '150_150';
-		$upload->thumbMaxWidth = '120';
 		//设置缩略图最大高度
+		$upload->thumbMaxWidth = '120';
 		$upload->thumbMaxHeight = '120';
 		
 		$info =  $upload->upload();
@@ -334,7 +334,6 @@ class ChangeAction extends CommonAction {
 			$imgPath = '/Public/Uploads/' . $upload->thumbPrefix . $fileName . $type;
 			$mem = M ('member');
 			$mem-> where('id ='.$id)->setField('us_img', $imgPath);
-			$_SESSION['us_img'] = $imgPath; // 用户头像
 			
 			echo json_encode(array(
     			'success' => 'success msg'

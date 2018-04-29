@@ -305,47 +305,39 @@ class ChangeAction extends CommonAction {
 	/* 上传图片 */
 	public function uploadImg(){
 		import('@.ORG.UploadFile');
-// 		$fileName = date("Y").date("m").date("d").date("H").date("i").date("s").rand(1,100);
 		$fileName = $_SESSION[C('USER_AUTH_KEY')];
 		$upload = new UploadFile();						// 实例化上传类
 		$upload->maxSize = 1*1024*1024;					//设置上传图片的大小
-		$upload->allowExts = array('jpg','jpeg','png','gif');	//设置上传图片的后缀
+		$upload->allowExts = array('jpg','jpeg','png');	//设置上传图片的后缀
 		$upload->uploadReplace = true;					//同名则替换
-		$upload->saveRule = 'temp';					//设置上传头像命名规则(临时图片),修改了UploadFile上 传类
-		$upload->saveRule = $fileName;
+		$upload->saveRule = $fileName;					//设置上传头像命名规则(临时图片),修改了UploadFile上 传类
 		//完整的头像路径
 		$path = './Public/Uploads/';
 		$upload->savePath = $path;
-		if(!$upload->upload()) {						// 上传错误提示错误信息
-			$this->ajaxReturn('',$upload->getErrorMsg(),0,'json');
-		}else{										// 上传成功 获取上传文件信息
-			$info =  $upload->getUploadFileInfo();
-			$params = json_decode($_POST['avatar_data'], true);
-			$randPath = $_SESSION[C('USER_AUTH_KEY')];
-			//头像目录地址
-			$path = './Public/Uploads/';
-			//要保存的图片
-			$real_path = $path.$randPath.'.jpg';
-			//临时图片地址
-			$pic_path = $path.$randPath.'.jpg';
-			import('@.ORG.ThinkImage.ThinkImage');
-			$Think_img = new ThinkImage(THINKIMAGE_GD);
-			//裁剪原图
-			$x = $params["x"];
-			$Think_img->open($pic_path)->crop($params['width'],$params['height'],$params['x'],$params['y'])->save($real_path);
-			//生成缩略图
-			$final_path = $path.$randPath.'avatar_150_150.jpg';
-			$Think_img->open($pic_path)->thumb(150,150, 1)->save($final_path);
-			// 		$Think_img->open($real_path)->thumb(60,60, 1)->save($path.'avatar_60.jpg');
-			// 		$Think_img->open($real_path)->thumb(30,30, 1)->save($path.'avatar_30.jpg');
-			$out_realpath = str_replace("./","/",__ROOT__.$final_path);
-			echo "<script>window.form1.img_src.src='".$out_realpath."';</script>";
-			$real_path=(str_replace('./Public/','__PUBLIC__/',$out_realpath));
-			echo "<script>window.form1.img_src.value='".$real_path."';</script>";
+		$upload->thumb = true;
+		$upload->thumbPath = $path;
+		$upload->thumbPrefix = $fileName . 'avatar_';
+		$upload->thumbFile = '150_150';
+		$upload->thumbMaxWidth = '100';
+		//设置缩略图最大高度
+		$upload->thumbMaxHeight = '100';
+		
+		$info =  $upload->upload();
+		if(!$info) {						// 上传错误提示错误信息
+			echo json_encode(array( //Error From Server
+					'error' => $upload->getErrorMsg()
+			));
+		}else{	
+			$id = $_SESSION[C('USER_AUTH_KEY')];
+			$img = $_FILES['ssi-upload'];
+			$type = strrchr($img['name'], '.');
+			$imgPath = '/Public/Uploads/' . $upload->thumbPrefix . $fileName . $type;
+			$mem = M ('member');
+			$mem-> where('id ='.$id)->setField('us_img', $imgPath);
 			
-			$data['URL'] = "/profile";
-            $data['result'] = $out_realpath;
-			$this->ajaxReturn($data,'json');
+			echo json_encode(array(
+    			'success' => 'success msg'
+			));
 		}
 	}
     

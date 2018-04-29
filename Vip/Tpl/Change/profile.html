@@ -3,9 +3,11 @@
 <link href="__PUBLIC__/resource/avatar/bootstrap.min.css" rel="stylesheet">
 <link href="__PUBLIC__/resource/avatar/cropper.min.css" rel="stylesheet">
 <link href="__PUBLIC__/resource/avatar/sitelogo.css" rel="stylesheet">
+<link href="__PUBLIC__/resource/ssi-uploader/styles/ssi-uploader.min.css" rel="stylesheet">
 <script src="__PUBLIC__/resource/avatar/cropper.min.js"></script>
 <script src="__PUBLIC__/resource/avatar/sitelogo.js"></script>
 <script src="__PUBLIC__/resource/avatar/bootstrap.min.js"></script>
+<script src="__PUBLIC__/resource/ssi-uploader/js/ssi-uploader.js"></script>
 	<div id="wrap">
 		<!-- Begin page content -->
 		<div class="container">
@@ -193,41 +195,45 @@
 					<h4 class="modal-title" id="avatar-modal-label">更换头像</h4>
 				</div>
 				<div class="modal-body">
-					<div class="avatar-body">
-						<div class="avatar-upload">
-							<input class="avatar-src" name="avatar_src" type="hidden">
-							<input class="avatar-data" name="avatar_data" type="hidden">
-							<label for="avatarInput">图片上传</label>
-							<input class="avatar-input" id="avatarInput" name="avatar_file" type="file"></div>
-						<div class="row">
-							<div class="col-md-9">
-								<div class="avatar-wrapper"></div>
-							</div>
-							<div class="col-md-3">
-								<div class="avatar-preview preview-lg"></div>
-								<div class="avatar-preview preview-md"></div>
-								<div class="avatar-preview preview-sm"></div>
-							</div>
-						</div>
-						<div class="row avatar-btns">
-							<div class="col-md-9">
-								<div class="btn-group">
-									<button class="btn" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"><i class="fa fa-undo"></i> 向左旋转</button>
-								</div>
-								<div class="btn-group">
-									<button class="btn" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"><i class="fa fa-repeat"></i> 向右旋转</button>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<button class="btn btn-success btn-block avatar-save" type="submit"><i class="fa fa-save"></i> 保存修改</button>
-							</div>
-						</div>
-					</div>
+					<form id="myForm" action="__APP__/Change/uploadImg" method="post">
+		                <input type="file" name="ssi-upload" multiple id="ssi-upload"/>
+		            </form>
 				</div>
   		</form>
   	</div>
   </div>
 </div>
+
+<script>
+
+    $('#ssi-upload').ssi_uploader({ url: '__APP__/Change/uploadImg', maxNumberOfFiles: 1,
+    	onUpload:function(data){
+    		window.location.href = '__APP__/Change/profile'
+    	},
+   	 	responseValidation:{
+   		    validationKey: {
+   		      success: 'success',
+   		      error: 'error'
+   		    },
+   		    resultKey: 'validationKey'
+   		  }
+    	});
+//     $('#ssi-upload').ssi_uploader({inForm:true,
+//     							   preview: true, 
+//     							   maxNumberOfFiles: 1,
+//     							   allowed: ['jpg', 'jpeg', 'png'],
+//     							   maxFileSize: 1,
+//     							   responseValidation:{
+//     								    validationKey: 'type',
+//     								    resultKey: 'msg',
+//     								    success: 'success',
+//     								    error: 'error'
+//     								  }});
+    
+    $('#upBtn').click(function(){
+    	$( "#myForm" ).submit();
+    });
+</script>
 
 <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
 	<include file="Public:xyFoot" />

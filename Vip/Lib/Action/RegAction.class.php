@@ -31,6 +31,10 @@ class RegAction extends CommonAction{
 			$this->error('用户名不能为空！');
 			exit;
 		}
+		if(!preg_match("/^[a-za-z]{1}([a-za-z0-9]|[._]){3,19}$/",$_POST['user_id'])){
+			$this->error('用户名必须是字母开头，字母+数字组合！');
+			exit;
+		}
 		/**=======前台数据验证===开始=============**/
 		// 验证密码
 		if(strlen($_POST['password']) < 6 or strlen($_POST['password']) > 16){

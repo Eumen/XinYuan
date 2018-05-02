@@ -1096,10 +1096,10 @@ class YouZiAction extends CommonAction
             case '关闭奖金':
                 $this->_Lockfenh($PTid);
                 break;
-            case '设为实体服务中心':
+            case '设为服务网点':
                 $this->_relAgent($PTid);
                 break;
-            case '解除实体服务中心':
+            case '解除服务网点':
                 $this->_relAgentCancel($PTid);
                 break;
             case '开启期限':
@@ -1853,7 +1853,6 @@ class YouZiAction extends CommonAction
         // 设置实体服务中心
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $where['is_aa'] = array('egt',1);
             $where['id'] = array('in',$PTid);
             $rs = $member->where($where)->setField('is_agent', '0');
     

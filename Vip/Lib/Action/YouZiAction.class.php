@@ -1321,47 +1321,38 @@ class YouZiAction extends CommonAction
     {
         if ($_SESSION['UrlPTPass'] == 'MyssGuanShuiPuTao') {
             $member = M('member');
-            $times = M('times');
-            $bonus = M('bonus');
-            $history = M('history');
-            $chongzhi = M('chongzhi');
-            $gouwu = M('gouwu');
-            $tiqu = M('tiqu');
-            $zhuanj = M('zhuanj');
-            
             foreach ($PTid as $voo) {
                 $rs = $member->find($voo);
                 if ($rs) {
                     $id = $rs['id'];
-                    $whe['id'] = $rs['father_id'];
+                    $whe['father_id'] = $id;
                     $con = $member->where($whe)->count();
                     if ($id == 1) {
                         $bUrl = __URL__ . '/adminMenber';
                         $this->error('该 ' . $rs['user_id'] . ' 不能删除！');
                         exit();
                     }
-                    if ($con == 2) {
+                    if ($rs['bk4'] == 1) {
+                        $bUrl = __URL__ . '/adminMenber';
+                        $this->error('该 ' . $rs['user_id'] . ' 会员已开通正式会员，不能删除！');
+                        exit();
+                    }
+                    if ($con > 0) {
                         $bUrl = __URL__ . '/adminMenber';
                         $this->error('该 ' . $rs['user_id'] . ' 会员有下级会员，不能删除！');
                         exit();
                     }
-                    if ($con == 1) {
-                        $this->set_Re_Path($id);
-                        $this->set_P_Path($id);
-                    }
                     $where = array();
                     $where['id'] = $voo;
-                    $map['uid'] = $voo;
-                    $bonus->where($map)->delete();
-                    $history->where($map)->delete();
-                    $chongzhi->where($map)->delete();
-                    $times->where($map)->delete();
-                    $tiqu->where($map)->delete();
-                    $zhuanj->where($map)->delete();
-                    $gouwu->where($map)->delete();
-                    $member->where($where)->delete();
-                    $bUrl = __URL__ . '/adminMenber';
-                    $this->_box(1, '删除会员！', $bUrl, 1);
+                    $result = $member->where($where)->delete();
+                    if ($result) {
+                        $bUrl = __URL__ . '/adminMenber';
+                        $this->_box(1, '删除会员成功！', $bUrl, 1);
+                    } else {
+                        $this->error('删除会员失败！');
+                        exit();
+                    }
+                    
                 }
             }
         } else {

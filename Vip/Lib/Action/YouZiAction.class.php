@@ -804,7 +804,6 @@ class YouZiAction extends CommonAction
                 $map['_complex'] = $where;
                 $UserID = urlencode($UserID);
             }
-            $map['is_pay'] = array('egt',1);
             // 查询字段
             $field = '*';
             // =====================分页开始==============================================
@@ -869,6 +868,9 @@ class YouZiAction extends CommonAction
             $vo = $member->where($where)->field($field)->find();
             $this->assign('b_bank', $vo);
             $this->assign('vo', $vo);
+            // 统计团队业绩
+            $team_money_sum = $member->where("p_path like '%,{$ID},%'")->sum('money');
+            $this->assign('team_money_sum', $team_money_sum);
             if ($vo) {
                 // 查询银行列表
                 $fee = M('fee');

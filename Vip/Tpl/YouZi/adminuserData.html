@@ -97,9 +97,15 @@ code {
 			<form class="form-horizontal" action="__URL__/adminuserDataSave"  id="form1" method="post">
 				<!-- #section:elements.form -->
 				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" >团队业绩：</label>
+					<div class="col-sm-9">
+						<input name="team_money_sum" type="text" value="{$team_money_sum}" class="col-xs-12 col-sm-5"   readonly/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" >所属报单中心：</label>
 					<div class="col-sm-9">
-						<input name="shop_name" type="text" value="{$vo['shop_name']}" class="col-xs-12 col-sm-5"   readonly/>
+						<input name="shop_id" type="text" value="{$vo['bk5']}" class="col-xs-12 col-sm-5"   readonly/>
 					</div>
 				</div>
 				<div class="form-group">

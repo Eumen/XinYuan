@@ -108,6 +108,18 @@ class TreeAction extends CommonAction {
 		}
 		
 		$member = M ( 'member' );
+		$searchId = $_POST['userId'];
+		if(!empty($searchId) && $uid != $searchId){
+			$uid = $searchId;
+			$searchUser = $member->where("user_id = '" . $searchId ."'")->field('*')->select();
+			if(empty($searchUser)){
+				$this->error ( '无此用户，请重新输入!' );
+			}
+			if($searchUser != false && strpos($searchUser[0]['p_path'], $_SESSION ['authId_N_bvip']) == false){
+				$this->error ( '此节点为父节点或非此分支节点!' );
+			}
+		}
+		
 		$fwhere = array ();
 		$fwhere ['father_name'] = $uid;
 		
@@ -152,6 +164,19 @@ class TreeAction extends CommonAction {
 		}
 		
 		$member = M ( 'member' );
+		
+		$searchId = $_POST['userId'];
+		if(!empty($searchId) && $uid != $searchId){
+			$uid = $searchId;
+			$searchUser = $member->where("user_id = '" . $searchId ."'")->field('*')->select();
+			if(empty($searchUser)){
+				$this->error ( '无此用户，请重新输入!' );
+			}
+			if($searchUser != false && strpos($searchUser[0]['re_path'], $_SESSION ['authId_N_bvip']) == false){
+				$this->error ( '此节点为父节点或非此分支节点!' );
+			}
+		}
+		
 		$fwhere = array ();
 		$fwhere ['re_name'] = $uid;
 		

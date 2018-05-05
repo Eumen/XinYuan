@@ -49,6 +49,17 @@
 			<a href="__APP__/Tree/treeIndex/" class="glyphicon glyphicon-chevron-left bg-info" style="font-size: 16px;"></a>推荐关系图
 		</h4>
 	</div>
+	<div class="col-xs-12">
+		<form method="post" action="__APP__/Tree/reclist" id="form1" name="form1">
+			<div class="form-group">
+				<div class="col-sm-6">
+					<input name="userId" type="text"
+						class="col-xs-10 col-sm-5" value="{$_SESSION['loginUseracc']}" />
+					<input type="submit" value="search" />
+				</div>
+			</div>
+		</form>
+	</div>
 	<footer class="footer navbar-fixed-bottom">
 	<div class="container">
 		<p style="font-size: 90%">Copyright © 2018 yakailongkj.com. All
@@ -73,7 +84,7 @@ var getDepth = function (obj) {
 
 var margin = {top: 0, right: 120, bottom: 20, left: 80},
     width = 1024 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+    height = 800 - margin.top - margin.bottom - 300;
 
 var i = 0,
     duration = 750,

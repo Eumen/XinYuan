@@ -157,13 +157,10 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right">手机验证码</label>
 							<div class="col-sm-9">
-								<input name="telCode" type="text"
-									id="telCode" placeholder="请输入手机验证码"
+								<input name="validCode" type="text"
+									id="validCode" placeholder="请输入手机验证码"
 									class="col-xs-10 col-sm-5" />
-								<button class="btn-xs btn-default col-xs-2 col-sm-1 col-md-1"
-									type="button">
-									<i class="ace-icon fa fa-check bigger-110"></i> 发送
-								</button>
+								<input id="validBtn" type="button" value="点击获取" style="width: 15%; height: 32px; background-color: #0e90d2; color: #fff; font-size: 14px" />
 							</div>
 						</div>
 						&nbsp;<br>
@@ -232,6 +229,50 @@
     
     $('#upBtn').click(function(){
     	$( "#myForm" ).submit();
+    });
+    
+
+    $("#validBtn").click(function(){
+   	 
+   	 var partten = /^\d{11}$/;
+   	 if($("#tel").val() == null ||$("#tel").val() == ""){
+   		 alert("电话号不能为空");
+   		 return false;
+   	 }else if(!partten.test($("#tel").val())){
+            alert('请输入正确的手机号码');
+   		 return false;
+   	 }else{
+   		 $(this).attr("disabled","disabled");
+   		 var time = 60;
+   		 var timer = setInterval(function(){
+   			 time--;
+   			 $("#validBtn").val("剩余"+time+"秒");
+   			 if(time == 0){
+   				 clearInterval(timer);
+   				 $("#validBtn").removeAttr("disabled");
+   				 $("#validBtn").val("点击获取");
+   			 }
+   		 }, 1000);
+   		 $.ajax({
+   		      url: "__URL__/sendCode",
+   		      type: "Post",
+   		      data: "tel=" + $("#tel").val(),
+   		      success: function(msg) {
+   				  switch(msg)
+   					{
+   					case "1":
+   					  alert("验证码已经发送")
+   					  break;
+   					case "-5":
+   					  alert("短信余额不足")
+   					  break;
+   					default:
+   					 alert("具体返回的值是参数值 "+msg)
+   					}
+   				//alert(msg);//用来调试，返回1代表成功
+   		      }
+   		  })
+   	 }
     });
 </script>
 

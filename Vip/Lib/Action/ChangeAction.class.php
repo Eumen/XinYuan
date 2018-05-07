@@ -79,6 +79,32 @@ class ChangeAction extends CommonAction {
 		}
 	}
 	
+	
+	public function sendCode(){
+		session_start();
+	
+		//$pattern = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ';
+		$pattern = '1234567890';
+		for($i=0;$i<6;$i++){
+			$key .= $pattern{mt_rand(0,9)};
+		}
+	
+		$_SESSION["code"]=$key;
+		$handtel =$_POST["tel"];
+		$msg_tmp="您的手机验证码是:".$_SESSION["code"]."【车壹号】";
+	
+		$msg = urlencode(iconv("UTF-8","gbk",$msg_tmp));
+	
+		$comid= "1345";
+		$username= "test15";
+		$userpwd= "test15aaqw";
+		$smsnumber= "10690";
+		$url = "http://jiekou.56dxw.com/sms/HttpInterface.aspx?comid=$comid&username=$username&userpwd=$userpwd&handtel=$handtel&sendcontent=$msg&sendtime=&smsnumber=$smsnumber";
+		$string = file_get_contents($url);
+		print($string);
+		exit();
+	}
+	
 	/* ---------------显示用户修改资料界面---------------- */
 	public function profile(){
 		$member	 =	 M('member');
@@ -104,6 +130,16 @@ class ChangeAction extends CommonAction {
 
 	/* --------------- 修改保存会员信息 ---------------- */
 	public function changedataSave(){
+		// 验证验证码
+		if(empty($_POST['validCode'])){
+			$this->error('请填写验证码！');
+			exit;
+		}
+		if($_POST['validCode'] != $_SESSION["code"]){
+			$this->error('验证码输入错误！');
+			exit;
+		}
+		
 		$member = M('member');
 		$myw = array();
 		$myw['id'] = $_SESSION[C('USER_AUTH_KEY')];

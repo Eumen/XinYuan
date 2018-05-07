@@ -24,6 +24,53 @@ class RegAction extends CommonAction{
 		//检测推荐人
 		$this->display();
 	}
+	
+// 	function randomkeys($length){
+// 		$pattern = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ';
+// 		for($i=0;$i<$length;$i++){
+// 			$key .= $pattern{mt_rand(0,35)};
+// 		}
+// 		return $key;
+// 	}
+	
+// 	function rstr($str){
+// 		print($str);
+// 		exit();
+// 	}
+	function sendnote($mobtel,$msg){
+		$comid= "1354";
+		$username= "test15";
+		$userpwd= "test15aaqw";
+		$smsnumber= "10690";
+		$url = "http://jiekou.56dxw.com/sms/HttpInterface.aspx?comid=$comid&username=$username&userpwd=$userpwd&handtel=$mobtel&sendcontent=$msg&sendtime=&smsnumber=$smsnumber";
+		$string = file_get_contents($url);
+		return  rstr($string);
+	}
+	public function sendCode(){
+		session_start();
+		
+		//$pattern = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ';
+		$pattern = '1234567890';
+		for($i=0;$i<6;$i++){
+			$key .= $pattern{mt_rand(0,9)};
+		}
+		
+		$_SESSION["code"]=$key;
+		$handtel =$_POST["tel"];
+		$msg_tmp="您的手机验证码是:".$_SESSION["code"]."【车壹号】";
+		
+		$msg = urlencode(iconv("UTF-8","gbk",$msg_tmp));
+		
+		$comid= "1345";
+		$username= "test15";
+		$userpwd= "test15aaqw";
+		$smsnumber= "10690";
+		$url = "http://jiekou.56dxw.com/sms/HttpInterface.aspx?comid=$comid&username=$username&userpwd=$userpwd&handtel=$handtel&sendcontent=$msg&sendtime=&smsnumber=$smsnumber";
+		$string = file_get_contents($url);
+		print($string);
+		exit();
+	}
+	
 	//前台注册处理
 	public function regAC() {
 		$member = M ('member');  //注册表
@@ -56,6 +103,19 @@ class RegAction extends CommonAction{
 		    $this->error('电话号码必须是11位！');
 		    exit;
 		}
+		
+		// 验证验证码
+		if(empty($_POST['validCode'])){
+			$this->error('请填写验证码！');
+			exit;
+		}
+		
+		if($_POST['validCode'] != $_SESSION["code"]){
+			$this->error('验证码输入错误！');
+			exit;
+		}
+		
+		
 		unset($authInfoo,$mappp);
 		$fwhere = array();//检测帐号是否存在
 		$fwhere['user_id'] = trim($_POST['user_id']);

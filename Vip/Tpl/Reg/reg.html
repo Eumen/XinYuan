@@ -28,7 +28,9 @@
                 <input id="confirm_password" name="confirm_password" type="password" placeholder="请确认登录密码..." maxlength="16">
                 <label for="tel"><span style="color: #FF3300;">*</span>手机号：</label>
                 <input type="text" id="tel" name="tel" placeholder="请输入11位手机号码..." maxlength="11">
-                <label for="tel">接点关系(<font style="font-size:10px;">如无默认为</font><font style="font-size:10px;color: #FF3300;">carNo1</font>)：</label>
+                <label for="validCode"><span style="color: #FF3300;">*</span>验证码：</label>
+                <input style="float:left; width: 69%" type="text" id="validCode" name="validCode" placeholder="请输入验证码..." maxlength="11"><input id="validBtn" type="button" value="点击获取" style="width: 25%; height: 42px; background-color: #0e90d2; color: #fff; font-size: 14px" />
+                <label for="father_id" style="float: left">接点关系(<font style="font-size:10px;">如无默认为</font><font style="font-size:10px;color: #FF3300;">carNo1</font>)：</label>
                 <input type="text" id="father_id" name="father_id" value="" placeholder="请输入一位朋友的用户名..." maxlength="11">
                 <button type="submit">注册</button>
                 <button type="button" onclick="javascript:window.location.href='__APP__/Public/login/'">返回</button>
@@ -60,6 +62,51 @@ $(document).ready(function() {
  if(value!=null){
          $("#rid").val(value);
  }  
+ 
+ $("#validBtn").click(function(){
+	 
+	 var partten = /^\d{11}$/;
+	 if($("#tel").val() == null ||$("#tel").val() == ""){
+		 alert("电话号不能为空");
+		 return false;
+	 }else if(!partten.test($("#tel").val())){
+         alert('请输入正确的手机号码');
+		 return false;
+	 }else{
+		 $(this).attr("disabled","disabled");
+		 var time = 60;
+		 var timer = setInterval(function(){
+			 time--;
+			 $("#validBtn").val("剩余"+time+"秒");
+			 if(time == 0){
+				 clearInterval(timer);
+				 $("#validBtn").removeAttr("disabled");
+				 $("#validBtn").val("点击获取");
+			 }
+		 }, 1000);
+		 $.ajax({
+		      url: "__URL__/sendCode",
+		      type: "Post",
+		      data: "tel=" + $("#tel").val(),
+		      success: function(msg) {
+				  switch(msg)
+					{
+					case "1":
+					  alert("验证码已经发送")
+					  break;
+					case "-5":
+					  alert("短信余额不足")
+					  break;
+					default:
+					 alert("具体返回的值是参数值 "+msg)
+					}
+				//alert(msg);//用来调试，返回1代表成功
+		      }
+		  })
+	 }
+ });
+ 
+ 
 });
 </script>
 </body>

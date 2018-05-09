@@ -95,7 +95,7 @@ class ChangeAction extends CommonAction {
 	
 		$_SESSION["code"]=$key;
 		$handtel =$_POST["tel"];
-		$msg_tmp="您的手机验证码是:".$_SESSION["code"]."【车壹号】";
+		$msg_tmp="【车壹号】您的手机验证码是:".$_SESSION["code"];
 	
 		$msg = urlencode(iconv("UTF-8","gbk",$msg_tmp));
 	

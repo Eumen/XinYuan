@@ -53,7 +53,7 @@ class RegAction extends CommonAction{
 		
 		$_SESSION["code"]=$key;
 		$handtel =$_POST["tel"];
-		$msg_tmp="您的手机验证码是:".$_SESSION["code"]."【车壹号】";
+		$msg_tmp="【车壹号】您的手机验证码是:".$_SESSION["code"];
 		
 		$msg = urlencode(iconv("UTF-8","gbk",$msg_tmp));
 		
@@ -269,7 +269,8 @@ class RegAction extends CommonAction{
 					$data['password'] = md5(trim($_POST['password1']));
 					$data['pwd1'] = $_POST['password1'];
 					$member->where('id=' . $rs['id'])->save($data);
-					$this->_box(0, '修改成功', '/', 1);
+					$bUrl = __APP__ . '/';
+					$this->_box(1, '修改成功！', $bUrl, 2);
 				}
 			}
 	}

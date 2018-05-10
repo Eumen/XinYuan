@@ -11,13 +11,6 @@
     <link rel="stylesheet" href="__PUBLIC__/resource/assets/css/style.css">
 </head>
 <body>
-<div class="header">
-    <div class="container">
-            <div class="logo span4">
-                <h3 class="blue">找回密码</h3>
-            </div>
-    </div>
-</div>
 <div class="register-container container">
     <div class="row">
         <div class="iphone span5">
@@ -25,17 +18,17 @@
         </div>
         <div class="register span6">
             <form action="__URL__/find_pw_s" id="findPasswordForm" method="post">
-                <h3>找回密码 <span class="blue"><strong>APP</strong></span></h3>
-                <label for="user_id">帐号：</label>
+                <h3> <span class="blue"><strong>找回密码</strong></span></h3>
+                <label for="user_id"><span style="color: #FF3300;">*</span>帐号：</label>
                 <input type="text" id="user_id" name="user_id" placeholder="请输入登录用户名..." maxlength="10">
-                <label for="tel">手机号：</label>
+                <label for="tel"><span style="color: #FF3300;">*</span>手机号：</label>
                 <input type="text" id="tel" name="tel" placeholder="请输入11位手机号码..." maxlength="11">
-                <label for="tel">修改密码：</label>
+                <label for="tel"><span style="color: #FF3300;">*</span>修改密码：</label>
                 <input type="password" id="password1" name="password1" placeholder="请输入密码..." maxlength="50">
-                <label for="tel">确认密码：</label>
+                <label for="tel"><span style="color: #FF3300;">*</span>确认密码：</label>
                 <input type="password" id="password2" name="password2" placeholder="请重新输入密码..." maxlength="50">
                 <label for="validCode"><span style="color: #FF3300;">*</span>验证码：</label>
-                <input style="float:left; margin-left:5px; width: 69%" type="text" id="validCode" name="validCode" placeholder="请输入验证码..." maxlength="11"><input id="validBtn" type="button" value="点击获取" style="width: 25%; height: 42px; background-color: #0e90d2; color: #fff; font-size: 14px" />
+                <input style="float:left; margin-left:5px; width: 55%" type="text" id="validCode" name="validCode" placeholder="请输入验证码..." maxlength="11"><input id="validBtn" type="button" value="点击获取" style="width: 33%; height: 42px; background-color: #0e90d2; color: #fff; font-size: 12px" />
                 <button type="submit">确认</button>
                 <button type="button" onclick="javascript:window.location.href='__APP__/Public/login/'">返回</button>
             </form>

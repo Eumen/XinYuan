@@ -198,7 +198,7 @@ class ETCore{
 		
 		//检测run方法
 		$run = 0;
-		if (eregi("run:",$ShowTPL)){
+		if (preg_match("run:",$ShowTPL)){
 			$run	 = 1;
 			//Fix =
 			$ShowTPL = preg_replace('/(\{|<!--\s*)run:(\}|\s*-->)\s*=/','{run:}echo ',$ShowTPL);
@@ -208,7 +208,7 @@ class ETCore{
 		}
 		
 		//Fix XML
-		if (eregi("<?xml",$ShowTPL)){
+		if (preg_match("<?xml",$ShowTPL)){
 			$ShowTPL = @preg_replace('/<\?(xml.+?)\?>/is', '<ET>\\1</ET>', $ShowTPL);
 		}
 		

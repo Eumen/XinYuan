@@ -200,14 +200,14 @@ class CommonAction extends CheFieldAction {
 			$GetPost = 'select|insert|update|delete|\'|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile|\(|\)|\<|\>|and|chr|char';
 		}
 		foreach ($post as $post_key => $sql_str){
-			$check = eregi($GetPost,$sql_str);// 进行过滤
+			$check = preg_match($GetPost,$sql_str);// 进行过滤
 			if ($check){
 				$this->error('输入内容不合法，请重新输入！');
 				exit();
 			}
 		}
 		foreach ($get as $post_key => $sql_str){
-			$check = eregi($GetPost,$sql_str);// 进行过滤
+			$check = preg_match($GetPost,$sql_str);// 进行过滤
 			if ($check){
 				$this->error('输入内容不合法，请重新输入！');
 				exit();

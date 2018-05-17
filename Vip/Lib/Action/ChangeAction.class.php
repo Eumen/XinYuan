@@ -360,8 +360,8 @@ class ChangeAction extends CommonAction {
 		$upload->thumbPrefix = $fileName . 'avatar_';
 		$upload->thumbFile = '150_150';
 		//设置缩略图最大高度
-		$upload->thumbMaxWidth = '120';
-		$upload->thumbMaxHeight = '120';
+		$upload->thumbMaxWidth = '80';
+		$upload->thumbMaxHeight = '80';
 		
 		$info =  $upload->upload();
 		if(!$info) {						// 上传错误提示错误信息

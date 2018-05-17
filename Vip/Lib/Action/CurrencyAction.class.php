@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 
 class CurrencyAction extends CommonAction {
 	
@@ -166,18 +166,18 @@ class CurrencyAction extends CommonAction {
 				$this->error('账户金额不足!');
 				exit;
 			}
-			$s_nowd = strtotime(date("Y-m-d"));
-			$e_nowd = $s_nowd+3600*24;
+// 			$s_nowd = strtotime(date("Y-m-d"));
+// 			$e_nowd = $s_nowd+3600*24;
 
-			$where2 = array();
-			$where2['user_id'] = $member_rs['user_id'];   //申请提现会员ID
-			$where2['withdraw_time'] = array(array('egt',$s_nowd),array('lt',$e_nowd));
-			$field1 = 'id';
-			$vo5 = $withdraw ->where($where2)->sum("money");
-			if ($vo5>10000){
-				$this->error('每天每个账户最高提现 10000 元!');
-				exit;
-			}
+// 			$where2 = array();
+// 			$where2['user_id'] = $member_rs['user_id'];   //申请提现会员ID
+// 			$where2['withdraw_time'] = array(array('egt',$s_nowd),array('lt',$e_nowd));
+// 			$field1 = 'id';
+// 			$vo5 = $withdraw ->where($where2)->sum("money");
+// 			if ($vo5>10000){
+// 				$this->error('每天每个账户最高提现 10000 元!');
+// 				exit;
+// 			}
 			$where1 = array();
 			$where1['user_id'] = $member_rs['user_id'];   //申请提现会员ID
 			$where1['is_pay'] = 0;            //申请提现是否通过
@@ -198,6 +198,10 @@ class CurrencyAction extends CommonAction {
 			$user_name = $member_rs['user_name'];   //开户姓名
 			$bank_address = $member_rs['bank_address'];   //开户地址
 			$tel = $member_rs['tel'];   //电话
+			if(empty($user_name) or empty($bank_card) or empty($bank_name)){
+				$this->error ('您的提现银行卡资料不完整，请先到个人中心补全资料再申请提现！');
+				exit;
+			}
 			$ePoints_two = $money - ($money * $ks_m / 100);  //提现扣税
 			$nowdate = strtotime(date('c'));
 			//开始事务处理

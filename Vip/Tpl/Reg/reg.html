@@ -95,10 +95,13 @@ $(document).ready(function() {
 					  alert("验证码已经发送")
 					  break;
 					case "-5":
-					  alert("短信余额不足")
+					  alert("短信余额不足");
+					  clearInterval(timer);
+					 $("#validBtn").removeAttr("disabled");
+					 $("#validBtn").val("点击获取");
 					  break;
 					default:
-					 alert("具体返回的值是参数值 "+msg)
+					 alert(msg)
 					}
 				//alert(msg);//用来调试，返回1代表成功
 		      }

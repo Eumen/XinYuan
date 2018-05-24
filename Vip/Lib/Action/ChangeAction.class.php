@@ -83,6 +83,10 @@ class ChangeAction extends CommonAction {
 	public function sendCode(){
 		session_start();
 	
+		if(!empty($_SESSION["code_time"]) && floor((strtotime(date("Y-m-d H:i:s"))-strtotime($_SESSION["code_time"]))%86400) < 60){
+			print('验证码请求小于60秒！');
+			exit();
+		}
 		//$pattern = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ';
 		$pattern = '1234567890';
 		for($i=0;$i<6;$i++){
@@ -95,12 +99,13 @@ class ChangeAction extends CommonAction {
 	
 		$msg = urlencode(iconv("UTF-8","gbk",$msg_tmp));
 	
-		$comid= "1345";
-		$username= "test15";
-		$userpwd= "test15aaqw";
+		$comid= "3718";
+		$username= "carNo1";
+		$userpwd= "aA111111";
 		$smsnumber= "10690";
 		$url = "http://jiekou.56dxw.com/sms/HttpInterface.aspx?comid=$comid&username=$username&userpwd=$userpwd&handtel=$handtel&sendcontent=$msg&sendtime=&smsnumber=$smsnumber";
 		$string = file_get_contents($url);
+		$_SESSION["code_time"] = date("Y-m-d H:i:s");
 		print($string);
 		exit();
 	}

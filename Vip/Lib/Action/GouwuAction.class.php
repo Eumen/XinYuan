@@ -662,9 +662,9 @@ public function dizhiAdd(){
     			exit;
     		}
         }
-        // 1 :3.8 积分：现金比例
-        $cash_tmp = bcdiv($prices*3.8, 4.8,2);
-        $point_tmp = bcdiv($prices, 4.8,2);
+        // 1 :3.5 积分：现金比例
+        $cash_tmp = bcdiv($prices*3.5, 4.5,2);
+        $point_tmp = bcdiv($prices, 4.5,2);
 		if($_POST['sel']==2){
 		    if($member_rs['cash'] < $cash_tmp){
 		        $this->error("您的现金币余额不足！");

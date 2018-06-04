@@ -889,6 +889,8 @@ class AgentAction extends CommonAction
         $gid = (int) $_GET['bj_id'];
         // 服务中心
         $map['is_agent'] = array( 'gt',0);
+        // 服务中心地址
+        $map['agency_address'] = array( 'neq','');
         $UserID = $_POST['UserID'];
         if (! empty($UserID)) {
             import("@.ORG.KuoZhan"); // 导入扩展类

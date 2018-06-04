@@ -493,7 +493,12 @@ public function dizhiAdd(){
 		$where['id'] = array('in','0'. $path .'0');
 		$list = $pora -> where($where) ->select();
 		foreach ($list as $lvo){
-			$w_money = $lvo['vip_price'];
+		    if ($member_rs['bk4'] == 0) {
+		        $w_money = $lvo['sale_price'];
+		    } else {
+		        $w_money = $lvo['vip_price'];
+		    }
+			
 			//物品总价
 			$ep[$lvo['id']] = $ids[$lvo['id']] * $w_money;
 			//所有商品总价
@@ -662,9 +667,16 @@ public function dizhiAdd(){
     			exit;
     		}
         }
-        // 1 :3.5 积分：现金比例
-        $cash_tmp = bcdiv($prices*3.5, 4.5,2);
-        $point_tmp = bcdiv($prices, 4.5,2);
+        // 会员比例：1：5 积分：现金比例
+        if ($member_rs['bk4'] == 0) {
+            $cash_tmp = bcdiv($prices*5, 6, 2);
+            $point_tmp = bcdiv($prices, 6, 2);
+        }
+        // 消费商比例：1 :3.8 积分：现金比例
+        else if ($member_rs['bk4'] == 1) {
+            $cash_tmp = bcdiv($prices*3.8, 4.8,2);
+            $point_tmp = bcdiv($prices, 4.8,2);
+        }
 		if($_POST['sel']==2){
 		    if($member_rs['cash'] < $cash_tmp){
 		        $this->error("您的现金币余额不足！");
@@ -680,7 +692,11 @@ public function dizhiAdd(){
 	   $where['id'] = array('in','0'. $path .'0');
 	   $prs = $pora->where($where)->select();
 		foreach ($prs as $vo){
-			$w_money = $vo['vip_price'];
+		    if ($member_rs['bk4'] == 0) {
+		        $w_money = $vo['sale_price'];
+		    } else {
+		        $w_money = $vo['vip_price'];
+		    }
 			// 产品ID
 			$gwd['bk1'] = $vo['id'];
 			// 单价

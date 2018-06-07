@@ -928,8 +928,10 @@ class YouZiAction extends CommonAction
             $data['cash'] = $_POST['cash'];
             // 积分
             $data['point'] = $_POST['point'];
-            // 服务中心库存
+            // 消费商库存
             $data['agency_count'] = $_POST['agency_count'];
+            // 普通会员库存
+            $data['bk13'] = $_POST['bk13'];
             // 服务中心地址
             $data['agency_address'] = $_POST['agency_address'];
             // 服务中心名字

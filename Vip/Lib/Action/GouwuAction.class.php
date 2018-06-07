@@ -1318,15 +1318,23 @@ public function dizhiAdd(){
                 'confirm_send_id' => $member_rs2['user_id'],
                 'confirm_send_name' => $member_rs2['user_name']
             );
-            $stock_rs = $shopping->where($where)->field("count")->select();
-            $count = 0;
+            $stock_rs = $shopping->where($where)->field("*")->select();
+            // 消费商库存
+            $count1 = 0;
+            // 普通会员库存
+            $count2 = 0;
             foreach ($stock_rs as $value){
-                $count += $value['count'];
+                $member_ispay_result = $member->where("user_id ='".$value['user_id']."'")->find();
+                if ($member_ispay_result['bk4'] == 1) {
+                    $count1 += $value['count'];
+                } else {
+                    $count2 += $value['count'];
+                }
             }
             $result = $shopping->where($where)->setField($valuearray);
             if ($result) {
                 $member_rs2 = $member->where('id =' . $sessionID)->find();
-                $rs = $member->query("UPDATE `xy_member` SET agency_count=agency_count - ".$count." where id=" . $sessionID);
+                $rs = $member->query("UPDATE `xy_member` SET agency_count=agency_count - ".$count1.",bk13 = bk13 - ".$count2." where id=" . $sessionID);
             }
             unset($shopping, $where);
             

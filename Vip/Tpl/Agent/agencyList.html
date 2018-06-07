@@ -17,7 +17,8 @@
         <th><span>联系电话</span></th>
         <th><span>服务中心地址</span></th>
         <?php if(  $_SESSION['grade']  ==  "2"): ?>
-        <th><span>服务中心库存</span></th>
+        <th><span>消费商库存</span></th>
+        <th><span>普通会员库存</span></th>
         <?php endif; ?>
     </tr>
     </thead>
@@ -29,6 +30,7 @@
         <td>{$vo['agency_address']}</td>
         <?php if(  $_SESSION['grade']  ==  "2"): ?>
         <td>{$vo['agency_count']}</td>
+        <td>{$vo['bk13']}</td>
         <?php endif; ?>
     </tr>
     </volist>

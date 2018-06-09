@@ -1,6 +1,7 @@
 <?php
 class RecTree {
 	var $name;
+	var $user_name;
 	var $children = array ();
 }
 class TreeAction extends CommonAction {
@@ -103,6 +104,7 @@ class TreeAction extends CommonAction {
 	}
 	function orglist() {
 		$uid = $_SESSION ['loginUseracc'];
+		$uname = $_SESSION ['loginUserName'];
 		if (! $uid) {
 			$this->error ( '页面过期!' );
 		}
@@ -124,41 +126,46 @@ class TreeAction extends CommonAction {
 		$fwhere ['father_name'] = $uid;
 		
 		$rt = new RecTree ();
-		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->count ();
+		$memberlist = $member->where ( $fwhere )->field ( "user_id,user_name" )->count ();
 		
 		if ($memberlist > 0) {
-			$this->push_childrenorg ( $uid, $rt );
+			$this->push_childrenorg ( $uid, $uname, $rt );
 		} else {
 			$rt->name = $uid;
+			$rt->user_name = $uname;
 		}
 		$this->assign ( "data", json_encode ( $rt ) );
 		$this->display ();
 		unset ( $rt );
 	}
-	function push_childrenorg($uid, $rt) {
+	function push_childrenorg($uid, $uname, $rt) {
 		$rt->name = $uid;
+		$rt->user_name = $uname;
 		$member = M ( 'member' );
 		$fwhere = array ();
 		$fwhere ['father_name'] = $uid;
 		
-		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->select ();
+		$memberlist = $member->where ( $fwhere )->field ( "user_id,user_name" )->select ();
 		foreach ( $memberlist as $value ) {
 			$fwhere ['father_name'] = $value ['user_id'];
-			$mem = $member->where ( $fwhere )->field ( "user_id" )->select ();
+			$mem = $member->where ( $fwhere )->field ( "user_id,user_name" )->select ();
 			if (count ( $mem ) > 0) {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];
+				$sub_rt->user_name = $value ['user_name'];
 				array_push ( $rt->children, $sub_rt );
-				$this->push_childrenorg ( $value ['user_id'], $sub_rt );
+				$this->push_childrenorg ( $value ['user_id'],$value ['user_name'], $sub_rt );
 			} else {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];
+				$sub_rt->user_name = $value ['user_name'];
 				array_push ( $rt->children, $sub_rt );
 			}
 		}
 	}
 	function reclist() {
 		$uid = $_SESSION ['loginUseracc'];
+		$uname = $_SESSION ['loginUserName'];
 		if (! $uid) {
 			$this->error ( '页面过期!' );
 		}
@@ -184,32 +191,36 @@ class TreeAction extends CommonAction {
 		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->count ();
 		
 		if ($memberlist > 0) {
-			$this->push_childrenrec ( $uid, $rt );
+			$this->push_childrenrec ( $uid, $uname, $rt );
 		} else {
 			$rt->name = $uid;
+			$rt->user_name = $uname;
 		}
 		$this->assign ( "data", json_encode ( $rt ) );
 		$this->display ();
 		unset ( $rt );
 	}
-	function push_childrenrec($uid, $rt) {
+	function push_childrenrec($uid, $uname, $rt) {
 		$rt->name = $uid;
+		$rt->user_name = $uname;
 		$member = M ( 'member' );
 		$fwhere = array ();
 		$fwhere ['re_name'] = $uid;
 		
-		$memberlist = $member->where ( $fwhere )->field ( "user_id" )->select ();
+		$memberlist = $member->where ( $fwhere )->field ( "user_id,user_name" )->select ();
 		foreach ( $memberlist as $value ) {
 			$fwhere ['re_name'] = $value ['user_id'];
-			$mem = $member->where ( $fwhere )->field ( "user_id" )->select ();
+			$mem = $member->where ( $fwhere )->field ( "user_id,user_name" )->select ();
 			if (count ( $mem ) > 0) {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];
+				$sub_rt->user_name = $value ['user_name'];
 				array_push ( $rt->children, $sub_rt );
-				$this->push_childrenrec ( $value ['user_id'], $sub_rt );
+				$this->push_childrenrec ( $value ['user_id'],$value ['user_name'], $sub_rt );
 			} else {
 				$sub_rt = new RecTree ();
 				$sub_rt->name = $value ['user_id'];
+				$sub_rt->user_name = $value ['user_name'];
 				array_push ( $rt->children, $sub_rt );
 			}
 		}

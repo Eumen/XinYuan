@@ -22,6 +22,7 @@
 
 .node text {
   font: 16px sans-serif;
+  white-space : norma;
 }
 
 .link {
@@ -105,7 +106,6 @@ var svg = d3.select("body").append("svg")
     
 // start
   root = {$data};
-  
   root.x0 = height / 2;
   root.y0 = 0;
   function collapse(d) {
@@ -157,8 +157,14 @@ function update(source) {
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-      .text(function(d) { return d.name; })
+      .text(function(d) { return d.name;})
       .style("fill-opacity", 1e-6);
+  
+  nodeEnter.append("text")
+  .attr("x", function(d) { return d.children || d._children ? -20 : 20; })
+  .attr("dy", "1.5em")
+  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+  .text(function(d) { return d.user_name; });
 
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
